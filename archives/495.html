@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>精确判断网站访问者是否是黑客的方法 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="burpsuite 是一个渗透测试中必备的抓包工具，几乎每个做渗透的都会用这个软件。对于一个网站来说，网站的访问者如果挂了 burpsuite 的代理来访问网站，那多半是不怀好意的。如果能识别出..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="精确判断网站访问者是否是黑客的方法 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/495.html" />
+<link rel="alternate" type="application/rdf+xml" title="精确判断网站访问者是否是黑客的方法 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/495.html" />
+<link rel="alternate" type="application/atom+xml" title="精确判断网站访问者是否是黑客的方法 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/495.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-495'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-495'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-495'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _1oJ2o = /* 'zb'//'zb' */''+//'Jfv'
+'53'+//'E6E'
+'504'+'yAu'//'yAu'
++'f8'//'VSa'
++'1d7'//'UZ'
++//'mG'
+'3e1'+'43'//'H'
++//'4t'
+'fb'+'5ef'//'bgk'
++'6dd'//'5D1'
++'2'//'bg'
++'4f9'//'mG'
++'b0'//'SkC'
++''///*'Y0D'*/'Y0D'
++'46'//'S'
++'3'//'v'
+, _fUw = [[5,8]];
+    
+    for (var i = 0; i < _fUw.length; i ++) {
+        _1oJ2o = _1oJ2o.substring(0, _fUw[i][0]) + _1oJ2o.substring(_fUw[i][1]);
+    }
+
+    return _1oJ2o;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">精确判断网站访问者是否是黑客的方法</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2021-05-19 19:51:00" itemprop="datePublished">2021-05-19 19:51:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/495.html"><a href="https://b1ue.cn/category/pentest/">渗透测试</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/495.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <p>burpsuite 是一个渗透测试中必备的抓包工具，几乎每个做渗透的都会用这个软件。对于一个网站来说，网站的访问者如果挂了 burpsuite 的代理来访问网站，那多半是不怀好意的。如果能识别出来访问者使用了 burpsuite 那就可以直接丢进蜜罐。</p><p>所以本文主要探讨如何识别访问者有没有使用 burpsuite。</p><p>经常使用 burpsuite 的人应该会有留意到，挂着 burpsuite 的代理是可以访问到 <a href="http://burp/" target="_blank">http://burp/</a> 这个地址的。</p><p><img src="/usr/uploads/2021/05/58204145.jpg" alt="1621853876883.jpg" title="1621853876883.jpg"></p><p>这个服务提供了证书下载和从浏览器发送请求和查看响应等功能，除此之外还有一个关键的地方就是它有 favicon 图标。</p><pre><code>http://burp/favicon.ico</code></pre><p>如果要想从自己的网站上去获取 <a href="http://burp/" target="_blank">http://burp/</a> 的内容就会发生跨域，所以要使用可以跨域的 img 标签。同时配合 onload 事件来判断图片是否加载成功。</p><pre><code>&lt;img src=&quot;http://burp/favicon.ico&quot; onload=&quot;alert('found burp')&quot; &gt;</code></pre><p><img src="/usr/uploads/2021/05/479887463.jpg" alt="1621855922870.jpg" title="1621855922870.jpg"></p><p>还可以用 script 标签加 onload 事件来检测。</p><pre><code>&lt;script src=&quot;http://burp/jquery.js&quot; onload=&quot;alert('found burp')&quot;&gt;&lt;/script&gt;</code></pre><p><img src="/usr/uploads/2021/05/2698680855.jpg" alt="1621864005937.jpg" title="1621864005937.jpg"></p><p>这样一段简单的代码就可以完成对 burp 使用状态的检测。</p><p>当检测到使用burpsuite后，要做的就是给服务器发送请求，标记当前的访问者是个攻击者，然后就可以把他引入蜜罐了。</p><p>我写了一套简单的 demo 用于演示。</p><p><img src="/usr/uploads/2021/05/2930246683.jpg" alt="1621856799529.jpg" title="1621856799529.jpg"></p><p><img src="/usr/uploads/2021/05/1916064923.png" alt="WX20210524-195346@2x.png" title="WX20210524-195346@2x.png"></p><p><code>/image/feedback.png</code> 用来标记访问者。</p><p><img src="/usr/uploads/2021/05/3158523602.jpg" alt="1621857198507.jpg" title="1621857198507.jpg"></p><p>最后在拦截器检测访问者有没有被标记，如果被标记到就引入蜜罐。</p><p>如果要想不被发现还可以再把代码写复杂一点，加点混淆，插入到 jQuery 的代码里。</p><p><img src="/usr/uploads/2021/05/1131903758.jpg" alt="1621859007284.jpg" title="1621859007284.jpg"></p><p>我挂着 burp 去访问 index.html 它就会检测到我使用了 burp 并向 feedback.png 发送标记请求。</p><p><img src="/usr/uploads/2021/05/2925877055.jpg" alt="1621859220627.jpg" title="1621859220627.jpg"></p><p>被标记后再次访问主页就会被拦截器拦下。</p><p>这个方法原理很简单，使用成本很低，且检测时不容易被注意到。</p><p>​不过红队也是可以避免被这种方法检测到的。</p><p>第一种方法最简单有效，在挂代理的时候设置 <code>burp</code> 这个主机名不走代理。</p><p><img src="/usr/uploads/2021/05/3929903733.jpg" alt="1621859561276.jpg" title="1621859561276.jpg"></p><p>或者也可以直接删除 burpsuite jar包里的<code>favicon.ico</code>文件，不过需要注意的是这种方法只能防 img 标签访问 <code>favicon.ico</code>，script 标签是不行的。</p><pre><code>zip -d burpsuite_pro.jar &quot;resources/Media/favicon.ico&quot;</code></pre>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 3 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-30" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/f41097aba90b1397437df7ad02d27f6e?s=32&r=G&d=" alt="P0rn" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">P0rn									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/495.html?replyTo=30#respond-post-495" rel="nofollow" onclick="return TypechoComment.reply('comment-30', 30);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2021-05-28 15:56:08" itemprop="datePublished">2021-05-28 15:56:08</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>大佬您这个源码可以发出来一下吗，我这边尝试多次都达不到您那种效果，谢谢您</p>					</div>
+			</div>
+                </li>
+        <li class="comment">
+			<div id="comment-31" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/c32404d57e9c46f7d5818e6d46d59dde?s=32&r=G&d=" alt="0xy63" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">0xy63									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/495.html?replyTo=31#respond-post-495" rel="nofollow" onclick="return TypechoComment.reply('comment-31', 31);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2021-07-07 10:28:56" itemprop="datePublished">2021-07-07 10:28:56</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>您好，博主可以分享一下源码吗。感激不尽</p>					</div>
+			</div>
+                </li>
+        <li class="comment">
+			<div id="comment-35" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/ae1def703b812d3901bcd97c5ba2bfc8?s=32&r=G&d=" alt="jeakins" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">jeakins									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/495.html?replyTo=35#respond-post-495" rel="nofollow" onclick="return TypechoComment.reply('comment-35', 35);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2022-10-16 00:27:01" itemprop="datePublished">2022-10-16 00:27:01</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>图片咋加载不出来了</p>					</div>
+			</div>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-495" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/495.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/495.html#respond-post-495" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

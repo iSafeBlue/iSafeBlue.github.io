@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>溯光 2.0 开源的微服务渗透测试框架 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="Github主页：https://github.com/iSafeBlue/TrackRay项目官网：https://trackray.cn/ _______             _    ..." />
+<meta name="keywords" content="渗透测试,trackray,溯光,框架" />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="溯光 2.0 开源的微服务渗透测试框架 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/66.html" />
+<link rel="alternate" type="application/rdf+xml" title="溯光 2.0 开源的微服务渗透测试框架 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/66.html" />
+<link rel="alternate" type="application/atom+xml" title="溯光 2.0 开源的微服务渗透测试框架 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/66.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-66'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-66'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-66'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _m2zjPQ = 'SN'//'SN'
++//'U'
+'U'+//'wL0'
+'7f'+''///*'hJy'*/'hJy'
++//'L'
+'8'+'c'//'k'
++//'4jh'
+'aa'+'oVx'//'oVx'
++//'b'
+'323'+'a75'//'J'
++//'F2'
+'33'+//'j'
+'f'+//'Dt7'
+'5'+//'D'
+'6'+//'Ue1'
+'294'+''///*'KpA'*/'KpA'
++//'Z'
+'e7f'+//'2sw'
+'a2'+//'Px8'
+'fe7'+'0a0'//'WS'
++'4'//'e6'
+, _yy6rRt9 = [[0,2],[0,1],[6,9]];
+    
+    for (var i = 0; i < _yy6rRt9.length; i ++) {
+        _m2zjPQ = _m2zjPQ.substring(0, _yy6rRt9[i][0]) + _m2zjPQ.substring(_yy6rRt9[i][1]);
+    }
+
+    return _m2zjPQ;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">溯光 2.0 开源的微服务渗透测试框架</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-01-30 21:08:00" itemprop="datePublished">2019-01-30 21:08:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/66.html"><a href="https://b1ue.cn/category/safe/">安全</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/66.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <p>Github主页：<a href="https://github.com/iSafeBlue/TrackRay" target="_blank">https://github.com/iSafeBlue/TrackRay</a><br>项目官网：<a href="https://trackray.cn/" target="_blank">https://trackray.cn/</a></p><pre><code> _______             _    _____             
+|__   __|           | |  |  __ \            
+   | |_ __ __ _  ___| | _| |__) |__ _ _   _ 
+   | | '__/ _` |/ __| |/ /  _  // _` | | | |
+   | | | | (_| | (__|    | | \ \ (_| | |_| |
+   |_|_|  \__,_|\___|_|\_\_|  \_\__,_|\__, |
+                                       __/ |
+                                      |___/   v2.0
+</code></pre><p><img src="https://img.shields.io/github/stars/iSafeBlue/Trackray.svg" alt="" title=""><br><img src="https://img.shields.io/github/forks/iSafeBlue/Trackray.svg" alt="" title=""><br><img src="https://img.shields.io/github/license/iSafeBlue/Trackray.svg" alt="" title=""><br><img src="https://img.shields.io/github/issues/iSafeBlue/Trackray.svg" alt="" title=""></p><h2>关于溯光</h2><p>溯光是一个由Java语言编写的微服务插件化渗透测试框架，项目是一个WEB服务，提供了调用插件和扫描的接口，并且使用了 Websocket 技术实现命令行风格交互，启动后只需要通过浏览器即可访问，有着多数开源渗透测试框架不具备的特点。</p><p>自更新 2.0 版本后，项目数据库采用嵌入式数据库hsqldb，使用 SpringBoot 框架开发，用maven管理依赖，使开发和使用更为简单方便。</p><p>如有任何使用上的问题可发送邮件或联系我的私人微信，BUG请提交issue。</p><p>如果你具备插件开发的能力，希望你也能一起来维护这个项目。</p><h2>特点</h2><ul><li>提供WEB服务接口</li><li>使用只需要一个浏览器</li><li>第一个使用Java集成MSF & AWVS的开源项目</li><li>内置插件式扫描器</li></ul><h2>如何使用</h2><ul><li><code>git clone https://github.com/iSafeBlue/TrackRay</code></li><li>安装nmap，写入环境变量</li><li>启动SQLMAP API</li><li>启动msfrpc服务 <code>msfrpcd -U msf -P msf -S -f</code></li><li>启动AWVS</li><li>在application.properties配置文件中修改 <code>database.dir</code>及以上有变更的配置参数</li><li>编译并运行SpringBoot启动类WebApplication.java</li></ul><h2>功能展示</h2><h4>交互式插件控制台</h4><p><img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/netcat.gif" alt="" title=""></p><h4>MSF 控制台</h4><p><img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/msf.gif" alt="" title=""></p><h4>无交互插件调用</h4><p><img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/5.png" alt="Image text" title="Image text"><br><img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/2.gif" alt="Image text" title="Image text"></p><h4>扫描器展示</h4><p><img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/6.gif" alt="" title=""></p><h2>插件</h2><p><a href="https://github.com/iSafeBlue/TrackRay/blob/master/plugin.md" target="_blank">plugin.md</a></p><h2>功能简介</h2><p><a href="https://github.com/iSafeBlue/TrackRay/blob/master/functions.md" target="_blank">functions.md</a></p><h2>贡献者</h2><p>项目由<a href="https://github.com/iSafeBlue" target="_blank">浅蓝</a>发起并主导开发。</p><p>致谢列表：</p><ul><li><a href="https://github.com/iSafeBlue" target="_blank">浅蓝</a></li><li>...</li></ul><h2>赞助</h2><h4>您的捐助将被用于</h4><ul><li>持续开发溯光渗透测试框架</li><li><code>trackray.cn</code>  域名续费</li><li>社区活动</li><li>奖励杰出贡献者</li></ul><p><img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/wx.png" alt="微信" title="微信"> <img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/img/ali.png" alt="支付宝" title="支付宝"></p><h2>申明</h2><p>溯光遵循 GPL 开源协议，请务必了解。</p><p>溯光开发的初衷是方便企业的安全研究者检测漏洞以及教育学习使用。</p><p>我们严格禁止一切通过本程序进行的违反任何国家法律行为，请在合法范围内使用本程序。</p><p>我们不会上传未公开的漏洞插件，也不允许插件中存在破坏性的语句，目前module模块只写了几个有代表性的模块供开发者参考。</p><p>使用本程序则默认视为你同意我们的规则，请您务必遵守道德与法律准则。</p><p>如不遵守，后果自负，开发者将不承担任何责任！</p><h2>联系作者</h2><p>email: blue#ixsec.org</p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-66" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/66.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/66.html#respond-post-66" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

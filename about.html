@@ -1,0 +1,422 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>关于我 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="Title：Java 打字工程师（写bug的）、安全研究员（找bug的）ID：浅蓝、b1u3r第一语言 Java，正在转 Python（弃了，不转了），主攻渗透测试（Web安全、代码审计），其他..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="关于我 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="http://www.b1ue.cn/feed/about.html" />
+<link rel="alternate" type="application/rdf+xml" title="关于我 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="http://www.b1ue.cn/feed/rss/about.html" />
+<link rel="alternate" type="application/atom+xml" title="关于我 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="http://www.b1ue.cn/feed/atom/about.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-page-21'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-page-21'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-page-21'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _LCBYUus = //'YD'
+'f'+'440'//'1'
++/* 'UvX'//'UvX' */''+//'GOT'
+'GOT'+/* '3'//'3' */''+//'ZOm'
+'0'+'K'//'K'
++'b0'//'6'
++//'9iZ'
+'6d'+'1b'//'N2'
++//'qAx'
+'b58'+'6'//'n'
++'2a7'//'QC'
++//'X'
+'47'+//'zC'
+'c'+/* 'pR'//'pR' */''+//'hwp'
+'hwp'+'9b'//'jaJ'
++'cb'//'8'
++/* 'fJn'//'fJn' */''+'2d7'//'ydB'
++/* 'ns'//'ns' */''+'645'//'aF8'
++'Rg'//'Rg'
++/* 'n'//'n' */''+'6'//'oCo'
+, _jsdht = [[4,7],[5,6],[21,24],[31,33]];
+    
+    for (var i = 0; i < _jsdht.length; i ++) {
+        _LCBYUus = _LCBYUus.substring(0, _jsdht[i][0]) + _LCBYUus.substring(_jsdht[i][1]);
+    }
+
+    return _LCBYUus;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="http://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="http://www.b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="http://www.b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="http://www.b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="http://www.b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="http://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+	<header class="entry-header">
+	<h2 class="entry-title" itemprop="headline">关于我</h2>
+	<div class="entry-meta">
+		<a><time class="lately-b"  datetime="2017-07-10 08:17:00" itemprop="datePublished">2017-07-10 08:17:00</time></a>
+	</div>
+	</header>
+	<div class="grap" itemprop="articleBody">
+		<p>Title：Java 打字工程师（写bug的）、安全研究员（找bug的）</p><p>ID：浅蓝、b1u3r</p><p>第一语言 Java，正在转 Python（弃了，不转了），主攻渗透测试（Web安全、代码审计），其他方向还正在学习。</p><h2>社交账号</h2><p>Github：<a href="https://github.com/iSafeBlue" target="_blank">iSafeBlue</a></p><p>微博：<a href="https://weibo.com/ixsec" target="_blank">@浅蓝_iSafe</a></p><p>知乎：<a href="https://www.zhihu.com/people/isafe_blue/" target="_blank">@浅蓝</a></p><p>乌云ID：浅蓝</p><p>微信：<img src="https://raw.githubusercontent.com/iSafeBlue/TrackRay/master/docs/img/wechat.png" alt="wechat" title="wechat"></p><pre><code>QQ / WeChat: 7059fdf708437fb61da1352de6e534a8
+
+Email: blue[at]ixsec.org
+</code></pre>	</div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 6 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-6" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fb60cddca9bd5ec7dbe6d16d23ef3fa?s=32&r=G&d=" alt="name" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">name									<span class="comment-reply-link u-cursorPointer" ><a href="http://www.b1ue.cn/about.html?replyTo=6#respond-page-21" rel="nofollow" onclick="return TypechoComment.reply('comment-6', 6);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2019-12-06 15:43:27" itemprop="datePublished">2019-12-06 15:43:27</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>大佬啊 写的内容都贼详细 但是为啥最近不更了？</p>					</div>
+			</div>
+                            <ol class="children">
+                    <ol class="comment-list">    <li class="comment">
+			<div id="comment-8" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fcb945d487c486ab52a524b3d5792ae?s=32&r=G&d=" alt="浅蓝" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="http://b1ue.cn/" rel="external nofollow">浅蓝</a>									<span class="comment-reply-link u-cursorPointer" ><a href="http://www.b1ue.cn/about.html?replyTo=8#respond-page-21" rel="nofollow" onclick="return TypechoComment.reply('comment-8', 8);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-02-23 16:03:01" itemprop="datePublished">2020-02-23 16:03:01</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>因为最近有（在）点（偷）忙（懒）</p>					</div>
+			</div>
+                </li>
+        <li class="comment">
+			<div id="comment-38" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/def52d8482ade7902751a1e511b1ced9?s=32&r=G&d=" alt="Crawlergo" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="https://crawlergo.nice.cn/" rel="external nofollow">Crawlergo</a>									<span class="comment-reply-link u-cursorPointer" ><a href="http://www.b1ue.cn/about.html?replyTo=38#respond-page-21" rel="nofollow" onclick="return TypechoComment.reply('comment-38', 38);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2023-04-09 17:34:17" itemprop="datePublished">2023-04-09 17:34:17</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>C</p>					</div>
+			</div>
+                </li>
+    </ol>                </ol>
+                </li>
+        <li class="comment">
+			<div id="comment-28" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/b642b4217b34b1e8d3bd915fc65c4452?s=32&r=G&d=" alt="test" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">test									<span class="comment-reply-link u-cursorPointer" ><a href="http://www.b1ue.cn/about.html?replyTo=28#respond-page-21" rel="nofollow" onclick="return TypechoComment.reply('comment-28', 28);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2021-02-15 09:01:10" itemprop="datePublished">2021-02-15 09:01:10</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>博客https访问时，部分 script是http协议，导致图片加载不出来。建议处理一下</p>					</div>
+			</div>
+                            <ol class="children">
+                    <ol class="comment-list">    <li class="comment">
+			<div id="comment-29" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fcb945d487c486ab52a524b3d5792ae?s=32&r=G&d=" alt="浅蓝" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="http://b1ue.cn/" rel="external nofollow">浅蓝</a>									<span class="comment-reply-link u-cursorPointer" ><a href="http://www.b1ue.cn/about.html?replyTo=29#respond-page-21" rel="nofollow" onclick="return TypechoComment.reply('comment-29', 29);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2021-02-19 14:35:59" itemprop="datePublished">2021-02-19 14:35:59</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>感谢提出，已修改</p>					</div>
+			</div>
+                </li>
+    </ol>                </ol>
+                </li>
+        <li class="comment">
+			<div id="comment-37" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/372d69196372979ca712736175e9105d?s=32&r=G&d=" alt="小豪" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">小豪									<span class="comment-reply-link u-cursorPointer" ><a href="http://www.b1ue.cn/about.html?replyTo=37#respond-page-21" rel="nofollow" onclick="return TypechoComment.reply('comment-37', 37);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2022-11-01 14:54:49" itemprop="datePublished">2022-11-01 14:54:49</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>来看过大佬</p>					</div>
+			</div>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-page-21" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="http://www.b1ue.cn/about.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="http://www.b1ue.cn/about.html#respond-page-21" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

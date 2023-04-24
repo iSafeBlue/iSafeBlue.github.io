@@ -1,0 +1,490 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>归档 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="归档" />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="归档 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives.html" />
+<link rel="alternate" type="application/rdf+xml" title="归档 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives.html" />
+<link rel="alternate" type="application/atom+xml" title="归档 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-page-53'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-page-53'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-page-53'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _BOG = '186'//'Q'
++//'P'
+'b'+//'oTS'
+'2d'+''///*'t'*/'t'
++//'xW'
+'b'+//'l'
+'c'+//'WR'
+'20e'+//'bRJ'
+'c'+'d'//'3'
++''///*'ld'*/'ld'
++'C'//'C'
++''///*'jnK'*/'jnK'
++//'w0'
+'8'+//'fe'
+'8'+'0'//'cCL'
++//'jH'
+'84'+'05'//'6OX'
++//'9G'
+'dce'+'33'//'Mhs'
++'fM'//'fM'
++/* 'wLE'//'wLE' */''+'4'//'f'
++'83e'//'yNr'
++//'9'
+'9'+''///*'1u'*/'1u'
++'612'//'f'
+, _Y2f3k1W = [[13,14],[25,27],[29,30]];
+    
+    for (var i = 0; i < _Y2f3k1W.length; i ++) {
+        _BOG = _BOG.substring(0, _Y2f3k1W[i][0]) + _BOG.substring(_Y2f3k1W[i][1]);
+    }
+
+    return _BOG;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+	<header class="entry-header">
+	<h2 class="entry-title" itemprop="headline">归档</h2>
+	<div class="entry-meta">
+		<a><time class="lately-b"  datetime="2018-12-17 17:45:00" itemprop="datePublished">2018-12-17 17:45:00</time></a>
+	</div>
+	</header>
+	<div class="grap" itemprop="articleBody">
+		<p><div class="car-container car-collapse">
+<a href="#" class="car-toggler">展开全部</a>
+
+<ul class="car-list">
+	<li><span class="car-yearmonth">01月 2022 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>17: <a href="https://b1ue.cn/archives/529.html" target="_blank">探索高版本 JDK 下 JNDI 漏洞的利用方法</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">12月 2021 <span title="Post Count">(3)</span></span>
+		<ul class='car-monthlisting'>
+			<li>25: <a href="https://b1ue.cn/archives/524.html" target="_blank">这篇关于 log4j 漏洞的文章太水了不配拥有标题</a> <span title="Comment Count">(0)</span></li>
+			<li>11: <a href="https://b1ue.cn/archives/513.html" target="_blank">log4j 漏洞一些特殊的利用方式</a> <span title="Comment Count">(0)</span></li>
+			<li>04: <a href="https://b1ue.cn/archives/506.html" target="_blank">fastjson 读文件 gadget 的利用场景扩展</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">05月 2021 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>19: <a href="https://b1ue.cn/archives/495.html" target="_blank">精确判断网站访问者是否是黑客的方法</a> <span title="Comment Count">(2)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">12月 2020 <span title="Post Count">(2)</span></span>
+		<ul class='car-monthlisting'>
+			<li>29: <a href="https://b1ue.cn/archives/458.html" target="_blank">HSQLDB 安全测试指南</a> <span title="Comment Count">(0)</span></li>
+			<li>06: <a href="https://b1ue.cn/archives/407.html" target="_blank">SnakeYaml 反序列化的一个小 trick</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">08月 2020 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>09: <a href="https://b1ue.cn/archives/402.html" target="_blank">fastjson 获取精确版本号的方法</a> <span title="Comment Count">(2)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">06月 2020 <span title="Post Count">(2)</span></span>
+		<ul class='car-monthlisting'>
+			<li>12: <a href="https://b1ue.cn/archives/387.html" target="_blank">Java XXE 漏洞做了 doctype 防护情况下的一种绕过案例</a> <span title="Comment Count">(1)</span></li>
+			<li>07: <a href="https://b1ue.cn/archives/382.html" target="_blank">fastjson 1.2.68 autotype bypass 反序列化漏洞 gadget 的一种挖掘思路</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">04月 2020 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>02: <a href="https://b1ue.cn/archives/318.html" target="_blank">细数 redis 的几种 getshell 方法</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">03月 2020 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>24: <a href="https://b1ue.cn/archives/314.html" target="_blank">fastjson &lt; 1.2.66 正则表达式拒绝服务漏洞</a> <span title="Comment Count">(2)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">02月 2020 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>22: <a href="https://b1ue.cn/archives/275.html" target="_blank">“GhostCat” Tomcat 文件读取与文件包含漏洞分析（CVE-2020-1938）</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">01月 2020 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>02: <a href="https://b1ue.cn/archives/262.html" target="_blank">eWebeditor 客户端控件任意文件读取漏洞</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">11月 2019 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>15: <a href="https://b1ue.cn/archives/239.html" target="_blank">Java 反序列化漏洞始末（5）— XML/YAML</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">10月 2019 <span title="Post Count">(2)</span></span>
+		<ul class='car-monthlisting'>
+			<li>28: <a href="https://b1ue.cn/archives/247.html" target="_blank">基于HTML注入的一种攻击思路</a> <span title="Comment Count">(0)</span></li>
+			<li>26: <a href="https://b1ue.cn/archives/241.html" target="_blank">Apache POI &lt;= 4.1.0 XXE 漏洞 (CVE-2019-12415)</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">09月 2019 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>10: <a href="https://b1ue.cn/archives/218.html" target="_blank">Python 的另外几个反序列化漏洞检查点</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">08月 2019 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>19: <a href="https://b1ue.cn/archives/217.html" target="_blank">溯光 3.1.0-beta 发布</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">07月 2019 <span title="Post Count">(3)</span></span>
+		<ul class='car-monthlisting'>
+			<li>31: <a href="https://b1ue.cn/archives/201.html" target="_blank">CVE-2019-14540: Another gadgets to exploit default typing issue in (Jackson 2.x - 2.9.9.2 and 2.10.0.pr1)</a> <span title="Comment Count">(0)</span></li>
+			<li>30: <a href="https://b1ue.cn/archives/189.html" target="_blank">Java 反序列化漏洞始末（4）— jackson</a> <span title="Comment Count">(1)</span></li>
+			<li>08: <a href="https://b1ue.cn/archives/184.html" target="_blank">Java 反序列化漏洞始末（3）— fastjson</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">06月 2019 <span title="Post Count">(2)</span></span>
+		<ul class='car-monthlisting'>
+			<li>26: <a href="https://b1ue.cn/archives/176.html" target="_blank">Java 反序列化漏洞始末（2）— JDK</a> <span title="Comment Count">(0)</span></li>
+			<li>25: <a href="https://b1ue.cn/archives/166.html" target="_blank">Java 反序列化漏洞始末（1）— Apache Commons</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">05月 2019 <span title="Post Count">(3)</span></span>
+		<ul class='car-monthlisting'>
+			<li>12: <a href="https://b1ue.cn/archives/154.html" target="_blank">打造自己的渗透测试框架 — 溯光：扩展篇</a> <span title="Comment Count">(0)</span></li>
+			<li>11: <a href="https://b1ue.cn/archives/146.html" target="_blank">打造自己的渗透测试框架 — 溯光：安装篇</a> <span title="Comment Count">(0)</span></li>
+			<li>11: <a href="https://b1ue.cn/archives/135.html" target="_blank">打造自己的渗透测试框架 — 溯光：介绍篇</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">04月 2019 <span title="Post Count">(6)</span></span>
+		<ul class='car-monthlisting'>
+			<li>23: <a href="https://b1ue.cn/archives/127.html" target="_blank">WebLogic wls9-async 反序列化漏洞</a> <span title="Comment Count">(7)</span></li>
+			<li>18: <a href="https://b1ue.cn/archives/126.html" target="_blank">Spring Cloud Config Server 任意文件读取漏洞（CVE-2019-3799）</a> <span title="Comment Count">(0)</span></li>
+			<li>16: <a href="https://b1ue.cn/archives/124.html" target="_blank">Internet Explorer 11 XXE 漏洞 </a> <span title="Comment Count">(0)</span></li>
+			<li>12: <a href="https://b1ue.cn/archives/122.html" target="_blank">中国蚁剑（AntSword）代码执行漏洞</a> <span title="Comment Count">(0)</span></li>
+			<li>10: <a href="https://b1ue.cn/archives/120.html" target="_blank">Atlassian Confluence RCE CVE-2019-3396</a> <span title="Comment Count">(0)</span></li>
+			<li>02: <a href="https://b1ue.cn/archives/115.html" target="_blank">渗透测试思维导图</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">03月 2019 <span title="Post Count">(5)</span></span>
+		<ul class='car-monthlisting'>
+			<li>15: <a href="https://b1ue.cn/archives/114.html" target="_blank"> Nexus Repository Manager 3 RCE（CVE-2019-7238） </a> <span title="Comment Count">(0)</span></li>
+			<li>15: <a href="https://b1ue.cn/archives/111.html" target="_blank">Spring Boot Actuator Jolokia RCE/XXE 复现</a> <span title="Comment Count">(0)</span></li>
+			<li>07: <a href="https://b1ue.cn/archives/108.html" target="_blank"> Sunflower 吉他谱</a> <span title="Comment Count">(0)</span></li>
+			<li>07: <a href="https://b1ue.cn/archives/107.html" target="_blank">Struts2 历史漏洞分析 — S2-005</a> <span title="Comment Count">(0)</span></li>
+			<li>04: <a href="https://b1ue.cn/archives/100.html" target="_blank">sqli-labs 笔记</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">02月 2019 <span title="Post Count">(8)</span></span>
+		<ul class='car-monthlisting'>
+			<li>28: <a href="https://b1ue.cn/archives/99.html" target="_blank">Struts2 历史漏洞分析 — S2-033</a> <span title="Comment Count">(0)</span></li>
+			<li>28: <a href="https://b1ue.cn/archives/93.html" target="_blank">Struts2 历史漏洞分析 — S2-001</a> <span title="Comment Count">(0)</span></li>
+			<li>27: <a href="https://b1ue.cn/archives/87.html" target="_blank">Docker 学习笔记</a> <span title="Comment Count">(0)</span></li>
+			<li>25: <a href="https://b1ue.cn/archives/83.html" target="_blank">SQLMAP 学习笔记 — tamper</a> <span title="Comment Count">(0)</span></li>
+			<li>21: <a href="https://b1ue.cn/archives/79.html" target="_blank">Appium 学习笔记</a> <span title="Comment Count">(0)</span></li>
+			<li>20: <a href="https://b1ue.cn/archives/76.html" target="_blank">JVM 学习笔记 — 控制参数</a> <span title="Comment Count">(0)</span></li>
+			<li>19: <a href="https://b1ue.cn/archives/75.html" target="_blank">Typora RCE 复现</a> <span title="Comment Count">(0)</span></li>
+			<li>19: <a href="https://b1ue.cn/archives/72.html" target="_blank">JVM 学习笔记 — 内存区域</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">01月 2019 <span title="Post Count">(2)</span></span>
+		<ul class='car-monthlisting'>
+			<li>30: <a href="https://b1ue.cn/archives/66.html" target="_blank">溯光 2.0 开源的微服务渗透测试框架</a> <span title="Comment Count">(0)</span></li>
+			<li>08: <a href="https://b1ue.cn/archives/65.html" target="_blank">HSQLDB 笔记</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">12月 2018 <span title="Post Count">(9)</span></span>
+		<ul class='car-monthlisting'>
+			<li>24: <a href="https://b1ue.cn/archives/63.html" target="_blank">Java 远程 Debug for IDEA</a> <span title="Comment Count">(0)</span></li>
+			<li>21: <a href="https://b1ue.cn/archives/60.html" target="_blank">Dedecms V5.7 SP2 Windows下后台猜解</a> <span title="Comment Count">(0)</span></li>
+			<li>21: <a href="https://b1ue.cn/archives/59.html" target="_blank">Selenium Webdriver 爬知乎图片</a> <span title="Comment Count">(0)</span></li>
+			<li>19: <a href="https://b1ue.cn/archives/56.html" target="_blank">Selenium Webdriver 学习笔记</a> <span title="Comment Count">(0)</span></li>
+			<li>17: <a href="https://b1ue.cn/archives/52.html" target="_blank">tornado学习笔记</a> <span title="Comment Count">(0)</span></li>
+			<li>15: <a href="https://b1ue.cn/archives/42.html" target="_blank">FREESWITCH 远程代码执行漏洞（CVE-2018-19911）</a> <span title="Comment Count">(0)</span></li>
+			<li>11: <a href="https://b1ue.cn/archives/41.html" target="_blank">ThinkPHP5 5.0.22/5.1.29 远程代码执行漏洞</a> <span title="Comment Count">(0)</span></li>
+			<li>10: <a href="https://b1ue.cn/archives/39.html" target="_blank">lombok 学习笔记</a> <span title="Comment Count">(0)</span></li>
+			<li>08: <a href="https://b1ue.cn/archives/36.html" target="_blank">SpringBoot学习笔记（1）</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">11月 2018 <span title="Post Count">(1)</span></span>
+		<ul class='car-monthlisting'>
+			<li>28: <a href="https://b1ue.cn/archives/31.html" target="_blank">《无题》六线谱</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+	<li><span class="car-yearmonth">07月 2017 <span title="Post Count">(2)</span></span>
+		<ul class='car-monthlisting'>
+			<li>20: <a href="https://b1ue.cn/archives/25.html" target="_blank">MS17-010 多线程批量检测</a> <span title="Comment Count">(0)</span></li>
+			<li>08: <a href="https://b1ue.cn/archives/5.html" target="_blank">Struts2 历史漏洞分析 — S2-048</a> <span title="Comment Count">(0)</span></li>
+		</ul>
+	</li>
+</ul>
+</div>
+</p>	</div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-page-53" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives.html#respond-page-53" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>
+	<!-- Just Archives | http://typecho.jkey.lu/ -->
+	<style type="text/css">.car-collapse .car-yearmonth { cursor: s-resize; } </style>
+	<script type='text/javascript' src='https://b1ue.cn//usr/plugins/JustArchives/js/jquery-1.4.3.min.js'></script> 
+	
+	<script type="text/javascript">
+		/* <![CDATA[ */
+			jQuery(document).ready(function() {
+				jQuery('.car-collapse').find('.car-monthlisting').hide();
+				jQuery('.car-collapse').find('.car-monthlisting:first').show();
+				jQuery('.car-collapse').find('.car-yearmonth').click(function() {
+					jQuery(this).next('ul').slideToggle('fast');
+				});
+				jQuery('.car-collapse').find('.car-toggler').click(function() {
+					if ( '展开全部' == jQuery(this).text() ) {
+						jQuery(this).parent('.car-container').find('.car-monthlisting').show();
+						jQuery(this).text('折叠全部');
+					}
+					else {
+						jQuery(this).parent('.car-container').find('.car-monthlisting').hide();
+						jQuery(this).text('展开全部');
+					}
+					return false;
+				});
+			});
+		/* ]]> */
+	</script>
+
+		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

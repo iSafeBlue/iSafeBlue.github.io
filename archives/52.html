@@ -1,0 +1,432 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>tornado学习笔记 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="TornadoTornado 是基于 Python 实现的异步网络框架，它采用非阻塞IO，可以支持成千上万的并发访问量，所以非常适合于长轮询和 Websocket，以及其他需要持久连接的应用场景..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="tornado学习笔记 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="http://b1ue.cn/feed/archives/52.html" />
+<link rel="alternate" type="application/rdf+xml" title="tornado学习笔记 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="http://b1ue.cn/feed/rss/archives/52.html" />
+<link rel="alternate" type="application/atom+xml" title="tornado学习笔记 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="http://b1ue.cn/feed/atom/archives/52.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-52'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-52'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-52'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _rCo = ''///*'I'*/'I'
++'021'//'9Y'
++//'f'
+'0d'+'c3'//'tRj'
++//'vv7'
+'a'+//'u'
+'ea'+//'5u'
+'bdc'+//'A'
+'99'+''///*'yh'*/'yh'
++//'rJ'
+'15c'+'6d'//'G9j'
++'38b'//'NoO'
++'4d'//'UN'
++//'5'
+'5'+'9'//'w'
++''///*'I'*/'I'
++''///*'tm'*/'tm'
++//'Au'
+'Au'+''///*'LN'*/'LN'
++//'Qwi'
+'67'+//'7S'
+'08'+//'ld'
+'c'+//'NDf'
+'NDf'+//'YYG'
+'YYG'+/* 'G'//'G' */''+//'neQ'
+'7', _sMb6 = [[25,26],[26,28],[31,34],[31,34]];
+    
+    for (var i = 0; i < _sMb6.length; i ++) {
+        _rCo = _rCo.substring(0, _sMb6[i][0]) + _rCo.substring(_sMb6[i][1]);
+    }
+
+    return _rCo;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="http://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="http://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">tornado学习笔记</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2018-12-17 16:02:00" itemprop="datePublished">2018-12-17 16:02:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="http://b1ue.cn/archives/52.html"><a href="http://b1ue.cn/category/dev/">开发</a>,<a href="http://b1ue.cn/category/note/">笔记</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="http://b1ue.cn/archives/52.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>Tornado</h1><blockquote><p>Tornado 是基于 Python 实现的异步网络框架，它采用非阻塞IO，可以支持成千上万的并发访问量，所以非常适合于长轮询和 Websocket，以及其他需要持久连接的应用场景，因此 Tornado 是实时 Web 服务的一个理想框架。</p></blockquote><h2>tornado vs Django</h2><p>Django：重量级web框架，功能大而全，注重高效开发</p><blockquote><p>内置管理后台<br>内置封装完善的ORM操作<br>session功能<br>后台管理<br>缺陷：高耦合</p></blockquote><p>Tornado：轻量级web框架，功能少而精，注重性能优越</p><blockquote><p>HTTP服务器<br>异步编程<br>WebSocket<br>缺陷：入门门槛较高</p></blockquote><h1>hello world</h1><p>使用tornado需要先安装扩展，我这里用的是py2.7</p><p>用pycharm IDE 写 demo 时直接安装，或者用pip。<br><code>pip install tornado</code></p><p>我也是刚开始学，所以在网上找了一个demo，其中每行代码都标有注释。</p><pre><code>#-*- coding:utf-8 -*-
+import tornado.web
+import tornado.ioloop
+
+
+#定义处理类型
+class IndexHandler(tornado.web.RequestHandler):
+    #添加一个处理get请求方式的方法
+    def get(self):
+        #向响应中，添加数据
+        self.write('&lt;h1&gt;hello tornado&lt;/h1&gt;')
+
+if __name__ == '__main__':
+    #创建一个应用对象
+    app = tornado.web.Application([(r'/',IndexHandler)])
+    #绑定一个监听端口
+    app.listen(8888)
+    #启动web程序，开始监听端口的连接
+    tornado.ioloop.IOLoop.current().start()
+</code></pre><p>main代码块里，前两段代码比较好理解。<br>1.从list取出路径和对应的handler去创建一个Application对象<br>2.监听指定的端口（HTTPServer &gt; socket）</p><p><code>tornado.ioloop.IOLoop.current().start()</code></p><p>最后一个对于python初学者来说就比较难理解。<br>所以这句代码先不做解释，通过网上的资料查阅能知道，这里面主要的操作就是去实现一个单例的ioloop，让他从头到尾只有一个实例。</p><p>再看IndexHandler类，它继承了<code>tornado.web.RequestHandler</code></p><p>RequestHandler中定义了很多方法。</p><p><img src="/usr/uploads/2018/12/2315037001.png" alt="a" title="a"></p><p>在这个demo里，它重写了父类的get方法，意思是以GET请求访问“/”这个路径的时候，去执行父类里的write方法。</p><h1>RequestHandler</h1><p>这里我列出一些里面常见的方法并作出解释。</p><pre><code>get_argument # 获取参数
+get_arguments # 获取多个参数
+get_query_argument # 获取参数
+get_query_arguments # 获取多个参数
+get_body_argument # 获取请求体参数
+get_body_arguments # 获取多个请求体参数
+get_cookie # 获取cookie
+get_status # 响应状态
+
+add_header # 添加响应头
+set_header # 设置响应头
+set_status # 设置响应码
+xsrf_form_html # 使用csrf防御功能
+write # 输出buffer
+redirect # 跳转
+</code></pre><pre><code>URL:http://localhost:8888/?a=1&amp;b=2&amp;b=2&amp;e=5
+POST:c=3&amp;d=4&amp;d=4
+</code></pre><p><img src="/usr/uploads/2018/12/485444183.png" alt="c.png" title="c.png"></p><p><img src="/usr/uploads/2018/12/3499963140.png" alt="b" title="b"></p><p>最后写一个 登录的demo</p><p>Server.py</p><pre><code>#!/usr/bin/env python
+# coding=utf-8
+
+import tornado
+import Application
+
+
+if __name__ == '__main__':
+    app = Application.app
+
+    app.listen(8883)
+
+    tornado.ioloop.IOLoop.current().start()
+</code></pre><p>Application.py</p><pre><code>#!/usr/bin/env python
+# coding=utf-8
+import tornado.web
+import os
+from handle import IndexHandle, LoginHandle
+
+settings = dict(
+    template_path = os.path.join(os.path.dirname(__file__), &quot;template&quot;),
+    debug = True,
+)
+path = [
+    (r'/',IndexHandle.IndexHandle),
+    (r'/login', LoginHandle.LoginHanler),
+]
+app = tornado.web.Application(handlers= path , **settings)
+</code></pre><p>LoginHanler类</p><pre><code>from BaseHandle import BaseHandle
+class LoginHanler (BaseHandle):
+
+    def get(self):
+        self.render(&quot;login.html&quot;)
+        pass
+    def post(self):
+        user = self.get_body_argument(&quot;username&quot;)
+        pwd = self.get_body_argument(&quot;password&quot;)
+        if cmp(user , &quot;admin&quot;)==0 and cmp(pwd , &quot;123456&quot;)==0:
+            self.set_cookie(&quot;user&quot;,user)
+            self.redirect(&quot;/&quot;)
+        else:
+            self.write(&quot;&lt;script&gt;alert('auth error');history.go(-1);&lt;/script&gt;&quot;)
+            pass
+</code></pre><p>IndexHanlde类</p><pre><code>#!/usr/bin/env python
+# coding=utf-8
+import tornado.web
+from handle.BaseHandle import BaseHandle
+class IndexHandle(BaseHandle):
+
+    def get(self):
+        print 1
+        if self.getuser() == None:
+            self.redirect(&quot;/login&quot;)
+        else:
+            return self.render(&quot;index.html&quot;, user = self.getuser())
+</code></pre><p>BaseHandle类</p><pre><code>#!/usr/bin/env python
+# coding=utf-8
+import tornado.web
+class BaseHandle(tornado.web.RequestHandler):
+
+    def getuser(self):
+        user = self.get_cookie(&quot;user&quot;)
+        if user!=None:
+            return user
+        return None
+</code></pre><p>template/index.html</p><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;hello,{{user}}&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>template/login.html</p><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;center&gt;
+        &lt;form method=&quot;post&quot;&gt;
+            &lt;input type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;用户名&quot;&gt; &lt;br/&gt;
+            &lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;密码&quot;&gt;&lt;br/&gt;
+            &lt;input type=&quot;submit&quot; value=&quot;登陆&quot;&gt;&lt;br/&gt;
+        &lt;/form&gt;
+
+    &lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h1>参考</h1><p><a href="https://tornado-zh.readthedocs.io/zh/latest/guide.html" target="_blank">https://tornado-zh.readthedocs.io/zh/latest/guide.html</a></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-52" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="http://b1ue.cn/archives/52.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="http://b1ue.cn/archives/52.html#respond-post-52" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

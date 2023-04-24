@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>fastjson 1.2.68 autotype bypass 反序列化漏洞 gadget 的一种挖掘思路 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="关于漏洞fastjson 的这个新漏洞在 1.2.68 及之前版本的 autotype 关闭的情况下仍然可以绕过限制反序列化，相比 1.2.47 版本的漏洞来讲这个版本的漏洞还是有一些限制的（关..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="fastjson 1.2.68 autotype bypass 反序列化漏洞 gadget 的一种挖掘思路 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/382.html" />
+<link rel="alternate" type="application/rdf+xml" title="fastjson 1.2.68 autotype bypass 反序列化漏洞 gadget 的一种挖掘思路 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/382.html" />
+<link rel="alternate" type="application/atom+xml" title="fastjson 1.2.68 autotype bypass 反序列化漏洞 gadget 的一种挖掘思路 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/382.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-382'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-382'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-382'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _EmDHE = //'Ze'
+'3fc'+''///*'1y'*/'1y'
++//'3XC'
+'a'+/* 'Br'//'Br' */''+'8a4'//'G8I'
++'lCL'//'lCL'
++//'od'
+'bb'+'y'//'y'
++//'ozy'
+'45d'+'8'//'ymw'
++//'yH'
+'87c'+'c3e'//'e'
++//'D0x'
+'1c8'+/* 'QqO'//'QqO' */''+//'a'
+'a'+'5'//'pW'
++//'Z'
+'2f7'+//'VrV'
+'VrV'+'08'//'yWN'
++/* 'S'//'S' */''+//'QN'
+'d6'+/* 'UGV'//'UGV' */''+'e'//'tnq'
++//'R'
+'9', _g05 = [[7,10],[9,10],[22,23],[26,29]];
+    
+    for (var i = 0; i < _g05.length; i ++) {
+        _EmDHE = _EmDHE.substring(0, _g05[i][0]) + _EmDHE.substring(_g05[i][1]);
+    }
+
+    return _EmDHE;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">fastjson 1.2.68 autotype bypass 反序列化漏洞 gadget 的一种挖掘思路</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2020-06-07 20:53:00" itemprop="datePublished">2020-06-07 20:53:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/382.html"><a href="https://b1ue.cn/category/default/">默认分类</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/382.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>关于漏洞</h1><p>fastjson 的这个新漏洞在 1.2.68 及之前版本的 autotype 关闭的情况下仍然可以绕过限制反序列化，相比 1.2.47 版本的漏洞来讲这个版本的漏洞还是有一些限制的（关于 1.2.47 漏洞可以参考我的另一篇文章<a href="https://b1ue.cn/archives/184.html" target="_blank">《Java 反序列化漏洞始末（3）— fastjson》</a>），例如 1.2.47 是可以绕过黑名单的限制的，而这个漏洞则无法绕过黑名单，并且需要类实现 AutoCloseable 接口。目前主要的 JNDI gadget 已经进了黑名单，还不允许反序列化类实现了 ClassLoader、DataSource、RowSet 接口，这就导致了绝大部分的 JNDI gadget 无法利用，所以本篇文章主要分享一下 gadget 的挖掘思路和漏洞的原理分析。</p><h1>漏洞分析</h1><p>这个漏洞的的成因和我的另一篇文章<a href="https://b1ue.cn/archives/348.html" target="_blank">《fastjson 1.2.68 最新版本有限制 autotype bypass》</a>一致，都是由于期望类（expectClass）导致的，这个漏洞的期望类范围更大，更容易找到具有危害的 gadget。</p><p><img src="/usr/uploads/2020/06/21345078.jpg" alt="1591505404(1).jpg" title="1591505404(1).jpg"></p><p>首先看 <code>DefaultJSONParser#parseObject</code> 这里将 @type 指定的类作为条件去获取 Deserialzer 对象。</p><p><img src="/usr/uploads/2020/06/3046376759.jpg" alt="1591505837.jpg" title="1591505837.jpg"></p><p>在<code>ParserConfig#getDeserializer</code> 方法中不满足条件所以到了最后一步通过<code>ParserConfig#createJavaBeanDeserializer</code> 方法来构造 JavaBeanDeserializer</p><p><img src="/usr/uploads/2020/06/711675763.jpg" alt="1591506050(1).jpg" title="1591506050(1).jpg"></p><p>在这一步创建了 JavaBeanDeserializer 对象，而漏洞也就发生在 JavaBeanDeserializer 类中。</p><p>现在回到 <code>DefaultJSONParser#parseObject</code> 应该走下一步 <code>JavaBeanDeserializer#deserialze</code> 方法。</p><p>用期望类的思路，可以找到此处有两个方法使用了 <code>ParserConfig#checkAutoType</code> 且指定了期望类。</p><p>一个是 <code>deserialzeArrayMapping()</code> 另一个是 <code>deserialze()</code></p><p><img src="/usr/uploads/2020/06/1322297086.jpg" alt="1591506835(1).jpg" title="1591506835(1).jpg"></p><p>在 <code>deserialze()</code> 方法中又做了一次 checkAutoType 检测，此处直接将第二个 @type 的类名，和前面构造 JavaBeanDeserializer 对象时指定的期望类直接传了进来。</p><p><img src="/usr/uploads/2020/06/3249565469.jpg" alt="1591507246(1).jpg" title="1591507246(1).jpg"></p><p>我在 <a href="https://b1ue.cn/archives/348.html" target="_blank">《fastjson 1.2.68 最新版本有限制 autotype bypass》</a> 这篇文章提到过，当 <code>checkAutoType(String typeName, Class&lt;?&gt; expectClass, int features)</code> 方法的 typeName 实现或继承自 expectClass，就会通过检验。</p><p>但还有三个问题，会阻碍 gadget 的触发。</p><pre><code>boolean expectClassFlag;
+if (expectClass == null) {
+    expectClassFlag = false;
+} else if (expectClass != Object.class &amp;&amp; expectClass != Serializable.class &amp;&amp; expectClass != Cloneable.class &amp;&amp; expectClass != Closeable.class &amp;&amp; expectClass != EventListener.class &amp;&amp; expectClass != Iterable.class &amp;&amp; expectClass != Collection.class) {
+    expectClassFlag = true;
+} else {
+    expectClassFlag = false;
+}
+</code></pre><p>第一个问题是期望类的黑名单，里面包括了大部分常用的父接口和父类，却唯独少了一个 <code>java.lang.AutoCloseable</code>。<br>这也就是为什么 AutoCloseable 为什么可以通过校验的第一个原因，第二个原因是<code>TypeUtils#mappings</code>里有 AutoCloseable 类。</p><p><img src="/usr/uploads/2020/06/3592059323.jpg" alt="1591507991(1).jpg" title="1591507991(1).jpg"></p><p>第二个问题是黑名单类，fastjson 在 denyHashCodes 里几乎把常见的容易造成漏洞的类都加进了黑名单，这就造成了攻击成本变高，如果要利用漏洞，只能花费更多的时间去寻未被发现的常用库 gadget。</p><p>第三个问题是父类、父接口黑名单，fastjson 在判断期望类之前将继承自 ClassLoader、DataSource、RowSet 的类直接抛出异常。</p><pre><code>if (ClassLoader.class.isAssignableFrom(clazz) || DataSource.class.isAssignableFrom(clazz) || RowSet.class.isAssignableFrom(clazz)) {
+    throw new JSONException(&quot;autoType is not support. &quot; + typeName);
+}</code></pre><p>而常用的 JNDI RCE 类基本上都继承自 DataSource 和 RowSet，所以能找到的 JNDI gadget 基本都无法在这个漏洞中使用。</p><p>以上三点足够让大部分常见的 gadget 无法使用，所以需要换一种 gadget 挖掘思路。</p><h1>挖掘 gadget</h1><p>关于 gadget 的挖掘思路我主要是寻找关于输入输出流的类来写文件，IntputStream 和 OutputStream 都是实现自 AutoCloseable 接口的，而且也没有被列入黑名单，所以只要找到合适的类，还是可以进行文件读写等高危操作的。</p><h2>JNDI</h2><p>前面说到，这个漏洞基本无法使用 JNDI，实际上并不完全是，当 fastjson 小于 1.2.51 时，还是可以通过实现了 RowSet 接口的类进行 JNDI 反序列化，但实际上已经没有什么危害，大多数都更新到了 1.2.60+ 版本。</p><p><img src="/usr/uploads/2020/06/490725217.jpg" alt="1591509245(1).jpg" title="1591509245(1).jpg"></p><p><img src="/usr/uploads/2020/06/1025069144.jpg" alt="1591535076(1).jpg" title="1591535076(1).jpg"></p><h2>文件读写</h2><p>我寻找 gadget 时的条件是这样的。</p><ul><li>需要一个通过 set 方法或构造方法指定文件路径的 OutputStream</li><li>需要一个通过 set 方法或构造方法传入字节数据的 OutputStream，并且可以通过 set 方法或构造方法传入一个 OutputStream，最后可以通过 write 方法将传入的字节码 write 到传入的 OutputStream</li><li>需要一个通过 set 方法或构造方法传入一个 OutputStream，并且可以通过调用 toString、hashCode、get、set、构造方法 调用传入的 OutputStream 的 flush 方法</li></ul><p>以上三个组合在一起就能构造成一个写文件的利用链，最终我挑选出了三个符合条件的类作为演示。</p><h1>漏洞复现</h1><p>漏洞的原理摸清了，接下来我将用本地的模拟环境复现一遍漏洞。</p><h2>写文件</h2><p><img src="/usr/uploads/2020/06/2905777608.jpg" alt="1591535397(1).jpg" title="1591535397(1).jpg"></p><h2>复制文件</h2><p><img src="/usr/uploads/2020/06/930744676.jpg" alt="1591535503(1).jpg" title="1591535503(1).jpg"></p><h1>总结</h1><p>本文旨在给安全研究者提供一种反序列化漏洞 gadget 挖掘思路，文中 POC 代码暂不公开。</p><h1>修复方案</h1><ul><li>更新到 1.2.69 或更高版本</li></ul>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-382" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/382.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/382.html#respond-post-382" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

